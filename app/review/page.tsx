@@ -1,48 +1,55 @@
-import { createClient } from "@/lib/supabase/server";
-import { redirect } from "next/navigation";
+import { sql, SINGLE_USER_ID } from "@/lib/db";
 import { SAMPLE_QUESTIONS } from "@/lib/sample-data";
 import ReviewSession from "@/components/ReviewSession";
 import type { Question } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
+export const runtime = "edge";
 
 export default async function ReviewPage() {
-  const supabase = createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) redirect("/login");
-
   // Get all questions (from DB or sample fallback)
-  const { data: dbQuestions } = await supabase
-    .from("questions")
-    .select("*")
-    .order("topic, difficulty");
+  let allQuestions: Question[];
 
-  const allQuestions: Question[] =
-    dbQuestions && dbQuestions.length > 0
-      ? (dbQuestions as Question[])
-      : SAMPLE_QUESTIONS;
+  try {
+    const dbQuestions = (await sql`
+      SELECT id, topic, subtopic, mode, difficulty, content, is_sample
+      FROM public.questions
+      ORDER BY topic, difficulty
+    `) as any[];
 
-  // Get review states for this user
-  const { data: reviewStates } = await supabase
-    .from("review_state")
-    .select("*")
-    .eq("user_id", user.id);
+    allQuestions =
+      dbQuestions.length > 0
+        ? dbQuestions.map((q) => ({
+            ...q,
+            content: typeof q.content === "string" ? JSON.parse(q.content) : q.content,
+          }))
+        : SAMPLE_QUESTIONS;
+  } catch {
+    allQuestions = SAMPLE_QUESTIONS;
+  }
+
+  // Get review states
+  let reviewStates: any[] = [];
+  try {
+    reviewStates = await sql`
+      SELECT question_id, stability, difficulty, due, reps, lapses, state, elapsed_days, scheduled_days, last_review
+      FROM public.review_state
+      WHERE user_id = ${SINGLE_USER_ID}
+    `;
+  } catch {}
 
   const now = new Date();
 
   // Find due question IDs (oldest due first)
-  const dueStates = (reviewStates || [])
+  const dueStates = reviewStates
     .filter((rs) => new Date(rs.due) <= now)
     .sort((a, b) => new Date(a.due).getTime() - new Date(b.due).getTime());
 
-  // Find unseen question IDs (no review state exists)
-  const seenIds = new Set((reviewStates || []).map((rs) => rs.question_id));
+  // Find unseen question IDs
+  const seenIds = new Set(reviewStates.map((rs) => rs.question_id));
   const unseenQuestions = allQuestions.filter((q) => !seenIds.has(q.id));
 
-  // Build queue: due first (oldest first), then unseen
+  // Build queue: due first, then unseen
   const dueQuestions: Question[] = dueStates
     .map((rs) => allQuestions.find((q) => q.id === rs.question_id))
     .filter((q): q is Question => q !== undefined);
@@ -51,7 +58,7 @@ export default async function ReviewPage() {
 
   // Pass review states as a map for the client
   const stateMap: Record<string, any> = {};
-  for (const rs of reviewStates || []) {
+  for (const rs of reviewStates) {
     stateMap[rs.question_id] = rs;
   }
 
@@ -72,11 +79,5 @@ export default async function ReviewPage() {
     );
   }
 
-  return (
-    <ReviewSession
-      userId={user.id}
-      questions={queue}
-      reviewStates={stateMap}
-    />
-  );
+  return <ReviewSession questions={queue} reviewStates={stateMap} />;
 }

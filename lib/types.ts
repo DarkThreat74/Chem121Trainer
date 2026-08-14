@@ -85,56 +85,72 @@ export interface TopicInfo {
   description: string;
   mode: QuestionMode | "mixed";
   order: number;
+  icon: string;
+  color: string;
 }
 
 export const TOPICS: TopicInfo[] = [
   {
     id: "fundamentals",
-    label: "Fundamentals & Definitions",
-    description: "Measurement, accuracy vs precision, states of matter, atom vs molecule",
+    label: "Fundamentals",
+    description: "Measurement, accuracy vs precision, matter classification",
     mode: "quiz",
     order: 1,
+    icon: "atom",
+    color: "#818cf8",
   },
   {
     id: "metric-system",
-    label: "Metric System & Prefixes",
-    description: "Kilo to nano, base units, converting between prefixed units",
+    label: "Metric System",
+    description: "SI prefixes, base units, unit conversions",
     mode: "quiz",
     order: 2,
+    icon: "ruler",
+    color: "#34d399",
   },
   {
     id: "significant-figures",
     label: "Significant Figures",
-    description: "Counting sig figs, rounding for calculations",
+    description: "Counting sig figs, rounding in calculations",
     mode: "mixed",
     order: 3,
+    icon: "hash",
+    color: "#fbbf24",
   },
   {
     id: "dimensional-analysis",
     label: "Dimensional Analysis",
-    description: "Unit conversion chains, single-step to multi-step",
+    description: "Unit conversion chains, single to multi-step",
     mode: "solver",
     order: 4,
+    icon: "arrow-left-right",
+    color: "#f0abfc",
   },
   {
     id: "the-mole",
     label: "The Mole",
-    description: "Mole-to-particle, mole-to-mass, mole-to-volume at STP",
+    description: "Mole-to-particle, mole-to-mass, Avogadro's number",
     mode: "solver",
     order: 5,
+    icon: "molecule",
+    color: "#60a5fa",
   },
   {
     id: "stoichiometry",
     label: "Stoichiometry",
-    description: "Grams/moles/molecules conversions, limiting reactants",
+    description: "Grams/moles/molecules, limiting reactants, % yield",
     mode: "solver",
     order: 6,
+    icon: "scale",
+    color: "#fb923c",
   },
   {
     id: "molarity-dilutions",
     label: "Molarity & Dilutions",
-    description: "Molarity, C1V1=C2V2, stock solution problems",
+    description: "Molarity, C1V1=C2V2, stock solutions",
     mode: "solver",
     order: 7,
+    icon: "flask-conical",
+    color: "#2dd4bf",
   },
 ];

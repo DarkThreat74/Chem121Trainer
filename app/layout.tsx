@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Chem 121 Trainer",
-  description: "Interactive chemistry practice with spaced repetition",
+  description: "Master introductory chemistry through spaced repetition practice",
 };
 
 export const viewport: Viewport = {
@@ -11,7 +11,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  themeColor: "#0a0a0b",
+  themeColor: "#09090b",
 };
 
 export default function RootLayout({

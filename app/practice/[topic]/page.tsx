@@ -1,53 +1,55 @@
-import { createClient } from "@/lib/supabase/server";
-import { redirect, notFound } from "next/navigation";
+import { sql, SINGLE_USER_ID } from "@/lib/db";
+import { notFound } from "next/navigation";
 import { SAMPLE_QUESTIONS } from "@/lib/sample-data";
 import ReviewSession from "@/components/ReviewSession";
-import type { Question, Topic } from "@/lib/types";
+import type { Question } from "@/lib/types";
 import { TOPICS } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
+export const runtime = "edge";
 
 export default async function PracticePage({
   params,
 }: {
   params: { topic: string };
 }) {
-  const supabase = createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) redirect("/login");
-
   const topicInfo = TOPICS.find((t) => t.id === params.topic);
   if (!topicInfo) notFound();
 
-  // Get all questions for this topic
-  const { data: dbQuestions } = await supabase
-    .from("questions")
-    .select("*")
-    .eq("topic", params.topic)
-    .order("difficulty");
-
   let questions: Question[];
-  if (dbQuestions && dbQuestions.length > 0) {
-    questions = dbQuestions as Question[];
-  } else {
+
+  try {
+    const dbQuestions = (await sql`
+      SELECT id, topic, subtopic, mode, difficulty, content, is_sample
+      FROM public.questions
+      WHERE topic = ${params.topic}
+      ORDER BY difficulty
+    `) as any[];
+
+    questions =
+      dbQuestions.length > 0
+        ? dbQuestions.map((q) => ({
+            ...q,
+            content: typeof q.content === "string" ? JSON.parse(q.content) : q.content,
+          }))
+        : SAMPLE_QUESTIONS.filter((q) => q.topic === params.topic);
+  } catch {
     questions = SAMPLE_QUESTIONS.filter((q) => q.topic === params.topic);
   }
 
-  // Get review states
-  const { data: reviewStates } = await supabase
-    .from("review_state")
-    .select("*")
-    .eq("user_id", user.id)
-    .in(
-      "question_id",
-      questions.map((q) => q.id)
-    );
+  let reviewStates: any[] = [];
+  try {
+    const questionIds = questions.map((q) => q.id);
+    reviewStates = await sql`
+      SELECT question_id, stability, difficulty, due, reps, lapses, state, elapsed_days, scheduled_days, last_review
+      FROM public.review_state
+      WHERE user_id = ${SINGLE_USER_ID}
+      AND question_id = ANY(${questionIds})
+    `;
+  } catch {}
 
   const stateMap: Record<string, any> = {};
-  for (const rs of reviewStates || []) {
+  for (const rs of reviewStates) {
     stateMap[rs.question_id] = rs;
   }
 
@@ -56,8 +58,7 @@ export default async function PracticePage({
       <div className="flex min-h-screen flex-col items-center justify-center px-4 text-center">
         <h2 className="text-xl font-bold">{topicInfo.label}</h2>
         <p className="mt-2 max-w-sm text-text-secondary">
-          No content available for this topic yet. Real questions need to be
-          imported from your course worksheets.
+          No content available for this topic yet.
         </p>
         <a
           href="/dashboard"
@@ -83,11 +84,7 @@ export default async function PracticePage({
         </div>
       </div>
       <div className="mx-auto max-w-2xl px-4 py-6">
-        <ReviewSession
-          userId={user.id}
-          questions={questions}
-          reviewStates={stateMap}
-        />
+        <ReviewSession questions={questions} reviewStates={stateMap} />
       </div>
     </div>
   );

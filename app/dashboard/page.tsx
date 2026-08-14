@@ -1,76 +1,86 @@
-import { createClient } from "@/lib/supabase/server";
-import { redirect } from "next/navigation";
+import { sql, SINGLE_USER_ID } from "@/lib/db";
 import { TOPICS } from "@/lib/types";
 import { SAMPLE_QUESTIONS } from "@/lib/sample-data";
 import DashboardClient from "@/components/DashboardClient";
-import LogoutButton from "@/components/LogoutButton";
+
+export const dynamic = "force-dynamic";
+export const runtime = "edge";
 
 export default async function DashboardPage() {
-  const supabase = createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  let questions: Array<{
+    id: string;
+    topic: string;
+    subtopic: string;
+    mode: string;
+    difficulty: number;
+    content: any;
+    is_sample: boolean;
+  }>;
 
-  if (!user) {
-    redirect("/login");
+  try {
+    const dbQuestions = (await sql`
+      SELECT id, topic, subtopic, mode, difficulty, content, is_sample
+      FROM public.questions
+      ORDER BY topic, difficulty
+    `) as Array<{
+      id: string;
+      topic: string;
+      subtopic: string;
+      mode: string;
+      difficulty: number;
+      content: any;
+      is_sample: boolean;
+    }>;
+    questions =
+      dbQuestions.length > 0
+        ? dbQuestions.map((q) => ({
+            ...q,
+            content: typeof q.content === "string" ? JSON.parse(q.content) : q.content,
+          }))
+        : SAMPLE_QUESTIONS.map((q) => ({
+            id: q.id,
+            topic: q.topic,
+            subtopic: q.subtopic,
+            mode: q.mode,
+            difficulty: q.difficulty,
+            content: q.content,
+            is_sample: q.is_sample,
+          }));
+  } catch {
+    questions = SAMPLE_QUESTIONS.map((q) => ({
+      id: q.id,
+      topic: q.topic,
+      subtopic: q.subtopic,
+      mode: q.mode,
+      difficulty: q.difficulty,
+      content: q.content,
+      is_sample: q.is_sample,
+    }));
   }
 
-  // Get user profile
-  const { data: profile } = await supabase
-    .from("users")
-    .select("*")
-    .eq("id", user.id)
-    .single();
+  let reviewStates: any[] = [];
+  try {
+    reviewStates = await sql`
+      SELECT question_id, stability, difficulty, due, reps, lapses, state, elapsed_days, scheduled_days, last_review
+      FROM public.review_state
+      WHERE user_id = ${SINGLE_USER_ID}
+    `;
+  } catch {}
 
-  // Get all review states for this user
-  const { data: reviewStates } = await supabase
-    .from("review_state")
-    .select("*")
-    .eq("user_id", user.id);
+  let reviewLogs: any[] = [];
+  try {
+    reviewLogs = await sql`
+      SELECT question_id, rating, reviewed_at
+      FROM public.review_log
+      WHERE user_id = ${SINGLE_USER_ID}
+      ORDER BY reviewed_at DESC
+    `;
+  } catch {}
 
-  // Get review logs for streak and mastery calculation
-  const { data: reviewLogs } = await supabase
-    .from("review_log")
-    .select("*")
-    .eq("user_id", user.id)
-    .order("reviewed_at", { ascending: false });
-
-  // Get all questions (from DB, or fall back to sample data if DB is empty)
-  const { data: dbQuestions } = await supabase
-    .from("questions")
-    .select("*")
-    .order("topic, difficulty");
-
-  const questions = dbQuestions && dbQuestions.length > 0
-    ? dbQuestions
-    : SAMPLE_QUESTIONS.map((q) => ({
-        id: q.id,
-        topic: q.topic,
-        subtopic: q.subtopic,
-        mode: q.mode,
-        difficulty: q.difficulty,
-        content: q.content,
-        is_sample: q.is_sample,
-      }));
-
-  // Calculate streak
   const now = new Date();
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const streak = calculateStreak(reviewLogs || []);
-
-  // Calculate due count
-  const dueCount = (reviewStates || []).filter(
-    (rs) => new Date(rs.due) <= now
-  ).length;
-
-  // Calculate per-topic mastery
-  const topicMastery = calculateTopicMastery(
-    reviewLogs || [],
-    questions,
-    reviewStates || []
-  );
-
-  // Count questions per topic
+  const streak = calculateStreak(reviewLogs);
+  const dueCount = reviewStates.filter((rs) => new Date(rs.due) <= now).length;
+  const topicMastery = calculateTopicMastery(reviewLogs, questions, reviewStates);
   const questionsPerTopic = TOPICS.map((t) => ({
     ...t,
     count: questions.filter((q) => q.topic === t.id).length,
@@ -78,15 +88,11 @@ export default async function DashboardPage() {
 
   return (
     <div className="min-h-screen safe-top safe-bottom">
-      <header className="sticky top-0 z-10 border-b border-border bg-bg/90 backdrop-blur">
-        <div className="mx-auto flex max-w-2xl items-center justify-between px-4 py-3">
-          <h1 className="text-lg font-bold">Chem 121 Trainer</h1>
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-text-secondary">
-              {profile?.email || user.email}
-            </span>
-            <LogoutButton />
-          </div>
+      <header className="sticky top-0 z-10 border-b border-border-subtle bg-bg/80 backdrop-blur-xl">
+        <div className="mx-auto flex max-w-2xl items-center justify-between px-4 py-4">
+          <h1 className="text-lg font-bold tracking-tight">
+            <span className="gradient-text">Chem 121</span> Trainer
+          </h1>
         </div>
       </header>
 
@@ -102,9 +108,7 @@ export default async function DashboardPage() {
   );
 }
 
-function calculateStreak(
-  logs: Array<{ reviewed_at: string }>
-): number {
+function calculateStreak(logs: Array<{ reviewed_at: string }>): number {
   if (logs.length === 0) return 0;
 
   const days = new Set<string>();
@@ -118,18 +122,15 @@ function calculateStreak(
   const today = new Date();
   const oneDay = 86400000;
 
-  // Check if today has a review
   const todayKey = `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`;
   let checkDate = today;
 
   if (!days.has(todayKey)) {
-    // If no review today, check yesterday
     checkDate = new Date(today.getTime() - oneDay);
     const yesterdayKey = `${checkDate.getFullYear()}-${checkDate.getMonth()}-${checkDate.getDate()}`;
     if (!days.has(yesterdayKey)) return 0;
   }
 
-  // Count consecutive days
   while (true) {
     const key = `${checkDate.getFullYear()}-${checkDate.getMonth()}-${checkDate.getDate()}`;
     if (days.has(key)) {
@@ -155,7 +156,6 @@ function calculateTopicMastery(
 
   const result: Record<string, { mastery: number; totalReviews: number; seen: number; total: number }> = {};
 
-  // Group logs by topic
   const topicLogs: Record<string, Array<{ rating: number; reviewed_at: string }>> = {};
   for (const log of logs) {
     const topic = topicMap.get(log.question_id);
@@ -164,7 +164,6 @@ function calculateTopicMastery(
     topicLogs[topic].push({ rating: log.rating, reviewed_at: log.reviewed_at });
   }
 
-  // Count seen questions per topic
   const seenPerTopic: Record<string, Set<string>> = {};
   for (const rs of reviewStates) {
     const topic = topicMap.get(rs.question_id);
@@ -173,7 +172,6 @@ function calculateTopicMastery(
     seenPerTopic[topic].add(rs.question_id);
   }
 
-  // Count total questions per topic
   const totalPerTopic: Record<string, number> = {};
   for (const q of questions) {
     totalPerTopic[q.topic] = (totalPerTopic[q.topic] || 0) + 1;
@@ -184,15 +182,13 @@ function calculateTopicMastery(
     const total = totalPerTopic[topic] || 0;
     const seen = seenPerTopic[topic]?.size || 0;
 
-    // Weighted accuracy: more recent reviews weighted higher
-    // Rating >= 3 (Good) counts as correct
     let weightedCorrect = 0;
     let weightedTotal = 0;
     const sortedLogs = [...tLogs].sort(
       (a, b) => new Date(a.reviewed_at).getTime() - new Date(b.reviewed_at).getTime()
     );
     for (let i = 0; i < sortedLogs.length; i++) {
-      const weight = (i + 1) / sortedLogs.length; // newer = higher weight
+      const weight = (i + 1) / sortedLogs.length;
       weightedTotal += weight;
       if (sortedLogs[i].rating >= 3) weightedCorrect += weight;
     }
