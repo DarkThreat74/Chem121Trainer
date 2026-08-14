@@ -1,10 +1,21 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 import QuizCard from "@/components/QuizCard";
 import SolverCard from "@/components/SolverCard";
-import { Check, X, ArrowRight, XCircle, Trophy } from "lucide-react";
+import {
+  Check,
+  X,
+  ArrowRight,
+  XCircle,
+  Trophy,
+  Flame,
+  Clock,
+  Zap,
+  RotateCcw,
+} from "lucide-react";
 import type { Question } from "@/lib/types";
 
 interface ReviewSessionProps {
@@ -17,6 +28,44 @@ type FeedbackState = {
   explanation: string;
 } | null;
 
+function formatTime(ms: number): string {
+  const s = Math.floor(ms / 1000);
+  if (s < 60) return `${s}s`;
+  const m = Math.floor(s / 60);
+  const rem = s % 60;
+  return `${m}:${rem.toString().padStart(2, "0")}`;
+}
+
+function Confetti() {
+  const colors = ["#818cf8", "#34d399", "#fbbf24", "#f0abfc", "#fb923c", "#2dd4bf"];
+  const pieces = Array.from({ length: 40 }, (_, i) => ({
+    id: i,
+    left: Math.random() * 100,
+    delay: Math.random() * 0.5,
+    duration: 2 + Math.random() * 2,
+    color: colors[i % colors.length],
+    rotation: Math.random() * 360,
+  }));
+
+  return (
+    <div className="pointer-events-none fixed inset-0 z-50 overflow-hidden">
+      {pieces.map((p) => (
+        <div
+          key={p.id}
+          className="confetti-piece"
+          style={{
+            left: `${p.left}%`,
+            backgroundColor: p.color,
+            animationDelay: `${p.delay}s`,
+            animationDuration: `${p.duration}s`,
+            transform: `rotate(${p.rotation}deg)`,
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
 export default function ReviewSession({
   questions,
   reviewStates,
@@ -24,20 +73,50 @@ export default function ReviewSession({
   const [currentIndex, setCurrentIndex] = useState(0);
   const [feedback, setFeedback] = useState<FeedbackState>(null);
   const [startTime, setStartTime] = useState(Date.now());
+  const [currentTime, setCurrentTime] = useState(Date.now());
   const [sessionFinished, setSessionFinished] = useState(false);
   const [correctCount, setCorrectCount] = useState(0);
+  const [sessionStreak, setSessionStreak] = useState(0);
+  const [bestStreak, setBestStreak] = useState(0);
+  const [totalTime, setTotalTime] = useState(0);
+  const [showConfetti, setShowConfetti] = useState(false);
   const router = useRouter();
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   const question = questions[currentIndex];
+
+  // Live timer
+  useEffect(() => {
+    if (feedback || sessionFinished) {
+      if (timerRef.current) clearInterval(timerRef.current);
+      return;
+    }
+    timerRef.current = setInterval(() => setCurrentTime(Date.now()), 100);
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [feedback, sessionFinished]);
+
+  const elapsedThisQuestion = currentTime - startTime;
 
   const handleAnswer = useCallback(
     async (isCorrect: boolean, explanation: string) => {
       if (feedback) return;
 
       setFeedback({ status: isCorrect ? "correct" : "incorrect", explanation });
-      if (isCorrect) setCorrectCount((c) => c + 1);
+      if (isCorrect) {
+        setCorrectCount((c) => c + 1);
+        setSessionStreak((s) => {
+          const newStreak = s + 1;
+          setBestStreak((b) => Math.max(b, newStreak));
+          return newStreak;
+        });
+      } else {
+        setSessionStreak(0);
+      }
 
       const timeTaken = Date.now() - startTime;
+      setTotalTime((t) => t + timeTaken);
 
       try {
         await fetch("/api/review", {
@@ -60,48 +139,116 @@ export default function ReviewSession({
     const nextIndex = currentIndex + 1;
     if (nextIndex >= questions.length) {
       setSessionFinished(true);
+      // Show confetti if accuracy >= 80%
+      const pct = Math.round((correctCount / questions.length) * 100);
+      if (pct >= 80) {
+        setShowConfetti(true);
+        setTimeout(() => setShowConfetti(false), 5000);
+      }
     } else {
       setCurrentIndex(nextIndex);
       setFeedback(null);
       setStartTime(Date.now());
+      setCurrentTime(Date.now());
     }
   }
 
   if (sessionFinished) {
     const pct = Math.round((correctCount / questions.length) * 100);
+    const avgTime = totalTime / questions.length;
+
     return (
       <div className="flex min-h-screen flex-col items-center justify-center px-4 text-center safe-top safe-bottom">
-        <div className="animate-scale-in flex h-20 w-20 items-center justify-center rounded-3xl bg-gradient-to-br from-accent/20 to-purple-500/20">
-          <Trophy className="h-10 w-10 text-accent" />
-        </div>
-        <h2 className="mt-6 text-2xl font-bold tracking-tight">Session Complete</h2>
-        <p className="mt-2 text-text-secondary">
+        {showConfetti && <Confetti />}
+        <motion.div
+          initial={{ scale: 0, rotate: -180 }}
+          animate={{ scale: 1, rotate: 0 }}
+          transition={{ type: "spring", stiffness: 200, damping: 15 }}
+          className="flex h-24 w-24 items-center justify-center rounded-3xl bg-gradient-to-br from-accent/20 to-purple-500/20 glow-accent"
+        >
+          <Trophy className="h-12 w-12 text-accent" />
+        </motion.div>
+
+        <motion.h2
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="mt-6 text-3xl font-bold tracking-tight"
+        >
+          Session Complete
+        </motion.h2>
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3 }}
+          className="mt-2 text-text-secondary"
+        >
           You reviewed {questions.length} cards
-        </p>
-        <div className="mt-6 flex items-center gap-6">
-          <div className="text-center">
-            <p className="text-3xl font-bold text-ok">{correctCount}</p>
+        </motion.p>
+
+        {/* Stats grid */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="mt-8 grid w-full max-w-md grid-cols-2 gap-3"
+        >
+          <div className="rounded-2xl border border-ok/20 bg-ok/5 p-4">
+            <Check className="mx-auto h-5 w-5 text-ok" />
+            <p className="mt-2 text-3xl font-bold text-ok">{correctCount}</p>
             <p className="text-xs text-text-tertiary">Correct</p>
           </div>
-          <div className="h-10 w-px bg-border" />
-          <div className="text-center">
-            <p className="text-3xl font-bold text-err">
+          <div className="rounded-2xl border border-err/20 bg-err/5 p-4">
+            <X className="mx-auto h-5 w-5 text-err" />
+            <p className="mt-2 text-3xl font-bold text-err">
               {questions.length - correctCount}
             </p>
             <p className="text-xs text-text-tertiary">Missed</p>
           </div>
-          <div className="h-10 w-px bg-border" />
-          <div className="text-center">
-            <p className="text-3xl font-bold">{pct}%</p>
+          <div className="rounded-2xl border border-accent/20 bg-accent/5 p-4">
+            <Zap className="mx-auto h-5 w-5 text-accent" />
+            <p className="mt-2 text-3xl font-bold text-accent">{pct}%</p>
             <p className="text-xs text-text-tertiary">Accuracy</p>
           </div>
-        </div>
-        <a
-          href="/dashboard"
-          className="mt-8 rounded-xl bg-gradient-to-r from-accent-hover to-accent px-8 py-3.5 font-semibold text-white transition hover:opacity-90 glow-accent"
+          <div className="rounded-2xl border border-warn/20 bg-warn/5 p-4">
+            <Flame className="mx-auto h-5 w-5 text-warn" />
+            <p className="mt-2 text-3xl font-bold text-warn">{bestStreak}</p>
+            <p className="text-xs text-text-tertiary">Best streak</p>
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          className="mt-4 flex items-center gap-2 text-sm text-text-tertiary"
         >
-          Back to dashboard
-        </a>
+          <Clock className="h-4 w-4" />
+          <span>
+            Total: {formatTime(totalTime)} · Avg: {formatTime(avgTime)}/card
+          </span>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+          className="mt-8 flex flex-col gap-3 sm:flex-row"
+        >
+          <a
+            href="/dashboard"
+            className="rounded-xl bg-gradient-to-r from-accent-hover to-accent px-8 py-3.5 font-semibold text-white transition hover:opacity-90 glow-accent"
+          >
+            Back to dashboard
+          </a>
+          <a
+            href={window.location.pathname}
+            className="flex items-center justify-center gap-2 rounded-xl border border-border bg-bg-card px-8 py-3.5 font-semibold text-text transition hover:bg-bg-hover"
+          >
+            <RotateCcw className="h-4 w-4" />
+            Practice again
+          </a>
+        </motion.div>
       </div>
     );
   }
@@ -127,16 +274,35 @@ export default function ReviewSession({
               <XCircle className="h-4 w-4" />
               Exit
             </button>
-            <span className="text-sm font-medium text-text-secondary">
-              {currentIndex + 1} / {questions.length}
-            </span>
+            <div className="flex items-center gap-3">
+              {/* Session streak */}
+              {sessionStreak >= 2 && (
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  className="flex items-center gap-1 text-sm font-semibold text-warn"
+                >
+                  <Flame className="h-3.5 w-3.5" />
+                  {sessionStreak}
+                </motion.div>
+              )}
+              {/* Timer */}
+              <div className="flex items-center gap-1 text-sm text-text-tertiary">
+                <Clock className="h-3.5 w-3.5" />
+                {formatTime(elapsedThisQuestion)}
+              </div>
+              <span className="text-sm font-medium text-text-secondary">
+                {currentIndex + 1} / {questions.length}
+              </span>
+            </div>
           </div>
           <div className="h-1.5 w-full overflow-hidden rounded-full bg-bg-input">
-            <div
-              className="h-full rounded-full bg-gradient-to-r from-accent to-purple-400 transition-all duration-500"
-              style={{
-                width: `${(currentIndex / questions.length) * 100}%`,
+            <motion.div
+              animate={{
+                width: `${((currentIndex + (feedback ? 1 : 0)) / questions.length) * 100}%`,
               }}
+              transition={{ duration: 0.3 }}
+              className="h-full rounded-full bg-gradient-to-r from-accent to-purple-400"
             />
           </div>
         </div>
@@ -144,68 +310,89 @@ export default function ReviewSession({
 
       {/* Question card */}
       <div className="mx-auto max-w-2xl px-4 py-6">
-        {question.mode === "quiz" ? (
-          <QuizCard
+        <AnimatePresence mode="wait">
+          <motion.div
             key={question.id}
-            question={question}
-            onAnswer={handleAnswer}
-            disabled={!!feedback}
-          />
-        ) : (
-          <SolverCard
-            key={question.id}
-            question={question}
-            onAnswer={handleAnswer}
-            disabled={!!feedback}
-          />
-        )}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            {question.mode === "quiz" ? (
+              <QuizCard
+                key={question.id}
+                question={question}
+                onAnswer={handleAnswer}
+                disabled={!!feedback}
+              />
+            ) : (
+              <SolverCard
+                key={question.id}
+                question={question}
+                onAnswer={handleAnswer}
+                disabled={!!feedback}
+              />
+            )}
+          </motion.div>
+        </AnimatePresence>
 
         {/* Feedback panel */}
-        {feedback && (
-          <div className="mt-4 animate-slide-up space-y-4">
-            <div
-              className={`rounded-2xl border p-5 ${
-                feedback.status === "correct"
-                  ? "border-ok/30 bg-ok/10"
-                  : "border-err/30 bg-err/10"
-              }`}
+        <AnimatePresence>
+          {feedback && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="mt-4 space-y-4"
             >
-              <div className="flex items-center gap-3">
-                <div
-                  className={`flex h-8 w-8 items-center justify-center rounded-full ${
-                    feedback.status === "correct"
-                      ? "bg-ok/20"
-                      : "bg-err/20"
-                  }`}
-                >
-                  {feedback.status === "correct" ? (
-                    <Check className="h-5 w-5 text-ok" />
-                  ) : (
-                    <X className="h-5 w-5 text-err" />
-                  )}
+              <div
+                className={`rounded-2xl border p-5 ${
+                  feedback.status === "correct"
+                    ? "border-ok/30 bg-ok/10"
+                    : "border-err/30 bg-err/10"
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                    className={`flex h-9 w-9 items-center justify-center rounded-full ${
+                      feedback.status === "correct" ? "bg-ok/20" : "bg-err/20"
+                    }`}
+                  >
+                    {feedback.status === "correct" ? (
+                      <Check className="h-5 w-5 text-ok" />
+                    ) : (
+                      <X className="h-5 w-5 text-err" />
+                    )}
+                  </motion.div>
+                  <span
+                    className={`text-lg font-bold ${
+                      feedback.status === "correct" ? "text-ok" : "text-err"
+                    }`}
+                  >
+                    {feedback.status === "correct" ? "Correct!" : "Not quite"}
+                  </span>
                 </div>
-                <span
-                  className={`text-lg font-bold ${
-                    feedback.status === "correct" ? "text-ok" : "text-err"
-                  }`}
-                >
-                  {feedback.status === "correct" ? "Correct!" : "Not quite"}
-                </span>
+                <p className="mt-3 text-sm leading-relaxed text-text-secondary">
+                  {feedback.explanation}
+                </p>
               </div>
-              <p className="mt-3 text-sm leading-relaxed text-text-secondary">
-                {feedback.explanation}
-              </p>
-            </div>
 
-            <button
-              onClick={handleNext}
-              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-accent-hover to-accent py-4 font-semibold text-white transition-all duration-200 hover:opacity-90 glow-accent"
-            >
-              {currentIndex + 1 >= questions.length ? "Finish session" : "Next question"}
-              <ArrowRight className="h-4 w-4" />
-            </button>
-          </div>
-        )}
+              <motion.button
+                whileTap={{ scale: 0.98 }}
+                onClick={handleNext}
+                className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-accent-hover to-accent py-4 font-semibold text-white transition-all duration-200 hover:opacity-90 glow-accent"
+              >
+                {currentIndex + 1 >= questions.length
+                  ? "Finish session"
+                  : "Next question"}
+                <ArrowRight className="h-4 w-4" />
+              </motion.button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );

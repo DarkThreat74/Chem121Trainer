@@ -1,8 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import type { Question, SolverContent } from "@/lib/types";
-import { Plus, X, Check, AlertTriangle, ArrowRight, Target } from "lucide-react";
+import {
+  Plus,
+  X,
+  Check,
+  AlertTriangle,
+  ArrowRight,
+  Target,
+  Lightbulb,
+  Zap,
+  Calculator,
+} from "lucide-react";
 
 interface SolverCardProps {
   question: Question;
@@ -19,6 +30,12 @@ interface Step {
   accepted?: boolean;
 }
 
+const DIFFICULTY_LABELS: Record<number, { label: string; color: string }> = {
+  1: { label: "Easy", color: "#34d399" },
+  2: { label: "Medium", color: "#fbbf24" },
+  3: { label: "Hard", color: "#f87171" },
+};
+
 export default function SolverCard({ question, onAnswer, disabled }: SolverCardProps) {
   const content = question.content as SolverContent;
   const [steps, setSteps] = useState<Step[]>([]);
@@ -31,6 +48,7 @@ export default function SolverCard({ question, onAnswer, disabled }: SolverCardP
   const [finalAnswer, setFinalAnswer] = useState("");
   const [finalError, setFinalError] = useState<string | null>(null);
   const [phase, setPhase] = useState<"building" | "answering">("building");
+  const [showHint, setShowHint] = useState(false);
 
   function getCurrentOutputUnit(): string {
     if (steps.length === 0) return content.given[0].unit;
@@ -116,6 +134,22 @@ export default function SolverCard({ question, onAnswer, disabled }: SolverCardP
     return noTrailingZeros.length || 1;
   }
 
+  // Running calculation
+  const runningResult = useMemo(() => {
+    if (steps.length === 0) return null;
+    let value = content.given[0].value;
+    for (const step of steps) {
+      const num = parseFloat(step.numeratorValue);
+      const den = parseFloat(step.denominatorValue);
+      if (!isNaN(num) && !isNaN(den) && den !== 0) {
+        value = (value * num) / den;
+      } else {
+        return null;
+      }
+    }
+    return value;
+  }, [steps, content.given]);
+
   function handleFinalSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (disabled) return;
@@ -128,30 +162,52 @@ export default function SolverCard({ question, onAnswer, disabled }: SolverCardP
     const tolerance = (expected.tolerance_pct / 100) * expected.value;
     const numericCorrect = Math.abs(parsed - expected.value) <= tolerance;
     if (!numericCorrect) {
-      onAnswer(false, `The correct answer is ${expected.value} ${expected.unit}. ${content.explanation}`);
+      onAnswer(
+        false,
+        `The correct answer is ${expected.value} ${expected.unit}. ${content.explanation}`
+      );
       return;
     }
     const userSigFigs = countSigFigs(finalAnswer);
     if (userSigFigs !== expected.sigfigs) {
-      onAnswer(false, `Your numeric value is correct (${parsed}), but you have ${userSigFigs} significant figure(s) — the answer should have ${expected.sigfigs}. ${content.explanation}`);
+      onAnswer(
+        false,
+        `Your numeric value is correct (${parsed}), but you have ${userSigFigs} significant figure(s) — the answer should have ${expected.sigfigs}. ${content.explanation}`
+      );
       return;
     }
     onAnswer(true, content.explanation);
   }
 
   const currentOutputUnit = getCurrentOutputUnit();
+  const diffInfo = DIFFICULTY_LABELS[question.difficulty] || DIFFICULTY_LABELS[1];
+  const hint = content.explanation.split(".")[0] + ".";
 
   return (
-    <div className="animate-slide-up rounded-2xl border border-border bg-bg-card p-6">
-      {/* Topic tag */}
-      <div className="mb-4 flex items-center gap-2">
-        <span className="rounded-lg bg-bg-input px-2.5 py-1 text-xs font-medium text-text-secondary">
-          {question.topic.replace(/-/g, " ")}
-        </span>
-        <span className="text-text-tertiary">·</span>
-        <span className="text-xs text-text-tertiary">
-          {question.subtopic.replace(/-/g, " ")}
-        </span>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+      className="rounded-3xl border border-border bg-bg-card p-6"
+    >
+      {/* Topic tag + difficulty */}
+      <div className="mb-4 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <span className="rounded-lg bg-bg-input px-2.5 py-1 text-xs font-medium capitalize text-text-secondary">
+            {question.topic.replace(/-/g, " ")}
+          </span>
+          <span className="text-text-tertiary">·</span>
+          <span className="text-xs capitalize text-text-tertiary">
+            {question.subtopic.replace(/-/g, " ")}
+          </span>
+        </div>
+        <div
+          className="flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold"
+          style={{ backgroundColor: `${diffInfo.color}15`, color: diffInfo.color }}
+        >
+          <Zap className="h-3 w-3" />
+          {diffInfo.label}
+        </div>
       </div>
 
       {/* Problem prompt */}
@@ -195,15 +251,22 @@ export default function SolverCard({ question, onAnswer, disabled }: SolverCardP
             </div>
           ))}
           {steps.map((step, i) => (
-            <div key={i} className="flex items-center gap-2 animate-scale-in">
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="flex items-center gap-2"
+            >
               <span className="text-muted">×</span>
               <div className="flex flex-col items-center font-mono text-sm">
                 <span className="rounded-t-lg border border-b-0 border-border bg-bg-input px-3 py-1 font-semibold">
-                  {step.numeratorValue} {step.numeratorUnit}
+                  {step.numeratorValue}{" "}
+                  <span className="text-accent">{step.numeratorUnit}</span>
                 </span>
                 <span className="h-px w-full bg-border" />
                 <span className="rounded-b-lg border border-t-0 border-border bg-bg-input px-3 py-1 font-semibold">
-                  {step.denominatorValue} {step.denominatorUnit}
+                  {step.denominatorValue}{" "}
+                  <span className="unit-cancel text-err">{step.denominatorUnit}</span>
                 </span>
               </div>
               {!disabled && (
@@ -214,18 +277,65 @@ export default function SolverCard({ question, onAnswer, disabled }: SolverCardP
                   <X className="h-4 w-4" />
                 </button>
               )}
-            </div>
+            </motion.div>
           ))}
+
+          {/* Running calculation */}
+          {runningResult !== null && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex items-center gap-2 rounded-lg border border-border-subtle bg-bg-elevated px-3 py-2 font-mono text-sm"
+            >
+              <Calculator className="h-3.5 w-3.5 text-text-tertiary" />
+              <span className="text-text-tertiary">Running:</span>
+              <span className="font-semibold text-text">
+                {runningResult.toPrecision(4)} {getCurrentOutputUnit()}
+              </span>
+            </motion.div>
+          )}
+
           {phase === "answering" && (
-            <div className="flex items-center gap-2 animate-fade-in">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex items-center gap-2"
+            >
               <ArrowRight className="h-4 w-4 text-ok" />
               <span className="text-sm font-semibold text-ok">
                 Units cancel to {content.target_unit}
               </span>
-            </div>
+            </motion.div>
           )}
         </div>
       )}
+
+      {/* Hint */}
+      {!disabled && !showHint && (
+        <button
+          onClick={() => setShowHint(true)}
+          className="mt-4 flex items-center gap-1.5 text-sm text-text-tertiary transition hover:text-warn"
+        >
+          <Lightbulb className="h-4 w-4" />
+          Show hint
+        </button>
+      )}
+
+      <AnimatePresence>
+        {showHint && !disabled && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="mt-3 overflow-hidden"
+          >
+            <div className="flex items-start gap-2 rounded-xl border border-warn/20 bg-warn/5 p-3">
+              <Lightbulb className="mt-0.5 h-4 w-4 flex-shrink-0 text-warn" />
+              <p className="text-sm text-text-secondary">{hint}</p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Step builder */}
       {phase === "building" && !disabled && (
@@ -279,30 +389,39 @@ export default function SolverCard({ question, onAnswer, disabled }: SolverCardP
                 className="w-24 rounded-b-lg border border-t-0 border-border bg-bg-input px-2 py-1.5 text-center font-mono text-xs outline-none transition focus:border-accent"
               />
             </div>
-            <button
+            <motion.button
+              whileTap={{ scale: 0.95 }}
               onClick={handleAddStep}
               className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-accent-hover to-accent px-4 py-2.5 text-sm font-semibold text-white transition hover:opacity-90"
             >
               <Plus className="h-4 w-4" />
               Add
-            </button>
+            </motion.button>
           </div>
 
           {currentStep.error && (
-            <div className="mt-3 flex items-start gap-2 rounded-xl border border-err/30 bg-err/10 p-3 animate-shake">
+            <motion.div
+              initial={{ opacity: 0, x: -6 }}
+              animate={{ opacity: 1, x: [0, -6, 6, 0] }}
+              className="mt-3 flex items-start gap-2 rounded-xl border border-err/30 bg-err/10 p-3"
+            >
               <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0 text-err" />
               <p className="text-sm text-err">{currentStep.error}</p>
-            </div>
+            </motion.div>
           )}
         </div>
       )}
 
       {/* Final answer input */}
       {phase === "answering" && !disabled && (
-        <div className="mt-5 border-t border-border-subtle pt-4 animate-slide-up">
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mt-5 border-t border-border-subtle pt-4"
+        >
           <div className="mb-3 flex items-center gap-2 text-sm font-medium text-ok">
             <div className="flex h-6 w-6 items-center justify-center rounded-full bg-ok/20">
-              <Check className="h-3.5 w-3.5 text-ok" />
+              <Check className="h-3.5 w-3.5" />
             </div>
             <span>Unit chain complete! Enter your final answer.</span>
           </div>
@@ -320,13 +439,14 @@ export default function SolverCard({ question, onAnswer, disabled }: SolverCardP
                 placeholder="Enter numeric answer"
               />
             </div>
-            <button
+            <motion.button
+              whileTap={{ scale: 0.95 }}
               type="submit"
               disabled={!finalAnswer.trim()}
               className="rounded-xl bg-gradient-to-r from-accent-hover to-accent px-6 py-3 font-semibold text-white transition hover:opacity-90 disabled:opacity-30"
             >
               Check
-            </button>
+            </motion.button>
           </form>
           {finalError && (
             <p className="mt-2 text-sm text-err">{finalError}</p>
@@ -335,7 +455,7 @@ export default function SolverCard({ question, onAnswer, disabled }: SolverCardP
             Check your significant figures — the answer should have the correct
             number of sig figs based on the given data.
           </p>
-        </div>
+        </motion.div>
       )}
 
       {/* Disabled state */}
@@ -349,6 +469,6 @@ export default function SolverCard({ question, onAnswer, disabled }: SolverCardP
           </p>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }

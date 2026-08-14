@@ -1,8 +1,8 @@
 # Chem 121 Trainer — AI Handoff & Progress Document
 
 > **Purpose:** This document allows any AI to pick up where the previous session left off.
-> **Last updated:** Aug 13, 2026 7:40 PM CST
-> **Updated by:** Cascade session (UI/UX + Content Overhaul)
+> **Last updated:** Aug 13, 2026 8:30 PM CST
+> **Updated by:** Devin session (UI/UX Interactive Redesign)
 
 ---
 
@@ -105,12 +105,32 @@ Content and UI were designed based on research using the `agent-reach` skill:
 | 8 | Inject 98 questions into Neon DB | Done via `scripts/inject-neon.ts` using `@neondatabase/serverless` driver. Schema created, 35 old questions deleted, 98 new questions inserted. Verified: 98 questions across 7 topics confirmed in database. |
 | 8 | Update `neon/setup.sql` | Updated with schema + note referencing `lib/sample-data.ts` as source of truth. Old stale seed data removed. |
 
+### ✅ Build & Push (Aug 13, 2026)
+
+| # | Task | Details |
+|---|------|---------|
+| 9 | Build, verify, and push to git | `npx next build` passed with no errors. Committed `AGENTS.md` (commit 88bd95a) and pushed to `origin/main`. |
+
+### ✅ UI/UX Overhaul — Interactive Redesign (Aug 13, 2026)
+
+| # | Task | Details |
+|---|------|---------|
+| 10 | Study CHEM 121 PDFs | Extracted and studied 10 course PDFs: High School Review, Structure of Atom, Significant Figures, Stoichiometry & Dimensional Analysis, Dilutions (with answers), and Terms in CHEM 121. |
+| 11 | Add framer-motion | Installed `framer-motion` for smooth spring animations throughout the app. |
+| 12 | Responsive NavBar | Bottom tab bar on mobile, top nav on desktop. Active indicator with shared layout animation. Hidden during active review/practice sessions. |
+| 13 | Landing page | Animated hero with floating orbs, gradient title, topic preview pills, feature cards, dual CTAs. |
+| 14 | Enhanced Dashboard | 3-column animated stats (streak/due/reviews), weekly activity bar chart, animated progress bars, pulse ring on streak flame. |
+| 15 | Enhanced QuizCard | Keyboard shortcuts (1-9 for choices, Enter to submit), hint system, difficulty badge, framer-motion shake/bounce feedback. |
+| 16 | Enhanced SolverCard | Visual unit cancellation (strikethrough animation), running calculation display, hint system, difficulty badge, animated step additions. |
+| 17 | Enhanced ReviewSession | Per-question timer, session streak counter with flame, confetti on ≥80% accuracy, 4-stat completion screen (correct/missed/accuracy/best streak), avg time per card. |
+| 18 | Learn page | Comprehensive study guide from PDF content: sig fig rules + calculation rules, metric prefixes & base units, atomic particles table, key formulas, stoichiometry steps, dimensional analysis example, interactive 3D flip vocabulary flashcards (24 terms) with shuffle. |
+
 ### ⬜ Pending
 
 | # | Task | Notes |
 |---|------|-------|
-| 9 | Build, verify, and push to git | Run `npx next build` to verify, then `git add -A; git commit; git push` |
 | — | Verify Vercel deployment | Check that app loads without errors, DATABASE_URL is set in Vercel env vars |
+| — | Expand content to 20+ Q per topic | Some topics have fewer questions; aim for 20+ each |
 
 ---
 

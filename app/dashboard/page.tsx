@@ -85,11 +85,13 @@ export default async function DashboardPage() {
     ...t,
     count: questions.filter((q) => q.topic === t.id).length,
   }));
+  const weeklyActivity = calculateWeeklyActivity(reviewLogs);
 
   return (
-    <div className="min-h-screen safe-top safe-bottom">
-      <header className="sticky top-0 z-10 border-b border-border-subtle bg-bg/80 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-2xl items-center justify-between px-4 py-4">
+    <div className="min-h-screen nav-offset safe-top safe-bottom">
+      {/* Mobile header */}
+      <header className="sticky top-0 z-10 border-b border-border-subtle bg-bg/80 backdrop-blur-xl md:hidden">
+        <div className="flex items-center justify-between px-4 py-4">
           <h1 className="text-lg font-bold tracking-tight">
             <span className="gradient-text">Chem 121</span> Trainer
           </h1>
@@ -102,6 +104,8 @@ export default async function DashboardPage() {
           dueCount={dueCount}
           topicMastery={topicMastery}
           topicsWithCounts={questionsPerTopic}
+          weeklyActivity={weeklyActivity}
+          totalReviews={reviewLogs.length}
         />
       </main>
     </div>
@@ -142,6 +146,31 @@ function calculateStreak(logs: Array<{ reviewed_at: string }>): number {
   }
 
   return streak;
+}
+
+function calculateWeeklyActivity(
+  logs: Array<{ reviewed_at: string }>
+): { date: string; label: string; count: number }[] {
+  const days: { date: string; label: string; count: number }[] = [];
+  const today = new Date();
+  const oneDay = 86400000;
+  const dayLabels = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(today.getTime() - i * oneDay);
+    const key = `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+    days.push({ date: key, label: dayLabels[d.getDay()], count: 0 });
+  }
+
+  const dayMap = new Map(days.map((d) => [d.date, d]));
+  for (const log of logs) {
+    const d = new Date(log.reviewed_at);
+    const key = `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+    const day = dayMap.get(key);
+    if (day) day.count++;
+  }
+
+  return days;
 }
 
 function calculateTopicMastery(

@@ -72,8 +72,8 @@ export default async function PracticePage({
 
   return (
     <div className="min-h-screen safe-top safe-bottom">
-      <div className="sticky top-0 z-10 border-b border-border bg-bg/90 backdrop-blur">
-        <div className="mx-auto max-w-2xl px-4 py-3">
+      <div className="mx-auto max-w-2xl px-4 py-6">
+        <div className="mb-4">
           <a
             href="/dashboard"
             className="text-sm text-text-secondary transition hover:text-text"
@@ -82,8 +82,6 @@ export default async function PracticePage({
           </a>
           <h1 className="mt-1 text-lg font-bold">{topicInfo.label}</h1>
         </div>
-      </div>
-      <div className="mx-auto max-w-2xl px-4 py-6">
         <ReviewSession questions={questions} reviewStates={stateMap} />
       </div>
     </div>
