@@ -1,8 +1,8 @@
 # Chem 121 Trainer — AI Handoff & Progress Document
 
 > **Purpose:** This document allows any AI to pick up where the previous session left off.
-> **Last updated:** Aug 13, 2026 8:30 PM CST
-> **Updated by:** Devin session (UI/UX Interactive Redesign)
+> **Last updated:** Aug 13, 2026 9:25 PM CST
+> **Updated by:** Devin session (Content Bank Expansion)
 
 ---
 
@@ -96,7 +96,7 @@ Content and UI were designed based on research using the `agent-reach` skill:
 | — | Migrate from Supabase to Neon | Removed auth, middleware, supabase client/server utils. Added Neon client. |
 | — | Push middleware fix to GitHub | Deleted middleware.ts (was crashing Vercel with Supabase import error) |
 
-**Total questions in sample-data.ts: 98** (all 7 topics covered)
+**Total questions in sample-data.ts: 144** (all 7 topics covered, 20+ each)
 
 ### ✅ Database Injected (Aug 13, 2026 7:39 PM)
 
@@ -125,12 +125,18 @@ Content and UI were designed based on research using the `agent-reach` skill:
 | 17 | Enhanced ReviewSession | Per-question timer, session streak counter with flame, confetti on ≥80% accuracy, 4-stat completion screen (correct/missed/accuracy/best streak), avg time per card. |
 | 18 | Learn page | Comprehensive study guide from PDF content: sig fig rules + calculation rules, metric prefixes & base units, atomic particles table, key formulas, stoichiometry steps, dimensional analysis example, interactive 3D flip vocabulary flashcards (24 terms) with shuffle. |
 
+### ✅ Content Bank Expansion (Aug 13, 2026)
+
+| # | Task | Details |
+|---|------|---------|
+| 19 | Add 46 new questions from PDF content | Expanded sample-data.ts from 98 → 144 questions. New questions derived from actual CHEM 121 course PDFs: states of matter, mole vs molarity, density (diamond/zirconia), orbital vs orbit, electron mass, unit identification (mg/cm³/µg/L), SI abbreviations (mM/µM), conversion ratios, sig fig counting (8370.00, 0.090, scientific notation, defined conversions), multi-step dimensional analysis (Jennifer/Mark driving, oak tree leaves, Thanksgiving calories, sea salt, Ben walking), mole concepts (isotopes, periodic table masses, mmol Na⁺ comparisons, isotope charge), stoichiometry (balancing oleic acid/CaCl₂/FeS₂, mass-to-mass, limiting reactant, gas volume), dilutions (stock solutions, serial dilution, C₁V₁=C₂V₂ calculations). |
+| 20 | Re-inject 144 questions into Neon DB | Ran `scripts/inject-neon.ts`. All 144 questions verified in DB: fundamentals 20, metric-system 20, significant-figures 22, dimensional-analysis 22, the-mole 20, stoichiometry 20, molarity-dilutions 20. |
+
 ### ⬜ Pending
 
 | # | Task | Notes |
 |---|------|-------|
 | — | Verify Vercel deployment | Check that app loads without errors, DATABASE_URL is set in Vercel env vars |
-| — | Expand content to 20+ Q per topic | Some topics have fewer questions; aim for 20+ each |
 
 ---
 
