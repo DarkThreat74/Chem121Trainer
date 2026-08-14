@@ -78,7 +78,12 @@ export default function QuizCard({ question, onAnswer, disabled }: QuizCardProps
   }, [disabled, content.answer_type, userAnswer, handleSubmit]);
 
   const diffInfo = DIFFICULTY_LABELS[question.difficulty] || DIFFICULTY_LABELS[1];
-  const hint = content.explanation.split(".")[0] + ".";
+  const hint =
+    content.answer_type === "multiple-choice"
+      ? "Eliminate choices you know are wrong, then evaluate the remaining ones carefully."
+      : content.answer_type === "numeric"
+      ? "Pay attention to units and significant figures in your calculation."
+      : "Think about the key term being asked about and its precise definition.";
 
   return (
     <motion.div

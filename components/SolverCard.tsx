@@ -181,7 +181,7 @@ export default function SolverCard({ question, onAnswer, disabled }: SolverCardP
 
   const currentOutputUnit = getCurrentOutputUnit();
   const diffInfo = DIFFICULTY_LABELS[question.difficulty] || DIFFICULTY_LABELS[1];
-  const hint = content.explanation.split(".")[0] + ".";
+  const hint = `Start from "${content.given[0].unit}" and work toward "${content.target_unit}". What conversion factor cancels the current unit?`;
 
   return (
     <motion.div

@@ -58,7 +58,6 @@ function Confetti() {
             backgroundColor: p.color,
             animationDelay: `${p.delay}s`,
             animationDuration: `${p.duration}s`,
-            transform: `rotate(${p.rotation}deg)`,
           }}
         />
       ))}
@@ -81,7 +80,7 @@ export default function ReviewSession({
   const [totalTime, setTotalTime] = useState(0);
   const [showConfetti, setShowConfetti] = useState(false);
   const router = useRouter();
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const question = questions[currentIndex];
 

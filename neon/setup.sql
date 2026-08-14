@@ -75,16 +75,16 @@ create index if not exists idx_review_log_question on public.review_log(user_id,
 -- ============================================================
 -- 5. Seed Sample Questions
 -- ============================================================
--- 98 questions across 7 topics, injected directly via scripts/inject-neon.ts
+-- 144 questions across 7 topics, injected directly via scripts/inject-neon.ts
 -- Source of truth: lib/sample-data.ts
 -- To re-inject: set DATABASE_URL env var and run: npx tsx scripts/inject-neon.ts
 -- Or use the Neon SQL Editor to run individual INSERTs below.
 
 DELETE FROM public.questions WHERE is_sample = true;
 
--- Note: The 98 questions are defined in lib/sample-data.ts and were
+-- Note: The 144 questions are defined in lib/sample-data.ts and were
 -- injected directly into the Neon database on Aug 13, 2026.
--- Topics: fundamentals (12), metric-system (12), significant-figures (18),
--- dimensional-analysis (14), the-mole (14), stoichiometry (14),
--- molarity-dilutions (14).
+-- Topics: fundamentals (20), metric-system (20), significant-figures (22),
+-- dimensional-analysis (22), the-mole (20), stoichiometry (20),
+-- molarity-dilutions (20).
 -- To re-seed, run the inject script or copy INSERTs from lib/sample-data.ts.

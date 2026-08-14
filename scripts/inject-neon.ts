@@ -46,6 +46,7 @@ async function inject() {
       elapsed_days REAL NOT NULL DEFAULT 0,
       scheduled_days REAL NOT NULL DEFAULT 0,
       last_review TIMESTAMPTZ,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
       PRIMARY KEY (user_id, question_id)
     )
   `;
@@ -53,22 +54,21 @@ async function inject() {
 
   await sql`
     CREATE TABLE IF NOT EXISTS public.review_log (
-      id TEXT NOT NULL,
+      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
       user_id UUID NOT NULL,
       question_id TEXT NOT NULL,
       rating INTEGER NOT NULL,
       state INTEGER NOT NULL,
       due TIMESTAMPTZ NOT NULL,
       reviewed_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-      time_taken_ms INTEGER NOT NULL DEFAULT 0,
-      PRIMARY KEY (id)
+      time_taken_ms INTEGER NOT NULL DEFAULT 0
     )
   `;
   console.log("✅ review_log table ready\n");
 
   // Delete old questions
-  const deleted = await sql`DELETE FROM public.questions`;
-  console.log(`🗑️  Deleted ${deleted.count ?? "all"} old questions`);
+  await sql`DELETE FROM public.questions`;
+  console.log("🗑️  Deleted old questions");
 
   // Insert new questions in batches
   let inserted = 0;

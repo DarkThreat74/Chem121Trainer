@@ -770,7 +770,7 @@ export const SAMPLE_QUESTIONS: Question[] = [
       solution_chain: [
         { numerator: "1.609 km", denominator: "1 mi", numerator_value: 1.609, denominator_value: 1 },
       ],
-      final_answer: { value: 104.585, unit: "km", sigfigs: 3, tolerance_pct: 1 },
+      final_answer: { value: 105, unit: "km", sigfigs: 3, tolerance_pct: 1 },
       explanation: "65.0 mi × (1.609 km / 1 mi) = 104.585 km → 105 km (3 sig figs from 65.0).",
     },
   },
@@ -1119,7 +1119,7 @@ export const SAMPLE_QUESTIONS: Question[] = [
       solution_chain: [
         { numerator: "174.26 g", denominator: "1 mol", numerator_value: 174.26, denominator_value: 1 },
       ],
-      final_answer: { value: 261.39, unit: "g", sigfigs: 3, tolerance_pct: 1 },
+      final_answer: { value: 261, unit: "g", sigfigs: 3, tolerance_pct: 1 },
       explanation: "1.50 mol × (174.26 g / 1 mol) = 261.39 g → 261 g. 3 sig figs from 1.50.",
     },
   },
@@ -1431,7 +1431,7 @@ export const SAMPLE_QUESTIONS: Question[] = [
       given: [{ value: 0.500, unit: "mol", sigfigs: 3 }],
       target_unit: "mol/L",
       solution_chain: [
-        { numerator: "1 L", denominator: "1 L", numerator_value: 1, denominator_value: 1 },
+        { numerator: "1 L", denominator: "2.50 L", numerator_value: 1, denominator_value: 2.50 },
       ],
       final_answer: { value: 0.200, unit: "mol/L", sigfigs: 3, tolerance_pct: 1 },
       explanation: "M = mol / L = 0.500 mol / 2.50 L = 0.200 M. 3 sig figs.",
@@ -1469,7 +1469,7 @@ export const SAMPLE_QUESTIONS: Question[] = [
       target_unit: "mol/L",
       solution_chain: [
         { numerator: "1 mol", denominator: "58.44 g", numerator_value: 1, denominator_value: 58.44 },
-        { numerator: "1 L", denominator: "1000 mL", numerator_value: 1, denominator_value: 1000 },
+        { numerator: "1000 mL", denominator: "250.0 mL", numerator_value: 1000, denominator_value: 250 },
       ],
       final_answer: { value: 0.400, unit: "mol/L", sigfigs: 3, tolerance_pct: 1 },
       explanation: "5.85 g ÷ 58.44 g/mol = 0.1001 mol. 250.0 mL = 0.2500 L. M = 0.1001 mol / 0.2500 L = 0.400 M. 3 sig figs from 5.85 g.",
@@ -2022,7 +2022,7 @@ export const SAMPLE_QUESTIONS: Question[] = [
     is_sample: true,
     content: {
       prompt: "Mark drives 1 hour at 1.2 km per minute. How many miles does he travel? (1.609 km = 1.000 mile)",
-      given: [{ value: 1, unit: "hr", sigfigs: 1 }],
+      given: [{ value: 1, unit: "hr", sigfigs: 2 }],
       target_unit: "mi",
       solution_chain: [
         { numerator: "60 min", denominator: "1 hr", numerator_value: 60, denominator_value: 1 },
@@ -2322,8 +2322,8 @@ export const SAMPLE_QUESTIONS: Question[] = [
         { numerator: "36 mol CO₂", denominator: "2 mol C₁₈H₃₄O₂", numerator_value: 36, denominator_value: 2 },
         { numerator: "44 g CO₂", denominator: "1 mol CO₂", numerator_value: 44, denominator_value: 1 },
       ],
-      final_answer: { value: 2.80, unit: "g CO₂", sigfigs: 3, tolerance_pct: 2 },
-      explanation: "1.00 g × (1 mol / 282 g) × (36 mol CO₂ / 2 mol C₁₈H₃₄O₂) × (44 g / 1 mol) = 2.80 g CO₂. Three-step: g→mol→mol→g. 3 sig figs.",
+      final_answer: { value: 2.81, unit: "g CO₂", sigfigs: 3, tolerance_pct: 2 },
+      explanation: "1.00 g × (1 mol / 282 g) × (36 mol CO₂ / 2 mol C₁₈H₃₄O₂) × (44 g / 1 mol) = 2.81 g CO₂. Three-step: g→mol→mol→g. 3 sig figs.",
     },
   },
   {
@@ -2362,8 +2362,8 @@ export const SAMPLE_QUESTIONS: Question[] = [
         { numerator: "11 mol O₂", denominator: "4 mol FeS₂", numerator_value: 11, denominator_value: 4 },
         { numerator: "22.4 L O₂", denominator: "1 mol O₂", numerator_value: 22.4, denominator_value: 1 },
       ],
-      final_answer: { value: 10.1, unit: "L O₂", sigfigs: 3, tolerance_pct: 2 },
-      explanation: "5.00 g × (1 mol / 120 g) × (11 mol O₂ / 4 mol FeS₂) × (22.4 L / 1 mol) = 10.1 L O₂. Three-step: g→mol→mol→L. 3 sig figs.",
+      final_answer: { value: 2.57, unit: "L O₂", sigfigs: 3, tolerance_pct: 2 },
+      explanation: "5.00 g × (1 mol / 120 g) × (11 mol O₂ / 4 mol FeS₂) × (22.4 L / 1 mol) = 2.57 L O₂. Three-step: g→mol→mol→L. 3 sig figs.",
     },
   },
 
@@ -2466,7 +2466,6 @@ export const SAMPLE_QUESTIONS: Question[] = [
       target_unit: "mL",
       solution_chain: [
         { numerator: "65.0 µg", denominator: "1 mL", numerator_value: 65.0, denominator_value: 1 },
-        { numerator: "500 mL", denominator: "1", numerator_value: 500, denominator_value: 1 },
         { numerator: "1 mL", denominator: "125000 µg", numerator_value: 1, denominator_value: 125000 },
       ],
       final_answer: { value: 0.260, unit: "mL", sigfigs: 3, tolerance_pct: 2 },
