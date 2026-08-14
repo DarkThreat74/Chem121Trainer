@@ -73,85 +73,18 @@ create index if not exists idx_review_log_user on public.review_log(user_id, rev
 create index if not exists idx_review_log_question on public.review_log(user_id, question_id);
 
 -- ============================================================
--- 5. Seed Sample Questions (ON CONFLICT = safe to re-run)
+-- 5. Seed Sample Questions
 -- ============================================================
-INSERT INTO public.questions (id, topic, subtopic, mode, difficulty, content, is_sample) VALUES
--- Fundamentals & Definitions (5 sample questions)
-('fund-001', 'fundamentals', 'measurement-definition', 'quiz', 1,
-  '{"prompt":"What two components make up every measurement?","answer_type":"multiple-choice","correct_answer":"A number and a unit","choices":["A number and a unit","A number only","A unit only","A number, a unit, and an uncertainty"],"explanation":"A measurement consists of a number (the magnitude) and a unit (what is being measured)."}'::jsonb, true),
-('fund-002', 'fundamentals', 'accuracy-vs-precision', 'quiz', 1,
-  '{"prompt":"Accuracy refers to how close a measurement is to:","answer_type":"multiple-choice","correct_answer":"The true value","choices":["The true value","Each other","The average of all measurements","The last digit of the measurement"],"explanation":"Accuracy = closeness to the true/accepted value. Precision = closeness of repeated measurements to each other."}'::jsonb, true),
-('fund-003', 'fundamentals', 'physical-vs-chemical', 'quiz', 2,
-  '{"prompt":"A piece of paper burns when lit on fire. Is flammability a physical or chemical property?","answer_type":"multiple-choice","correct_answer":"Chemical property","choices":["Physical property","Chemical property","Neither","Both"],"explanation":"Flammability is a chemical property — it describes the ability to undergo a chemical change (combustion)."}'::jsonb, true),
-('fund-004', 'fundamentals', 'atom-vs-molecule', 'quiz', 1,
-  '{"prompt":"What is the relationship between an atom and a molecule?","answer_type":"multiple-choice","correct_answer":"A molecule is two or more atoms bonded together","choices":["A molecule is two or more atoms bonded together","An atom is made of molecules","Atoms and molecules are the same thing","A molecule is a single atom"],"explanation":"An atom is the smallest unit of an element. A molecule is two or more atoms held together by chemical bonds."}'::jsonb, true),
-('fund-005', 'fundamentals', 'mass-vs-weight', 'quiz', 1,
-  '{"prompt":"What is the difference between mass and weight?","answer_type":"multiple-choice","correct_answer":"Mass is constant; weight depends on gravity","choices":["Mass is constant; weight depends on gravity","Weight is constant; mass depends on gravity","Mass and weight are the same thing","Mass is measured in newtons"],"explanation":"Mass = amount of matter (constant everywhere). Weight = gravitational force on that mass (changes with location)."}'::jsonb, true),
+-- 98 questions across 7 topics, injected directly via scripts/inject-neon.ts
+-- Source of truth: lib/sample-data.ts
+-- To re-inject: set DATABASE_URL env var and run: npx tsx scripts/inject-neon.ts
+-- Or use the Neon SQL Editor to run individual INSERTs below.
 
--- Metric System & Prefixes (5 sample questions)
-('metric-001', 'metric-system', 'prefix-meaning', 'quiz', 1,
-  '{"prompt":"What does the prefix kilo mean?","answer_type":"multiple-choice","correct_answer":"1000","choices":["100","1000","0.01","0.001"],"explanation":"The prefix kilo means 1000, so 1 kg = 1000 g."}'::jsonb, true),
-('metric-002', 'metric-system', 'prefix-meaning', 'quiz', 1,
-  '{"prompt":"What does the prefix milli mean?","answer_type":"multiple-choice","correct_answer":"0.001","choices":["0.1","0.01","0.001","0.000001"],"explanation":"The prefix milli means 0.001, so 1 mL = 0.001 L."}'::jsonb, true),
-('metric-003', 'metric-system', 'prefix-meaning', 'quiz', 2,
-  '{"prompt":"What does the prefix micro (µ) mean?","answer_type":"multiple-choice","correct_answer":"0.000001","choices":["0.001","0.0001","0.000001","0.000000001"],"explanation":"The prefix micro (µ) means 10⁻⁶ = 0.000001."}'::jsonb, true),
-('metric-004', 'metric-system', 'prefix-conversion', 'quiz', 2,
-  '{"prompt":"Convert 2.5 g to mg.","answer_type":"numeric","correct_answer":2500,"explanation":"1 g = 1000 mg, so 2.5 g × 1000 mg/g = 2500 mg."}'::jsonb, true),
-('metric-005', 'metric-system', 'prefix-conversion', 'quiz', 2,
-  '{"prompt":"Convert 375 mg to g.","answer_type":"numeric","correct_answer":0.375,"explanation":"1 mg = 0.001 g, so 375 mg × 0.001 g/mg = 0.375 g."}'::jsonb, true),
+DELETE FROM public.questions WHERE is_sample = true;
 
--- Significant Figures (15 sample questions)
-('sigfig-001', 'significant-figures', 'counting-rules', 'quiz', 1,
-  '{"prompt":"How many significant figures are in 3.45?","answer_type":"numeric","correct_answer":3,"explanation":"All non-zero digits are significant. 3.45 has 3 significant figures."}'::jsonb, true),
-('sigfig-002', 'significant-figures', 'counting-rules', 'quiz', 1,
-  '{"prompt":"How many significant figures are in 2006?","answer_type":"numeric","correct_answer":4,"explanation":"Non-zero digits are significant, and captive zeros (between significant digits) are significant. 2006 has 4 sig figs."}'::jsonb, true),
-('sigfig-003', 'significant-figures', 'counting-rules', 'quiz', 2,
-  '{"prompt":"How many significant figures are in 0.0042?","answer_type":"numeric","correct_answer":2,"explanation":"Leading zeros are NOT significant. 0.0042 has 2 sig figs (the 4 and 2)."}'::jsonb, true),
-('sigfig-004', 'significant-figures', 'counting-rules', 'quiz', 2,
-  '{"prompt":"How many significant figures are in 8370.00?","answer_type":"numeric","correct_answer":6,"explanation":"Non-zero digits are significant, captive zeros are significant, and trailing zeros after the decimal are significant. 8370.00 has 6 sig figs."}'::jsonb, true),
-('sigfig-005', 'significant-figures', 'counting-rules', 'quiz', 2,
-  '{"prompt":"How many significant figures are in 100.0?","answer_type":"numeric","correct_answer":4,"explanation":"The 1, the two captive zeros, and the trailing zero after the decimal are all significant. 100.0 has 4 sig figs."}'::jsonb, true),
-('sigfig-006', 'significant-figures', 'counting-rules', 'quiz', 1,
-  '{"prompt":"How many significant figures are in 4.0200?","answer_type":"numeric","correct_answer":5,"explanation":"All digits are significant: 4, 0 (captive), 2, 0 (trailing), 0 (trailing). 4.0200 has 5 sig figs."}'::jsonb, true),
-('sigfig-007', 'significant-figures', 'counting-rules', 'quiz', 2,
-  '{"prompt":"How many significant figures are in 1.007?","answer_type":"numeric","correct_answer":4,"explanation":"The captive zeros between 1 and 7 are significant. 1.007 has 4 sig figs."}'::jsonb, true),
-('sigfig-008', 'significant-figures', 'counting-rules', 'quiz', 2,
-  '{"prompt":"How many significant figures are in 0.0005?","answer_type":"numeric","correct_answer":1,"explanation":"Leading zeros are never significant; only the 5 counts. 0.0005 has 1 sig fig."}'::jsonb, true),
-('sigfig-009', 'significant-figures', 'counting-rules', 'quiz', 3,
-  '{"prompt":"How many significant figures are in 10.030?","answer_type":"numeric","correct_answer":5,"explanation":"1, 0 (captive), 0 (captive), 3, and 0 (trailing after decimal) are all significant. 10.030 has 5 sig figs."}'::jsonb, true),
-('sigfig-010', 'significant-figures', 'counting-rules', 'quiz', 1,
-  '{"prompt":"How many significant figures are in 25.0?","answer_type":"numeric","correct_answer":3,"explanation":"The trailing zero after the decimal is significant. 25.0 has 3 sig figs."}'::jsonb, true),
-('sigfig-011', 'significant-figures', 'counting-rules', 'quiz', 3,
-  '{"prompt":"How many significant figures are in 0.03040?","answer_type":"numeric","correct_answer":4,"explanation":"Leading zeros dont count. The 3, 0 (captive), 4, and 0 (trailing after decimal) are significant. 0.03040 has 4 sig figs."}'::jsonb, true),
-('sigfig-012', 'significant-figures', 'rounding-mult-div', 'quiz', 2,
-  '{"prompt":"For 2.5 × 2.5, how many significant figures should the answer have?","answer_type":"numeric","correct_answer":2,"explanation":"For multiplication/division, the result has the same number of sig figs as the factor with the fewest. Both factors have 2 sig figs, so the answer should have 2."}'::jsonb, true),
-('sigfig-013', 'significant-figures', 'rounding-add-sub', 'quiz', 2,
-  '{"prompt":"For 12.1 + 3.447, how many decimal places should the answer have?","answer_type":"numeric","correct_answer":1,"explanation":"For addition/subtraction, the result has the same number of decimal places as the term with the fewest. 12.1 has 1 decimal place, so the answer should have 1."}'::jsonb, true),
-('sigfig-014', 'significant-figures', 'rounding-mult-div', 'quiz', 3,
-  '{"prompt":"For 4.56 × 1.4, how many significant figures should the answer have?","answer_type":"numeric","correct_answer":2,"explanation":"For multiplication, use the fewest sig figs among the factors. 1.4 has 2 sig figs (fewest), so the answer should have 2 sig figs."}'::jsonb, true),
-('sigfig-015', 'significant-figures', 'counting-rules', 'quiz', 2,
-  '{"prompt":"How many significant figures are in 0.0100?","answer_type":"numeric","correct_answer":3,"explanation":"Leading zeros dont count. The 1 and the two trailing zeros after the decimal are significant. 0.0100 has 3 sig figs."}'::jsonb, true),
-
--- Dimensional Analysis (10 sample problems)
-('diman-001', 'dimensional-analysis', 'single-step', 'solver', 1,
-  '{"prompt":"Convert 5.00 km to meters.","given":[{"value":5.0,"unit":"km","sigfigs":3}],"target_unit":"m","solution_chain":[{"numerator":"1000 m","denominator":"1 km"}],"final_answer":{"value":5000,"unit":"m","sigfigs":3,"tolerance_pct":1},"explanation":"1 km = 1000 m. Multiply by 1000 m/km to cancel km and get m."}'::jsonb, true),
-('diman-002', 'dimensional-analysis', 'single-step', 'solver', 1,
-  '{"prompt":"Convert 2500 mg to grams.","given":[{"value":2500,"unit":"mg","sigfigs":2}],"target_unit":"g","solution_chain":[{"numerator":"1 g","denominator":"1000 mg"}],"final_answer":{"value":2.5,"unit":"g","sigfigs":2,"tolerance_pct":1},"explanation":"1 g = 1000 mg. Multiply by 1 g/1000 mg to cancel mg and get g."}'::jsonb, true),
-('diman-003', 'dimensional-analysis', 'two-step', 'solver', 2,
-  '{"prompt":"Convert 3.00 km to cm.","given":[{"value":3.0,"unit":"km","sigfigs":3}],"target_unit":"cm","solution_chain":[{"numerator":"1000 m","denominator":"1 km"},{"numerator":"100 cm","denominator":"1 m"}],"final_answer":{"value":300000,"unit":"cm","sigfigs":3,"tolerance_pct":1},"explanation":"First convert km to m (x1000), then m to cm (x100). 3.00 km = 300,000 cm."}'::jsonb, true),
-('diman-004', 'dimensional-analysis', 'single-step', 'solver', 1,
-  '{"prompt":"Convert 45.0 mL to L.","given":[{"value":45.0,"unit":"mL","sigfigs":3}],"target_unit":"L","solution_chain":[{"numerator":"1 L","denominator":"1000 mL"}],"final_answer":{"value":0.045,"unit":"L","sigfigs":3,"tolerance_pct":1},"explanation":"1 L = 1000 mL. 45.0 mL x (1 L / 1000 mL) = 0.0450 L."}'::jsonb, true),
-('diman-005', 'dimensional-analysis', 'three-step', 'solver', 3,
-  '{"prompt":"Convert 65.0 miles per hour to meters per second. (1 mile = 1.609 km)","given":[{"value":65.0,"unit":"mile/h","sigfigs":3}],"target_unit":"m/s","solution_chain":[{"numerator":"1.609 km","denominator":"1 mile"},{"numerator":"1000 m","denominator":"1 km"},{"numerator":"1 h","denominator":"3600 s"}],"final_answer":{"value":29.1,"unit":"m/s","sigfigs":3,"tolerance_pct":1},"explanation":"65.0 mile/h x (1.609 km/mile) x (1000 m/km) x (1 h/3600 s) = 29.1 m/s."}'::jsonb, true),
-('diman-006', 'dimensional-analysis', 'single-step', 'solver', 1,
-  '{"prompt":"Convert 0.500 L to mL.","given":[{"value":0.5,"unit":"L","sigfigs":3}],"target_unit":"mL","solution_chain":[{"numerator":"1000 mL","denominator":"1 L"}],"final_answer":{"value":500,"unit":"mL","sigfigs":3,"tolerance_pct":1},"explanation":"1 L = 1000 mL. 0.500 L x 1000 mL/L = 500 mL."}'::jsonb, true),
-('diman-007', 'dimensional-analysis', 'two-step', 'solver', 2,
-  '{"prompt":"Convert 2.50 g/cm3 to kg/m3.","given":[{"value":2.5,"unit":"g/cm^3","sigfigs":3}],"target_unit":"kg/m^3","solution_chain":[{"numerator":"1 kg","denominator":"1000 g"},{"numerator":"1000000 cm^3","denominator":"1 m^3"}],"final_answer":{"value":2500,"unit":"kg/m^3","sigfigs":3,"tolerance_pct":1},"explanation":"2.50 g/cm3 x (1 kg/1000 g) x (10^6 cm3/1 m3) = 2500 kg/m3."}'::jsonb, true),
-('diman-008', 'dimensional-analysis', 'three-step', 'solver', 3,
-  '{"prompt":"A car travels 120. km in 2.00 hours. What is the speed in m/s?","given":[{"value":120,"unit":"km","sigfigs":3},{"value":2.0,"unit":"h","sigfigs":3}],"target_unit":"m/s","solution_chain":[{"numerator":"1000 m","denominator":"1 km"},{"numerator":"1 h","denominator":"3600 s"},{"numerator":"1","denominator":"2.00 h"}],"final_answer":{"value":16.7,"unit":"m/s","sigfigs":3,"tolerance_pct":1},"explanation":"120 km / 2.00 h = 60.0 km/h. Then 60.0 km/h x (1000 m/km) x (1 h/3600 s) = 16.7 m/s."}'::jsonb, true),
-('diman-009', 'dimensional-analysis', 'two-step', 'solver', 2,
-  '{"prompt":"Convert 450 ug to mg.","given":[{"value":450,"unit":"ug","sigfigs":3}],"target_unit":"mg","solution_chain":[{"numerator":"1 g","denominator":"1000000 ug"},{"numerator":"1000 mg","denominator":"1 g"}],"final_answer":{"value":0.45,"unit":"mg","sigfigs":3,"tolerance_pct":1},"explanation":"450 ug x (1 g/10^6 ug) x (1000 mg/1 g) = 0.450 mg."}'::jsonb, true),
-('diman-010', 'dimensional-analysis', 'two-step', 'solver', 2,
-  '{"prompt":"How many seconds are in 2.50 days?","given":[{"value":2.5,"unit":"day","sigfigs":3}],"target_unit":"s","solution_chain":[{"numerator":"24 h","denominator":"1 day"},{"numerator":"3600 s","denominator":"1 h"}],"final_answer":{"value":216000,"unit":"s","sigfigs":3,"tolerance_pct":1},"explanation":"2.50 days x (24 h/1 day) x (3600 s/1 h) = 216,000 s = 2.16 x 10^5 s."}'::jsonb, true)
-
-ON CONFLICT (id) DO NOTHING;
+-- Note: The 98 questions are defined in lib/sample-data.ts and were
+-- injected directly into the Neon database on Aug 13, 2026.
+-- Topics: fundamentals (12), metric-system (12), significant-figures (18),
+-- dimensional-analysis (14), the-mole (14), stoichiometry (14),
+-- molarity-dilutions (14).
+-- To re-seed, run the inject script or copy INSERTs from lib/sample-data.ts.
