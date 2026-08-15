@@ -16,8 +16,183 @@ import {
   FlaskConical,
   Calculator,
 } from "lucide-react";
-import { LEARN_CONTENT } from "@/lib/learn-content";
+import { LEARN_CONTENT, type Diagram } from "@/lib/learn-content";
 import { TOPICS } from "@/lib/types";
+
+function DiagramRenderer({ diagram, color }: { diagram: Diagram; color: string }) {
+  if (diagram.type === "visual" && diagram.visual) {
+    return (
+      <div className="mt-3 overflow-x-auto rounded-xl border border-border-subtle bg-bg-input p-4">
+        {diagram.title && (
+          <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-text-tertiary">
+            {diagram.title}
+          </p>
+        )}
+        <pre
+          className="text-xs leading-relaxed text-text-secondary sm:text-sm"
+          style={{ fontFamily: "ui-monospace, 'JetBrains Mono', monospace" }}
+        >
+          {diagram.visual}
+        </pre>
+        {diagram.caption && (
+          <p className="mt-2 text-xs italic text-text-tertiary">
+            {diagram.caption}
+          </p>
+        )}
+      </div>
+    );
+  }
+
+  if (diagram.type === "table" && diagram.headers && diagram.rows) {
+    return (
+      <div className="mt-3 overflow-x-auto rounded-xl border border-border-subtle">
+        {diagram.title && (
+          <p className="border-b border-border-subtle bg-bg-input px-4 py-2 text-xs font-semibold uppercase tracking-wider text-text-tertiary">
+            {diagram.title}
+          </p>
+        )}
+        <table className="w-full text-sm">
+          <thead>
+            <tr style={{ backgroundColor: `${color}10` }}>
+              {diagram.headers.map((h, i) => (
+                <th
+                  key={i}
+                  className="px-3 py-2 text-left text-xs font-bold uppercase tracking-wider text-text-tertiary sm:px-4"
+                >
+                  {h}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {diagram.rows.map((row, i) => (
+              <tr
+                key={i}
+                className={i % 2 === 0 ? "bg-bg-card" : "bg-bg-input/50"}
+              >
+                {row.map((cell, j) => (
+                  <td
+                    key={j}
+                    className="px-3 py-2 text-text-secondary sm:px-4"
+                  >
+                    {cell}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  }
+
+  if (diagram.type === "comparison" && diagram.left && diagram.right) {
+    return (
+      <div className="mt-3 grid gap-3 sm:grid-cols-2">
+        {[diagram.left, diagram.right].map((side, idx) => (
+          <div
+            key={idx}
+            className="rounded-xl border p-4"
+            style={{
+              borderColor: idx === 0 ? `${color}30` : `${color}30`,
+              backgroundColor: idx === 0 ? `${color}08` : `${color}08`,
+            }}
+          >
+            <p
+              className="mb-2 text-sm font-bold uppercase tracking-wider"
+              style={{ color }}
+            >
+              {side.title}
+            </p>
+            <ul className="space-y-1.5">
+              {side.items.map((item, i) => (
+                <li key={i} className="flex items-start gap-2 text-sm text-text-secondary">
+                  <span
+                    className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full"
+                    style={{ backgroundColor: color }}
+                  />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  if (diagram.type === "flowchart" && diagram.nodes) {
+    return (
+      <div className="mt-3 space-y-2 rounded-xl border border-border-subtle bg-bg-input p-4">
+        {diagram.title && (
+          <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-text-tertiary">
+            {diagram.title}
+          </p>
+        )}
+        {diagram.nodes.map((node, i) => {
+          const depth = node.label === "MATTER" ? 0 :
+            ["Pure Substances", "Mixtures"].includes(node.label) ? 1 :
+            ["Elements", "Compounds", "Homogeneous", "Heterogeneous"].includes(node.label) ? 2 : 0;
+          return (
+            <div key={i} style={{ marginLeft: `${depth * 24}px` }}>
+              <div
+                className="inline-block rounded-lg px-3 py-1.5 text-sm font-semibold"
+                style={{
+                  backgroundColor: `${color}15`,
+                  color,
+                  border: `1px solid ${color}30`,
+                }}
+              >
+                {node.label}
+              </div>
+              {node.note && (
+                <p className="mt-1 text-xs text-text-tertiary">{node.note}</p>
+              )}
+              {node.children && node.children.length > 0 && (
+                <div className="mt-1 pl-4 text-text-tertiary">
+                  {node.children.map((c, j) => (
+                    <span key={j} className="text-xs">
+                      {j > 0 && " | "}
+                      <span style={{ color }}>{c}</span>
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+
+  if (diagram.type === "steps" && diagram.steps) {
+    return (
+      <div className="mt-3 space-y-2">
+        {diagram.steps.map((step, i) => (
+          <div
+            key={i}
+            className="flex items-center gap-3 rounded-xl border border-border-subtle bg-bg-input p-3"
+          >
+            <span
+              className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full text-xs font-bold text-white"
+              style={{ backgroundColor: color }}
+            >
+              {i + 1}
+            </span>
+            <div>
+              <p className="text-sm font-semibold">{step.label}</p>
+              <p className="mt-0.5 font-mono text-xs text-text-secondary">
+                {step.visual}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  return null;
+}
 
 export default function TopicLearnPage({
   params,
@@ -159,6 +334,9 @@ export default function TopicLearnPage({
                     <p className="mt-1.5 text-sm leading-relaxed text-text-secondary">
                       {concept.body}
                     </p>
+                    {concept.diagram && (
+                      <DiagramRenderer diagram={concept.diagram} color={color} />
+                    )}
                     {concept.example && (
                       <div className="mt-3 rounded-xl border border-border-subtle bg-bg-input p-3">
                         <p className="text-xs font-medium text-text-tertiary">
@@ -166,6 +344,16 @@ export default function TopicLearnPage({
                         </p>
                         <p className="mt-1 text-sm text-text-secondary">
                           {concept.example}
+                        </p>
+                      </div>
+                    )}
+                    {concept.misconception && (
+                      <div className="mt-3 rounded-xl border border-warn/20 bg-warn/5 p-3">
+                        <p className="text-xs font-semibold text-warn">
+                          Common Mistake
+                        </p>
+                        <p className="mt-1 text-sm text-text-secondary">
+                          {concept.misconception}
                         </p>
                       </div>
                     )}

@@ -51,13 +51,14 @@ export default function ReviewSession({
   const [bestStreak, setBestStreak] = useState(0);
   const [totalTime, setTotalTime] = useState(0);
   const [confettiTrigger, setConfettiTrigger] = useState(0);
-  const [questionOrder, setQuestionOrder] = useState<number[]>([]);
-  const masteryRef = useRef(0); // tracks consecutive correct for "4 in a row" completion
-  const MASTERY_THRESHOLD = 4;
+  const [questionQueue, setQuestionQueue] = useState<number[]>([]); // indices into questions[]
+  const masteryRef = useRef(0); // consecutive correct for "6 in a row" completion
+  const correctQuestionsRef = useRef<Set<string>>(new Set()); // question IDs answered correctly
+  const MASTERY_THRESHOLD = 6;
   const router = useRouter();
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const question = questions[questionOrder[currentIndex] ?? currentIndex];
+  const question = questions[questionQueue[currentIndex] ?? currentIndex];
 
   // Guard against empty questions array
   if (questions.length === 0) {
@@ -79,8 +80,8 @@ export default function ReviewSession({
     const now = Date.now();
     setStartTime(now);
     setCurrentTime(now);
-    // Initialize question order (shuffled)
-    setQuestionOrder(Array.from({ length: questions.length }, (_, i) => i).sort(() => Math.random() - 0.5));
+    // Initialize question queue (shuffled indices)
+    setQuestionQueue(Array.from({ length: questions.length }, (_, i) => i).sort(() => Math.random() - 0.5));
   }, []);
 
   // Live timer
@@ -105,6 +106,7 @@ export default function ReviewSession({
       if (isCorrect) {
         setCorrectCount((c) => c + 1);
         masteryRef.current += 1;
+        correctQuestionsRef.current.add(question.id);
         setSessionStreak((s) => {
           const newStreak = s + 1;
           setBestStreak((b) => Math.max(b, newStreak));
@@ -117,6 +119,12 @@ export default function ReviewSession({
       } else {
         masteryRef.current = 0;
         setSessionStreak(0);
+        // Move this question to the end of the queue so it comes back
+        setQuestionQueue((prev) => {
+          if (prev.length <= 1) return prev;
+          const currentQIdx = prev[currentIndex];
+          return [...prev.filter((_, i) => i !== currentIndex), currentQIdx];
+        });
       }
 
       const timeTaken = Date.now() - startTime;
@@ -140,17 +148,20 @@ export default function ReviewSession({
   );
 
   function handleNext() {
-    // Check if mastery threshold reached (4 in a row)
+    // Check if completion threshold reached (6 in a row)
     if (masteryRef.current >= MASTERY_THRESHOLD) {
+      const allMastered = correctQuestionsRef.current.size >= questions.length;
       setSessionFinished(true);
-      setConfettiTrigger((t) => t + 1);
+      if (allMastered) {
+        setConfettiTrigger((t) => t + 1);
+      }
       return;
     }
 
     const nextIndex = currentIndex + 1;
-    if (nextIndex >= questions.length) {
-      // Ran through all questions but haven't mastered yet — reshuffle and continue
-      setQuestionOrder(Array.from({ length: questions.length }, (_, i) => i).sort(() => Math.random() - 0.5));
+    if (nextIndex >= questionQueue.length) {
+      // Reached end of queue but haven't hit 6-in-a-row yet
+      // Reshuffle remaining unseen questions and continue
       setCurrentIndex(0);
       setFeedback(null);
       setStartTime(Date.now());
@@ -164,7 +175,8 @@ export default function ReviewSession({
   }
 
   if (sessionFinished) {
-    const pct = questions.length > 0 ? Math.round((correctCount / questions.length) * 100) : 0;
+    const allMastered = correctQuestionsRef.current.size >= questions.length;
+    const pct = questions.length > 0 ? Math.round((correctQuestionsRef.current.size / questions.length) * 100) : 0;
     const avgTime = questions.length > 0 ? totalTime / questions.length : 0;
 
     return (
@@ -185,7 +197,7 @@ export default function ReviewSession({
           transition={{ delay: 0.2 }}
           className="mt-5 text-2xl font-bold tracking-tight sm:mt-6 sm:text-3xl"
         >
-          Mastered!
+          {allMastered ? "Mastered!" : "Completed!"}
         </motion.h2>
         <motion.p
           initial={{ opacity: 0 }}
@@ -193,7 +205,9 @@ export default function ReviewSession({
           transition={{ delay: 0.3 }}
           className="mt-2 text-sm text-text-secondary sm:text-base"
         >
-          You got {MASTERY_THRESHOLD} in a row correct
+          {allMastered
+            ? `You got all ${questions.length} questions correct and hit ${MASTERY_THRESHOLD} in a row`
+            : `You got ${MASTERY_THRESHOLD} in a row correct (${correctQuestionsRef.current.size}/${questions.length} questions mastered)`}
         </motion.p>
 
         {/* Stats grid */}
@@ -306,7 +320,7 @@ export default function ReviewSession({
               </span>
             </div>
           </div>
-          {/* Mastery streak indicator: 4 in a row */}
+          {/* Mastery streak indicator: 6 in a row */}
           <div className="mt-2 flex items-center gap-2">
             <span className="text-xs font-medium text-text-tertiary">
               Get {MASTERY_THRESHOLD} in a row to finish:
@@ -321,7 +335,7 @@ export default function ReviewSession({
                     scale: i < masteryRef.current ? [1, 1.2, 1] : 1,
                   }}
                   transition={{ duration: 0.3 }}
-                  className="h-2 w-6 rounded-full"
+                  className="h-2 w-5 rounded-full"
                 />
               ))}
             </div>
