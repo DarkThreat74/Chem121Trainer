@@ -7,6 +7,7 @@ A mobile-first introductory chemistry learning app built with Next.js 14, TypeSc
 ### Learning Path
 - **8 topics** taught in sequence: Fundamentals, Metric System, Atomic Structure, Significant Figures, Dimensional Analysis, The Mole, Stoichiometry, Molarity & Dilutions
 - Each topic has a dedicated **Learn page** with detailed concept explanations, ASCII diagrams, data tables, side-by-side comparisons, flowcharts, worked examples, and vocabulary flashcards
+- **Text-to-speech narration** on every section — tap the speaker icon to have the content read aloud
 - Topics unlock progressively as you complete the previous one (50% threshold)
 - Content written for students with zero chemistry knowledge
 
@@ -33,7 +34,9 @@ A mobile-first introductory chemistry learning app built with Next.js 14, TypeSc
 
 ### UI/UX
 - Mobile-first responsive design (works on phone, tablet, desktop)
-- Dark theme with Framer Motion animations
+- **Dark and light mode** — toggle in settings, persists across sessions
+- **Settings panel** — voice selection, reading speed, theme toggle (gear icon on dashboard and learn pages)
+- Framer Motion animations throughout
 - Confetti on streaks and high-accuracy completions
 - Safe area support for notched devices
 - Bottom nav on mobile, top nav on desktop
@@ -73,6 +76,8 @@ components/
   Confetti.tsx              # Trigger-based confetti
   PWAInstallPrompt.tsx      # PWA install banner (SSR-safe)
   ServiceWorkerRegister.tsx # SW registration (production only)
+  SettingsProvider.tsx      # Settings context (voice, rate, theme + localStorage)
+  SettingsPanel.tsx         # Settings UI (voice picker, speed slider, dark/light toggle)
 
 lib/
   types.ts                  # Question, Topic types + TOPICS constant (8 topics)
