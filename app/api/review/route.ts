@@ -19,7 +19,8 @@ export async function POST(request: NextRequest) {
       timeTakenMs: number;
     };
 
-    if (!questionId || typeof isCorrect !== "boolean") {
+    if (!questionId || typeof isCorrect !== "boolean" ||
+        typeof timeTakenMs !== "number" || timeTakenMs < 0 || timeTakenMs > 3600000) {
       return NextResponse.json(
         { error: "Invalid request body" },
         { status: 400 }

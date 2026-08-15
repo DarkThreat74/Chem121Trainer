@@ -54,6 +54,7 @@ export default function ReviewSession({
   const [totalTime, setTotalTime] = useState(0);
   const [confettiTrigger, setConfettiTrigger] = useState(0);
   const [questionQueue, setQuestionQueue] = useState<number[]>([]); // indices into questions[]
+  const [currentPath, setCurrentPath] = useState("");
   const masteryRef = useRef(0); // consecutive correct for "6 in a row" completion
   const correctQuestionsRef = useRef<Set<string>>(new Set()); // question IDs answered correctly
   const MASTERY_THRESHOLD = 6;
@@ -84,6 +85,10 @@ export default function ReviewSession({
     setCurrentTime(now);
     // Initialize question queue (shuffled indices)
     setQuestionQueue(Array.from({ length: questions.length }, (_, i) => i).sort(() => Math.random() - 0.5));
+    // Capture current path for "practice again" link (avoid SSR hydration mismatch)
+    if (typeof window !== "undefined") {
+      setCurrentPath(window.location.pathname);
+    }
   }, []);
 
   // Live timer
@@ -321,7 +326,7 @@ export default function ReviewSession({
             Back to dashboard
           </a>
           <a
-            href={window.location.pathname}
+            href={currentPath || "/dashboard"}
             className="flex items-center justify-center gap-2 rounded-xl border border-border bg-bg-card px-6 py-3.5 font-semibold text-text transition hover:bg-bg-hover sm:px-8"
           >
             <RotateCcw className="h-4 w-4" />

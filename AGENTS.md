@@ -20,19 +20,20 @@ Chem 121 Trainer is a mobile-first Next.js 14 web app for interactive chemistry 
 - `pdf_extracted/` — Extracted text from CHEM 121 PDF worksheets (committed, intentional content).
 - `components/QuizCard.tsx` — Quiz mode (multiple-choice, numeric, short-text).
 - `components/SolverCard.tsx` — Guided solver with unit-cancellation validation and sig-fig checking.
-- `components/ReviewSession.tsx` — Review queue engine; calls `/api/review` to save results. Has confetti on streaks.
-- `components/DashboardClient.tsx` — Dashboard with guided learning path (locked/unlocked topics), streak, mastery %, due count.
+- `components/ReviewSession.tsx` — Review/quiz engine with auto-advance mode (review), 6-in-a-row mastery (practice), wrong-answer recycling, confetti on streaks. Calls `/api/review` to save results.
+- `components/DashboardClient.tsx` — Dashboard with guided learning path. Each topic card has Learn + Quiz buttons. Locked/unlocked topics, streak, mastery %, due count.
 - `components/Confetti.tsx` — Trigger-based confetti component (fires on 3-streak, 5-streak intervals, 80%+ session completion).
 - `components/PWAInstallPrompt.tsx` — PWA install banner (detects beforeinstallprompt, iOS instructions, dismissible). All browser APIs accessed in useEffect only.
 - `components/ServiceWorkerRegister.tsx` — Registers service worker (production only).
-- `app/api/review/route.ts` — Edge API route that saves review state and log to Neon. Validates input (400 on invalid).
-- `app/review/page.tsx` — Due-card review session.
-- `app/practice/[topic]/page.tsx` — Per-topic practice. Enforces guided path lock server-side (50% seen threshold for previous topic).
+- `app/api/review/route.ts` — Edge API route that saves review state and log to Neon. Validates input including timeTakenMs (400 on invalid).
+- `app/review/page.tsx` — Spaced repetition review. Only pulls from unlocked topics and due questions (not unseen). Passes autoAdvance={true}.
+- `app/practice/[topic]/page.tsx` — Per-topic quiz. Enforces guided path lock server-side (50% seen threshold for previous topic).
 - `app/dashboard/page.tsx` — Dashboard (edge runtime; queries Neon directly).
-- `app/learn/page.tsx` — Study guide with 8 sections (matter, sig figs, metric, atomic structure, formulas, stoichiometry, worked examples, vocabulary).
+- `app/learn/[topic]/page.tsx` — Per-topic learn page with detailed teaching content, diagrams (visual/table/comparison/flowchart/steps), worked examples, vocabulary flashcards. DiagramRenderer component handles 5 diagram types.
+- `lib/learn-content.ts` — Detailed teaching content for all 8 topics. Written for zero-knowledge beginners. Includes concepts, formulas, worked examples, vocabulary, diagrams, and misconceptions.
 - `app/layout.tsx` — Root layout with PWA metadata, NavBar, ServiceWorkerRegister, PWAInstallPrompt.
-- `public/manifest.json` — PWA manifest (standalone display, /icon.svg).
-- `public/sw.js` — Service worker (network-first for pages, cache-first for static, never caches API POST).
+- `public/manifest.json` — PWA manifest (standalone display, start_url=/dashboard, /icon.svg).
+- `public/sw.js` — Service worker (network-first for pages, cache-first for static, never intercepts non-GET requests).
 
 ## Environment
 
@@ -46,12 +47,19 @@ Migrated from Supabase to Neon on Aug 13 2026. Removed: auth pages, middleware, 
 
 - **162 questions** across 8 topics, all with explanations.
 - **8 giveaway questions fixed** (fund-001, fund-008, fund-009, fund-010, diman-011, diman-012, mole-012, molarity-015).
+- **Per-topic learn pages** at `/learn/[topic]` with detailed teaching content (concepts, diagrams, worked examples, vocabulary). Written for zero-knowledge beginners.
+- **Dashboard cards** have two buttons each: Learn (goes to `/learn/[topic]`) and Quiz (goes to `/practice/[topic]`).
+- **NavBar** has only Dashboard and Review (Learn removed — learning is per-topic from dashboard).
+- **6-in-a-row mastery** for quiz sessions: get 6 consecutive correct to complete. Wrong answers recycle to end of queue. "Mastered" = all questions correct + 6 in a row. "Completed" = 6 in a row only.
+- **Review system**: Only pulls from unlocked topics and due questions (FSRS scheduled). Auto-advance mode with 4-second countdown. No unseen questions in review.
 - **Guided learning path**: topics locked in order, unlock at 50% seen of previous topic. Enforced both on dashboard and server-side on practice pages.
 - **PWA**: manifest, service worker, install prompt (Chrome/Edge/Android + iOS instructions).
 - **Feedback screen redesigned**: gradient background, spring icon animation, streak indicator, glow effects.
 - **Confetti**: trigger-based, fires on streaks and high-accuracy session completion.
-- **Build passes**: TypeScript 0 errors, Next.js build successful, all 15 routes return 200.
-- **Latest commit**: `17cf44e` on `main`, pushed to `origin/main`.
+- **Build passes**: TypeScript 0 errors, Next.js build successful, all 22 routes return 200.
+- **API validation**: questionId, isCorrect, and timeTakenMs all validated (400 on invalid).
+- **SSR-safe**: All browser APIs accessed in useEffect only. No hydration mismatches.
+- **Latest commit**: see git log on `main`.
 
 ## Pedagogy Order
 
