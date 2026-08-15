@@ -1,7 +1,7 @@
 import { sql, SINGLE_USER_ID } from "@/lib/db";
 import { SAMPLE_QUESTIONS } from "@/lib/sample-data";
 import ReviewSession from "@/components/ReviewSession";
-import type { Question } from "@/lib/types";
+import { TOPICS, type Question, type Topic } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 export const runtime = "edge";
@@ -48,21 +48,57 @@ export default async function ReviewPage() {
 
   const now = new Date();
 
-  // Find due question IDs (oldest due first)
+  // Calculate which topics are unlocked based on guided path progress
+  // A topic is unlocked if:
+  //   - It is the first topic (order 1), OR
+  //   - The previous topic has seen >= 50% of its total question count
+  const sortedTopics = [...TOPICS].sort((a, b) => a.order - b.order);
+  const topicQuestionCounts: Record<string, number> = {};
+  for (const t of sortedTopics) {
+    topicQuestionCounts[t.id] = allQuestions.filter((q) => q.topic === t.id).length;
+  }
+
+  const topicSeenCounts: Record<string, number> = {};
+  for (const rs of reviewStates) {
+    const q = allQuestions.find((q) => q.id === rs.question_id);
+    if (q) {
+      topicSeenCounts[q.topic] = (topicSeenCounts[q.topic] || 0) + 1;
+    }
+  }
+
+  const unlockedTopics: Set<Topic> = new Set();
+  for (let i = 0; i < sortedTopics.length; i++) {
+    const topic = sortedTopics[i];
+    if (i === 0) {
+      unlockedTopics.add(topic.id);
+    } else {
+      const prevTopic = sortedTopics[i - 1];
+      const prevTotal = topicQuestionCounts[prevTopic.id] || 0;
+      const prevSeen = topicSeenCounts[prevTopic.id] || 0;
+      // Unlock if previous topic has been seen at least 50%
+      if (prevTotal > 0 && prevSeen >= prevTotal * 0.5) {
+        unlockedTopics.add(topic.id);
+      }
+    }
+  }
+
+  // Only include questions from unlocked topics
+  const unlockedQuestions = allQuestions.filter((q) => unlockedTopics.has(q.topic));
+
+  // Find DUE questions only (questions already seen and scheduled for review by FSRS)
+  // Do NOT include unseen questions — those are introduced through topic-specific quizzes
   const dueStates = reviewStates
-    .filter((rs) => new Date(rs.due) <= now)
+    .filter((rs) => {
+      const q = allQuestions.find((q) => q.id === rs.question_id);
+      if (!q) return false;
+      if (!unlockedTopics.has(q.topic)) return false;
+      return new Date(rs.due) <= now;
+    })
     .sort((a, b) => new Date(a.due).getTime() - new Date(b.due).getTime());
 
-  // Find unseen question IDs
-  const seenIds = new Set(reviewStates.map((rs) => rs.question_id));
-  const unseenQuestions = allQuestions.filter((q) => !seenIds.has(q.id));
-
-  // Build queue: due first, then unseen
   const dueQuestions: Question[] = dueStates
     .map((rs) => allQuestions.find((q) => q.id === rs.question_id))
     .filter((q): q is Question => q !== undefined);
-
-  const queue: Question[] = [...dueQuestions, ...unseenQuestions];
 
   // Pass review states as a map for the client
   const stateMap: Record<string, any> = {};
@@ -70,7 +106,13 @@ export default async function ReviewPage() {
     stateMap[rs.question_id] = rs;
   }
 
-  if (queue.length === 0) {
+  if (dueQuestions.length === 0) {
+    // Check if user has any unlocked topics with seen questions at all
+    const hasAnySeen = reviewStates.some((rs) => {
+      const q = allQuestions.find((q) => q.id === rs.question_id);
+      return q && unlockedTopics.has(q.topic);
+    });
+
     return (
       <div className="flex min-h-screen flex-col items-center justify-center px-4 text-center safe-top safe-bottom">
         <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-gradient-to-br from-ok/20 to-accent/20">
@@ -78,9 +120,13 @@ export default async function ReviewPage() {
             <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </div>
-        <h2 className="mt-6 text-2xl font-bold tracking-tight">All caught up!</h2>
+        <h2 className="mt-6 text-2xl font-bold tracking-tight">
+          {hasAnySeen ? "All caught up!" : "Start learning first"}
+        </h2>
         <p className="mt-2 max-w-sm text-text-secondary">
-          No cards due for review. Come back later or practice a specific topic.
+          {hasAnySeen
+            ? "No cards due for review right now. Come back later — spaced repetition will schedule your next review automatically."
+            : "Complete some topic quizzes first. Questions you answer will appear here for review on a spaced repetition schedule."}
         </p>
         <a
           href="/dashboard"
@@ -92,5 +138,5 @@ export default async function ReviewPage() {
     );
   }
 
-  return <ReviewSession questions={queue} reviewStates={stateMap} />;
+  return <ReviewSession questions={dueQuestions} reviewStates={stateMap} autoAdvance={true} />;
 }

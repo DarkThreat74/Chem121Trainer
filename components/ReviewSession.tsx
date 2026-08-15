@@ -22,6 +22,7 @@ import type { Question } from "@/lib/types";
 interface ReviewSessionProps {
   questions: Question[];
   reviewStates: Record<string, any>;
+  autoAdvance?: boolean;
 }
 
 type FeedbackState = {
@@ -40,6 +41,7 @@ function formatTime(ms: number): string {
 export default function ReviewSession({
   questions,
   reviewStates,
+  autoAdvance = false,
 }: ReviewSessionProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [feedback, setFeedback] = useState<FeedbackState>(null);
@@ -96,6 +98,36 @@ export default function ReviewSession({
     };
   }, [feedback, sessionFinished]);
 
+  // Auto-advance: when feedback is shown and autoAdvance is enabled,
+  // wait a few seconds then automatically go to the next question
+  const autoAdvanceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [autoAdvanceCountdown, setAutoAdvanceCountdown] = useState(0);
+  const AUTO_ADVANCE_DELAY = 4; // seconds to show explanation before auto-advancing
+
+  useEffect(() => {
+    if (!autoAdvance || !feedback || sessionFinished) {
+      if (autoAdvanceTimerRef.current) clearTimeout(autoAdvanceTimerRef.current);
+      setAutoAdvanceCountdown(0);
+      return;
+    }
+
+    setAutoAdvanceCountdown(AUTO_ADVANCE_DELAY);
+
+    const countdownInterval = setInterval(() => {
+      setAutoAdvanceCountdown((c) => Math.max(0, c - 1));
+    }, 1000);
+
+    autoAdvanceTimerRef.current = setTimeout(() => {
+      handleNext();
+    }, AUTO_ADVANCE_DELAY * 1000);
+
+    return () => {
+      if (autoAdvanceTimerRef.current) clearTimeout(autoAdvanceTimerRef.current);
+      clearInterval(countdownInterval);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [feedback, autoAdvance, sessionFinished]);
+
   const elapsedThisQuestion = currentTime - startTime;
 
   const handleAnswer = useCallback(
@@ -148,7 +180,26 @@ export default function ReviewSession({
   );
 
   function handleNext() {
-    // Check if completion threshold reached (6 in a row)
+    // In review (autoAdvance) mode: go through all due questions once, then finish
+    if (autoAdvance) {
+      const nextIndex = currentIndex + 1;
+      if (nextIndex >= questionQueue.length) {
+        // All due questions reviewed
+        setSessionFinished(true);
+        const pct = questions.length > 0 ? Math.round((correctCount / questions.length) * 100) : 0;
+        if (pct >= 80) {
+          setConfettiTrigger((t) => t + 1);
+        }
+      } else {
+        setCurrentIndex(nextIndex);
+        setFeedback(null);
+        setStartTime(Date.now());
+        setCurrentTime(Date.now());
+      }
+      return;
+    }
+
+    // In practice/quiz mode: 6-in-a-row mastery system
     if (masteryRef.current >= MASTERY_THRESHOLD) {
       const allMastered = correctQuestionsRef.current.size >= questions.length;
       setSessionFinished(true);
@@ -176,7 +227,9 @@ export default function ReviewSession({
 
   if (sessionFinished) {
     const allMastered = correctQuestionsRef.current.size >= questions.length;
-    const pct = questions.length > 0 ? Math.round((correctQuestionsRef.current.size / questions.length) * 100) : 0;
+    const pct = autoAdvance
+      ? (questions.length > 0 ? Math.round((correctCount / questions.length) * 100) : 0)
+      : (questions.length > 0 ? Math.round((correctQuestionsRef.current.size / questions.length) * 100) : 0);
     const avgTime = questions.length > 0 ? totalTime / questions.length : 0;
 
     return (
@@ -197,7 +250,7 @@ export default function ReviewSession({
           transition={{ delay: 0.2 }}
           className="mt-5 text-2xl font-bold tracking-tight sm:mt-6 sm:text-3xl"
         >
-          {allMastered ? "Mastered!" : "Completed!"}
+          {autoAdvance ? "Review Complete!" : allMastered ? "Mastered!" : "Completed!"}
         </motion.h2>
         <motion.p
           initial={{ opacity: 0 }}
@@ -205,7 +258,9 @@ export default function ReviewSession({
           transition={{ delay: 0.3 }}
           className="mt-2 text-sm text-text-secondary sm:text-base"
         >
-          {allMastered
+          {autoAdvance
+            ? `You reviewed ${questions.length} cards`
+            : allMastered
             ? `You got all ${questions.length} questions correct and hit ${MASTERY_THRESHOLD} in a row`
             : `You got ${MASTERY_THRESHOLD} in a row correct (${correctQuestionsRef.current.size}/${questions.length} questions mastered)`}
         </motion.p>
@@ -316,30 +371,34 @@ export default function ReviewSession({
                 {formatTime(elapsedThisQuestion)}
               </div>
               <span className="text-sm font-medium text-text-secondary">
-                Q{currentIndex + 1}
+                {autoAdvance
+                  ? `${currentIndex + 1} / ${questionQueue.length || questions.length}`
+                  : `Q${currentIndex + 1}`}
               </span>
             </div>
           </div>
-          {/* Mastery streak indicator: 6 in a row */}
-          <div className="mt-2 flex items-center gap-2">
-            <span className="text-xs font-medium text-text-tertiary">
-              Get {MASTERY_THRESHOLD} in a row to finish:
-            </span>
-            <div className="flex gap-1">
-              {Array.from({ length: MASTERY_THRESHOLD }, (_, i) => (
-                <motion.div
-                  key={i}
-                  initial={false}
-                  animate={{
-                    backgroundColor: i < masteryRef.current ? "#34d399" : "#27272a",
-                    scale: i < masteryRef.current ? [1, 1.2, 1] : 1,
-                  }}
-                  transition={{ duration: 0.3 }}
-                  className="h-2 w-5 rounded-full"
-                />
-              ))}
+          {/* Mastery streak indicator: 6 in a row (only in practice/quiz mode) */}
+          {!autoAdvance && (
+            <div className="mt-2 flex items-center gap-2">
+              <span className="text-xs font-medium text-text-tertiary">
+                Get {MASTERY_THRESHOLD} in a row to finish:
+              </span>
+              <div className="flex gap-1">
+                {Array.from({ length: MASTERY_THRESHOLD }, (_, i) => (
+                  <motion.div
+                    key={i}
+                    initial={false}
+                    animate={{
+                      backgroundColor: i < masteryRef.current ? "#34d399" : "#27272a",
+                      scale: i < masteryRef.current ? [1, 1.2, 1] : 1,
+                    }}
+                    transition={{ duration: 0.3 }}
+                    className="h-2 w-5 rounded-full"
+                  />
+                ))}
+              </div>
             </div>
-          </div>
+          )}
           <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-bg-input">
             <motion.div
               animate={{
@@ -465,15 +524,33 @@ export default function ReviewSession({
                 onClick={handleNext}
                 className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-accent-hover to-accent py-4 font-semibold text-white transition-all duration-200 hover:shadow-lg hover:shadow-accent/20"
               >
-                {currentIndex + 1 >= questions.length
-                  ? "Finish session"
-                  : "Next question"}
-                <motion.div
-                  animate={{ x: [0, 3, 0] }}
-                  transition={{ repeat: Infinity, duration: 1.5 }}
-                >
-                  <ArrowRight className="h-4 w-4" />
-                </motion.div>
+                {autoAdvance && autoAdvanceCountdown > 0 ? (
+                  <>
+                    {currentIndex + 1 >= questions.length
+                      ? "Finishing"
+                      : "Continuing"}
+                    {" in "}
+                    {autoAdvanceCountdown}
+                    <motion.div
+                      animate={{ scale: [1, 1.2, 1] }}
+                      transition={{ repeat: Infinity, duration: 1 }}
+                    >
+                      <Clock className="h-4 w-4" />
+                    </motion.div>
+                  </>
+                ) : (
+                  <>
+                    {currentIndex + 1 >= questions.length
+                      ? "Finish session"
+                      : "Next question"}
+                    <motion.div
+                      animate={{ x: [0, 3, 0] }}
+                      transition={{ repeat: Infinity, duration: 1.5 }}
+                    >
+                      <ArrowRight className="h-4 w-4" />
+                    </motion.div>
+                  </>
+                )}
               </motion.button>
             </motion.div>
           )}
