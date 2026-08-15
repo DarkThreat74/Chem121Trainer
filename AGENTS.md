@@ -1,6 +1,6 @@
 # Chem 121 Trainer — Project Context
 
-Chem 121 Trainer is a mobile-first Next.js 14 web app for interactive chemistry practice, using FSRS spaced repetition. Built for Illinois CHEM 121 students.
+Chem 121 Trainer is a mobile-first Next.js 14 web app for interactive chemistry practice, using FSRS spaced repetition.
 
 ## Architecture
 
@@ -14,18 +14,25 @@ Chem 121 Trainer is a mobile-first Next.js 14 web app for interactive chemistry 
 
 - `neon/setup.sql` — Idempotent DB schema and seed data (run in Neon SQL Editor).
 - `lib/db.ts` — Neon serverless client (`sql` tagged template + `SINGLE_USER_ID`).
-- `lib/fsrs.ts` — FSRS scheduling wrapper around `ts-fsrs`.
+- `lib/fsrs.ts` — FSRS scheduling wrapper around `ts-fsrs` (retention=0.9, max_interval=365, fuzz=true).
 - `lib/types.ts` — `Question`, `Topic`, `ReviewState` types and `TOPICS` constant (8 topics).
-- `lib/sample-data.ts` — 162 sample questions across all 8 modules (fallback when DB is empty).
-- `docs/source-material/` — Extracted text from CHEM 121 PDF worksheets (study guides + answer keys).
+- `lib/sample-data.ts` — 162 questions across all 8 topics (112 quiz + 50 solver). Fallback when DB is empty.
+- `pdf_extracted/` — Extracted text from CHEM 121 PDF worksheets (committed, intentional content).
 - `components/QuizCard.tsx` — Quiz mode (multiple-choice, numeric, short-text).
 - `components/SolverCard.tsx` — Guided solver with unit-cancellation validation and sig-fig checking.
-- `components/ReviewSession.tsx` — Review queue engine; calls `/api/review` to save results.
-- `components/DashboardClient.tsx` — Dashboard with streak, mastery %, due count, and topic list.
-- `app/api/review/route.ts` — Edge API route that saves review state and log to Neon.
+- `components/ReviewSession.tsx` — Review queue engine; calls `/api/review` to save results. Has confetti on streaks.
+- `components/DashboardClient.tsx` — Dashboard with guided learning path (locked/unlocked topics), streak, mastery %, due count.
+- `components/Confetti.tsx` — Trigger-based confetti component (fires on 3-streak, 5-streak intervals, 80%+ session completion).
+- `components/PWAInstallPrompt.tsx` — PWA install banner (detects beforeinstallprompt, iOS instructions, dismissible). All browser APIs accessed in useEffect only.
+- `components/ServiceWorkerRegister.tsx` — Registers service worker (production only).
+- `app/api/review/route.ts` — Edge API route that saves review state and log to Neon. Validates input (400 on invalid).
 - `app/review/page.tsx` — Due-card review session.
-- `app/practice/[topic]/page.tsx` — Per-topic practice.
+- `app/practice/[topic]/page.tsx` — Per-topic practice. Enforces guided path lock server-side (50% seen threshold for previous topic).
 - `app/dashboard/page.tsx` — Dashboard (edge runtime; queries Neon directly).
+- `app/learn/page.tsx` — Study guide with 8 sections (matter, sig figs, metric, atomic structure, formulas, stoichiometry, worked examples, vocabulary).
+- `app/layout.tsx` — Root layout with PWA metadata, NavBar, ServiceWorkerRegister, PWAInstallPrompt.
+- `public/manifest.json` — PWA manifest (standalone display, /icon.svg).
+- `public/sw.js` — Service worker (network-first for pages, cache-first for static, never caches API POST).
 
 ## Environment
 
@@ -34,3 +41,30 @@ Chem 121 Trainer is a mobile-first Next.js 14 web app for interactive chemistry 
 ## Migration Notes
 
 Migrated from Supabase to Neon on Aug 13 2026. Removed: auth pages, middleware, Supabase client/server utilities, and `LogoutButton`.
+
+## Current State (as of last session)
+
+- **162 questions** across 8 topics, all with explanations.
+- **8 giveaway questions fixed** (fund-001, fund-008, fund-009, fund-010, diman-011, diman-012, mole-012, molarity-015).
+- **Guided learning path**: topics locked in order, unlock at 50% seen of previous topic. Enforced both on dashboard and server-side on practice pages.
+- **PWA**: manifest, service worker, install prompt (Chrome/Edge/Android + iOS instructions).
+- **Feedback screen redesigned**: gradient background, spring icon animation, streak indicator, glow effects.
+- **Confetti**: trigger-based, fires on streaks and high-accuracy session completion.
+- **Build passes**: TypeScript 0 errors, Next.js build successful, all 15 routes return 200.
+- **Latest commit**: `17cf44e` on `main`, pushed to `origin/main`.
+
+## Pedagogy Order
+
+1. Teach the concept (learn page)
+2. Show a worked example (interactive step-by-step)
+3. Guide the learner through problems (SolverCard)
+4. Independent practice (QuizCard)
+5. Schedule via FSRS after each attempt
+
+## Known Limitations / Future Work
+
+- No per-choice explanations for multiple-choice distractors (only general question explanation + correct answer shown).
+- Review save failures are logged to console but not surfaced to the student visually.
+- No retry mechanism for failed saves.
+- Illinois-specific content was added then removed per user request — content is generic Chem 121.
+- The `pdf_extracted/` source covers: High School Review, Atomic Structure, Stoichiometry/Dimensional Analysis, Dilutions, Significant Figures, Terms. Does NOT cover: nomenclature, gas laws, thermochemistry, bonding, electron configuration, acids/bases, equilibrium (these are second-half CHEM 121 topics not in the supplied PDFs).
