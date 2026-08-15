@@ -12,11 +12,11 @@ export const SAMPLE_QUESTIONS: Question[] = [
     difficulty: 1,
     is_sample: true,
     content: {
-      prompt: "Every measurement consists of two parts. What are they?",
+      prompt: "Which of the following is required for a measurement to be meaningful?",
       answer_type: "multiple-choice",
       correct_answer: "A number and a unit",
       choices: ["A number and a unit", "A number only", "A unit and an uncertainty", "A number, a unit, and a symbol"],
-      explanation: "Every measurement = a number (magnitude) + a unit (what is being measured). For example, 25 mL has the number 25 and the unit mL.",
+      explanation: "Every measurement = a number (magnitude) + a unit (what is being measured). For example, 25 mL has the number 25 and the unit mL. A number alone is meaningless without a unit — '25' could be anything.",
     },
   },
   {
@@ -119,8 +119,8 @@ export const SAMPLE_QUESTIONS: Question[] = [
     content: {
       prompt: "Which of the following is a compound?",
       answer_type: "multiple-choice",
-      correct_answer: "Carbon dioxide (CO₂)",
-      choices: ["Carbon dioxide (CO₂)", "Oxygen (O₂)", "Iron (Fe)", "Helium (He)"],
+      correct_answer: "Carbon dioxide",
+      choices: ["Carbon dioxide", "Oxygen gas", "Iron metal", "Helium gas"],
       explanation: "A compound contains two or more different elements chemically combined. CO₂ has carbon AND oxygen. O₂, Fe, and He are elements (single type of atom).",
     },
   },
@@ -134,9 +134,9 @@ export const SAMPLE_QUESTIONS: Question[] = [
     content: {
       prompt: "A mixture of salt dissolved in water is best classified as:",
       answer_type: "multiple-choice",
-      correct_answer: "A homogeneous mixture (solution)",
-      choices: ["A homogeneous mixture (solution)", "A heterogeneous mixture", "A compound", "A pure element"],
-      explanation: "Salt water is uniform throughout → homogeneous mixture (solution). The salt and water retain their individual properties and can be separated by physical means (evaporation).",
+      correct_answer: "A homogeneous mixture",
+      choices: ["A homogeneous mixture", "A heterogeneous mixture", "A compound", "A pure element"],
+      explanation: "Salt water is uniform throughout → homogeneous mixture (a solution). The salt and water retain their individual properties and can be separated by physical means (evaporation).",
     },
   },
   {
@@ -147,11 +147,11 @@ export const SAMPLE_QUESTIONS: Question[] = [
     difficulty: 1,
     is_sample: true,
     content: {
-      prompt: "An astronaut has a mass of 70 kg on Earth. What is their mass on the Moon?",
+      prompt: "An astronaut has a mass of 80 kg on Earth. What is their mass on the Moon?",
       answer_type: "multiple-choice",
-      correct_answer: "70 kg",
-      choices: ["70 kg", "About 11.7 kg", "About 420 kg", "Zero"],
-      explanation: "Mass is the amount of matter — it does not change with location. Weight changes due to gravity (Moon gravity ≈ 1/6 of Earth's), but mass stays 70 kg.",
+      correct_answer: "80 kg",
+      choices: ["80 kg", "About 13.3 kg", "About 480 kg", "Zero"],
+      explanation: "Mass is the amount of matter — it does not change with location. Weight changes due to gravity (Moon gravity ≈ 1/6 of Earth's), but mass stays 80 kg.",
     },
   },
   {
@@ -1010,12 +1010,12 @@ export const SAMPLE_QUESTIONS: Question[] = [
     content: {
       prompt: "When setting up a dimensional analysis problem, how do you decide which unit goes in the numerator vs denominator of a conversion factor?",
       answer_type: "multiple-choice",
-      correct_answer: "Put the unit you want to cancel in the denominator, and the unit you want to keep in the numerator",
+      correct_answer: "Place the unit to cancel in the denominator",
       choices: [
-        "Put the unit you want to cancel in the denominator, and the unit you want to keep in the numerator",
+        "Place the unit to cancel in the denominator",
         "Always put the larger unit in the numerator",
-        "Put the metric unit in the numerator and the English unit in the denominator",
-        "It doesn't matter as long as both units are present",
+        "Put metric units in the numerator",
+        "The position doesn't matter",
       ],
       explanation: "The unit you want to eliminate must be in the opposite position (denominator) from where it currently appears, so it cancels. The desired unit goes in the numerator.",
     },
@@ -1030,14 +1030,9 @@ export const SAMPLE_QUESTIONS: Question[] = [
     content: {
       prompt: "How many conversion factors can be written from the equality 1 m = 100 cm?",
       answer_type: "multiple-choice",
-      correct_answer: "Two: (100 cm / 1 m) and (1 m / 100 cm)",
-      choices: [
-        "One: (100 cm / 1 m)",
-        "Two: (100 cm / 1 m) and (1 m / 100 cm)",
-        "Three",
-        "Only one, since 1 m = 100 cm is not a fraction",
-      ],
-      explanation: "Any equality A = B gives two conversion factors: (A/B) and (B/A). Both equal 1. You choose the one that cancels the unwanted unit.",
+      correct_answer: "Two",
+      choices: ["One", "Two", "Three", "Four"],
+      explanation: "Any equality A = B gives two conversion factors: (A/B) and (B/A). For 1 m = 100 cm: (100 cm / 1 m) and (1 m / 100 cm). Both equal 1. You choose the one that cancels the unwanted unit.",
     },
   },
   {
@@ -1280,14 +1275,14 @@ export const SAMPLE_QUESTIONS: Question[] = [
     difficulty: 2,
     is_sample: true,
     content: {
-      prompt: "Which contains more molecules: 1 mole of H₂O or 1 mole of CO₂?",
+      prompt: "Compare the number of molecules in 1 mole of H₂O versus 1 mole of CO₂:",
       answer_type: "multiple-choice",
-      correct_answer: "They contain the same number of molecules",
+      correct_answer: "They have the same number of molecules",
       choices: [
-        "1 mole of H₂O (lighter molecules)",
-        "1 mole of CO₂ (heavier molecules)",
-        "They contain the same number of molecules",
-        "Cannot be determined without more information",
+        "H₂O has more molecules",
+        "CO₂ has more molecules",
+        "They have the same number of molecules",
+        "It depends on the temperature",
       ],
       explanation: "1 mole of ANY substance contains Avogadro's number (6.022 × 10²³) of particles. The type of molecule doesn't matter — only the mole count.",
     },
@@ -2565,9 +2560,9 @@ export const SAMPLE_QUESTIONS: Question[] = [
     content: {
       prompt: "Why do we make stock solutions in labs instead of making the desired concentration directly?",
       answer_type: "multiple-choice",
-      correct_answer: "Both: faster to dilute, and avoids weighing very small masses",
+      correct_answer: "Faster to dilute, and avoids weighing very small masses",
       choices: [
-        "Both: faster to dilute, and avoids weighing very small masses",
+        "Faster to dilute, and avoids weighing very small masses",
         "Stock solutions are more accurate",
         "It's required by safety regulations",
         "Stock solutions never expire",

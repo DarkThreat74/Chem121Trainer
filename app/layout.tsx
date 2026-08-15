@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import NavBar from "@/components/NavBar";
 import ServiceWorkerRegister from "@/components/ServiceWorkerRegister";
+import PWAInstallPrompt from "@/components/PWAInstallPrompt";
 
 export const metadata: Metadata = {
   title: "Chem 121 Trainer",
@@ -33,6 +34,7 @@ export default function RootLayout({
         <NavBar />
         {children}
         <ServiceWorkerRegister />
+        <PWAInstallPrompt />
       </body>
     </html>
   );
