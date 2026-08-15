@@ -21,37 +21,196 @@ import {
 import { LEARN_CONTENT, type Diagram } from "@/lib/learn-content";
 import { TOPICS } from "@/lib/types";
 
+// ─── Text-to-Speech helpers ─────────────────────────────────────────────────
+// Clean up text for natural narration: strip ASCII art, expand symbols, etc.
+function cleanTextForSpeech(raw: string): string {
+  return raw
+    // Replace common math/chemistry symbols with spoken equivalents
+    .replace(/→/g, " becomes ")
+    .replace(/←/g, " becomes ")
+    .replace(/×/g, " times ")
+    .replace(/÷/g, " divided by ")
+    .replace(/·/g, " times ")
+    .replace(/≈/g, " approximately ")
+    .replace(/≤/g, " less than or equal to ")
+    .replace(/≥/g, " greater than or equal to ")
+    .replace(/≠/g, " not equal to ")
+    .replace(/±/g, " plus or minus ")
+    .replace(/°/g, " degrees ")
+    .replace(/µ/g, " micro ")
+    .replace(/Ω/g, " ohm ")
+    // Scientific notation: 6.02 x 10^23 -> "6.02 times 10 to the 23rd"
+    .replace(/(\d+\.?\d*)\s*[xX]\s*10\^?(\d+)/g, "$1 times 10 to the power of $2")
+    .replace(/10\^(\d+)/g, "10 to the power of $1")
+    // Subscripts/superscripts in chemical formulas: H2O -> "H 2 O"
+    .replace(/([A-Z])(\d)/g, "$1 $2 ")
+    // Remove ASCII art lines (lines with mostly symbols/brackets)
+    .split("\n")
+    .filter((line) => {
+      const stripped = line.trim();
+      if (stripped.length === 0) return true; // keep blank lines as pauses
+      const symbolChars = (stripped.match(/[\[\]{}|#<>+\-=*_^|/\\().~]/g) || []).length;
+      const ratio = symbolChars / stripped.length;
+      // If more than 40% symbols, it's probably ASCII art — skip it
+      return ratio < 0.4;
+    })
+    .join(". ")
+    // Clean up multiple spaces and periods
+    .replace(/\s+/g, " ")
+    .replace(/\.\s*\.\s*/g, ". ")
+    .replace(/^\s*\.+\s*/g, "")
+    .trim();
+}
+
+// Pick the best available voice for natural narration
+function pickBestVoice(voices: SpeechSynthesisVoice[]): SpeechSynthesisVoice | null {
+  if (voices.length === 0) return null;
+
+  // Preference order — these are the most natural-sounding voices available
+  // without an API key
+  const preferred = [
+    // Google voices (Chrome desktop) — very natural
+    "Google US English",
+    // Microsoft Natural voices (Edge) — extremely natural
+    "Microsoft Aria Online (Natural) - English (United States)",
+    "Microsoft Jenny Online (Natural) - English (United States)",
+    "Microsoft Guy Online (Natural) - English (United States)",
+    "Microsoft Aria",
+    "Microsoft Jenny",
+    "Microsoft Guy",
+    // Apple voices (Safari/iOS) — decent
+    "Samantha",
+    "Allison",
+    "Ava",
+    // Fallback: any en-US or en voice
+  ];
+
+  for (const name of preferred) {
+    const match = voices.find((v) => v.name === name);
+    if (match) return match;
+  }
+
+  // Try to find any natural/premium voice
+  const natural = voices.find(
+    (v) => v.lang.startsWith("en") && /natural|premium|enhanced|neural/i.test(v.name)
+  );
+  if (natural) return natural;
+
+  // Fall back to any en-US voice
+  const enUS = voices.find((v) => v.lang === "en-US");
+  if (enUS) return enUS;
+
+  // Last resort: any English voice
+  const en = voices.find((v) => v.lang.startsWith("en"));
+  return en || voices[0];
+}
+
+// Split text into sentence-sized chunks for natural pausing
+function splitIntoChunks(text: string, maxLen = 200): string[] {
+  const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
+  const chunks: string[] = [];
+  let current = "";
+
+  for (const sentence of sentences) {
+    if ((current + sentence).length > maxLen && current) {
+      chunks.push(current.trim());
+      current = sentence;
+    } else {
+      current += sentence;
+    }
+  }
+  if (current.trim()) chunks.push(current.trim());
+  return chunks;
+}
+
 // Compact text-to-speech button using the browser's built-in Web Speech API
 function SpeakButton({ text, color }: { text: string; color: string }) {
   const [isSpeaking, setIsSpeaking] = useState(false);
-  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+  const voiceRef = useRef<SpeechSynthesisVoice | null>(null);
+  const cancelledRef = useRef(false);
+
+  // Load the best voice on mount (voices load asynchronously in some browsers)
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.speechSynthesis) return;
+
+    const loadVoice = () => {
+      const voices = window.speechSynthesis.getVoices();
+      if (voices.length > 0) {
+        voiceRef.current = pickBestVoice(voices);
+      }
+    };
+
+    loadVoice();
+    // Chrome loads voices asynchronously
+    window.speechSynthesis.onvoiceschanged = loadVoice;
+
+    return () => {
+      window.speechSynthesis.onvoiceschanged = null;
+    };
+  }, []);
 
   const handleSpeak = useCallback(() => {
     if (typeof window === "undefined" || !window.speechSynthesis) return;
 
-    // If already speaking this text, stop it
+    // If already speaking, stop it
     if (isSpeaking) {
+      cancelledRef.current = true;
       window.speechSynthesis.cancel();
       setIsSpeaking(false);
       return;
     }
 
     // Cancel any ongoing speech first
+    cancelledRef.current = false;
     window.speechSynthesis.cancel();
 
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = 0.95;
-    utterance.pitch = 1;
-    utterance.onend = () => setIsSpeaking(false);
-    utterance.onerror = () => setIsSpeaking(false);
-    utteranceRef.current = utterance;
-    window.speechSynthesis.speak(utterance);
+    const cleaned = cleanTextForSpeech(text);
+    if (!cleaned) return;
+
+    const chunks = splitIntoChunks(cleaned);
+    const voice = voiceRef.current || pickBestVoice(window.speechSynthesis.getVoices());
+
+    let chunkIndex = 0;
+
+    const speakNext = () => {
+      if (cancelledRef.current) {
+        setIsSpeaking(false);
+        return;
+      }
+      if (chunkIndex >= chunks.length) {
+        setIsSpeaking(false);
+        return;
+      }
+
+      const utterance = new SpeechSynthesisUtterance(chunks[chunkIndex]);
+      if (voice) {
+        utterance.voice = voice;
+        utterance.lang = voice.lang;
+      }
+      utterance.rate = 0.92;   // slightly slower for clarity
+      utterance.pitch = 1.0;
+      utterance.volume = 1.0;
+
+      utterance.onend = () => {
+        chunkIndex++;
+        // Small natural pause between chunks
+        setTimeout(speakNext, 150);
+      };
+      utterance.onerror = () => {
+        setIsSpeaking(false);
+      };
+
+      window.speechSynthesis.speak(utterance);
+    };
+
     setIsSpeaking(true);
+    speakNext();
   }, [text, isSpeaking]);
 
   // Cleanup on unmount
   useEffect(() => {
     return () => {
+      cancelledRef.current = true;
       if (typeof window !== "undefined" && window.speechSynthesis) {
         window.speechSynthesis.cancel();
       }
@@ -66,7 +225,13 @@ function SpeakButton({ text, color }: { text: string; color: string }) {
       style={{ color: isSpeaking ? color : undefined }}
     >
       {isSpeaking ? (
-        <Square className="h-4 w-4 fill-current" />
+        <motion.span
+          animate={{ scale: [1, 1.15, 1] }}
+          transition={{ repeat: Infinity, duration: 1.2 }}
+          className="flex items-center justify-center"
+        >
+          <Square className="h-3.5 w-3.5 fill-current" />
+        </motion.span>
       ) : (
         <Volume2 className="h-4 w-4 text-text-tertiary" />
       )}
