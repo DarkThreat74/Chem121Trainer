@@ -5,8 +5,8 @@ import ServiceWorkerRegister from "@/components/ServiceWorkerRegister";
 import PWAInstallPrompt from "@/components/PWAInstallPrompt";
 
 export const metadata: Metadata = {
-  title: "Chem 121 Trainer — Illinois",
-  description: "Master introductory chemistry through spaced repetition practice. Built for Illinois CHEM 121 students.",
+  title: "Chem 121 Trainer",
+  description: "Master introductory chemistry through spaced repetition practice.",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,

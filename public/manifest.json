@@ -1,7 +1,7 @@
 {
-  "name": "Chem 121 Trainer — Illinois",
-  "short_name": "Chem 121 IL",
-  "description": "Master introductory chemistry through spaced repetition practice. Built for Illinois CHEM 121 students.",
+  "name": "Chem 121 Trainer",
+  "short_name": "Chem 121",
+  "description": "Master introductory chemistry through spaced repetition practice.",
   "start_url": "/dashboard",
   "display": "standalone",
   "background_color": "#09090b",

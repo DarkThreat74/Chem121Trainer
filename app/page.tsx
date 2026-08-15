@@ -101,8 +101,7 @@ export default function LandingPage() {
           className="mt-3 max-w-xl text-base text-text-secondary sm:mt-4 sm:text-lg"
         >
           Master introductory chemistry through interactive practice, guided
-          problem-solving, and science-backed spaced repetition. Built for
-          Illinois CHEM 121 students.
+          problem-solving, and science-backed spaced repetition.
         </motion.p>
 
         {/* CTAs */}

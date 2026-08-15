@@ -177,7 +177,7 @@ export const SAMPLE_QUESTIONS: Question[] = [
     difficulty: 2,
     is_sample: true,
     content: {
-      prompt: "A sample of aluminum from a Chicago recycling plant has a mass of 27.0 g and a volume of 10.0 mL. What is its density?",
+      prompt: "An object has a mass of 27.0 g and a volume of 10.0 mL. What is its density?",
       answer_type: "numeric",
       correct_answer: 2.70,
       explanation: "Density = mass / volume = 27.0 g / 10.0 mL = 2.70 g/mL. This is the density of aluminum.",
@@ -969,7 +969,7 @@ export const SAMPLE_QUESTIONS: Question[] = [
     difficulty: 3,
     is_sample: true,
     content: {
-      prompt: "You're driving 55.0 mph on I-55 near Chicago. Convert this to m/s. (1 mile = 1.609 km, 1 hour = 3600 s)",
+      prompt: "Convert 55.0 mph (miles/hour) to m/s. (1 mile = 1.609 km, 1 hour = 3600 s)",
       given: [{ value: 55.0, unit: "mi/h", sigfigs: 3 }],
       target_unit: "m/s",
       solution_chain: [
