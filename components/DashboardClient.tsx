@@ -23,6 +23,7 @@ import {
   PlayCircle,
   type LucideIcon,
 } from "lucide-react";
+// ChevronRight is imported but may be unused — keep for potential future use
 import type { TopicInfo } from "@/lib/types";
 
 const ICON_MAP: Record<string, LucideIcon> = {
@@ -228,17 +229,10 @@ export default function DashboardClient({
 
       {/* Guided learning path */}
       <div>
-        <div className="mb-3 flex items-center justify-between">
+        <div className="mb-3">
           <h2 className="text-sm font-semibold uppercase tracking-wider text-text-tertiary">
             Learning Path
           </h2>
-          <Link
-            href="/learn"
-            className="flex items-center gap-1 text-xs font-medium text-accent transition hover:text-accent-hover"
-          >
-            <BookOpen className="h-3.5 w-3.5" />
-            Study Guide
-          </Link>
         </div>
 
         {/* Guidance banner */}
@@ -270,10 +264,9 @@ export default function DashboardClient({
           );
         })()}
 
-        <div className="space-y-2.5">
+        <div className="space-y-3">
           {[...topicsWithCounts].sort((a, b) => (a.order || 0) - (b.order || 0)).map((topic, i) => {
             const mastery = topicMastery[topic.id] || { mastery: 0, totalReviews: 0, seen: 0, total: topic.count };
-            const hasContent = topic.count > 0;
             const Icon = ICON_MAP[topic.icon] || Atom;
             const sortedTopics = [...topicsWithCounts].sort((a, b) => (a.order || 0) - (b.order || 0));
             const prevTopic = i > 0 ? sortedTopics[i - 1] : null;
@@ -290,75 +283,86 @@ export default function DashboardClient({
                 transition={{ delay: 0.35 + i * 0.04, duration: 0.3 }}
               >
                 {isUnlocked ? (
-                  <Link
-                    href={`/practice/${topic.id}`}
-                    className={`group flex items-center gap-3 rounded-2xl border p-3.5 transition-all duration-200 sm:gap-4 sm:p-4 ${
+                  <div
+                    className={`rounded-2xl border p-4 transition-all duration-200 sm:p-5 ${
                       isCurrent
-                        ? "border-accent/40 bg-accent/5 hover:border-accent/60 hover:bg-accent/10"
-                        : "border-border bg-bg-card hover:border-border-strong hover:bg-bg-hover"
+                        ? "border-accent/40 bg-accent/5"
+                        : "border-border bg-bg-card"
                     }`}
                   >
-                    {/* Step number / status icon */}
-                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl sm:h-12 sm:w-12" style={{ backgroundColor: isComplete ? `${topic.color}20` : `${topic.color}15` }}>
-                      {isComplete ? (
-                        <CheckCircle2 className="h-5 w-5 sm:h-6 sm:w-6" style={{ color: topic.color }} />
-                      ) : (
-                        <Icon className="h-4 w-4 sm:h-5 sm:w-5" style={{ color: topic.color }} />
-                      )}
-                    </div>
-
-                    {/* Content */}
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-bold text-text-tertiary">STEP {topic.order}</span>
-                        {isCurrent && (
-                          <span className="rounded-md bg-accent/20 px-1.5 py-0.5 text-xs font-semibold text-accent">
-                            START HERE
-                          </span>
-                        )}
-                        {isComplete && (
-                          <span className="rounded-md bg-ok/20 px-1.5 py-0.5 text-xs font-semibold text-ok">
-                            DONE
-                          </span>
+                    {/* Header row */}
+                    <div className="flex items-start gap-3">
+                      <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl sm:h-12 sm:w-12" style={{ backgroundColor: isComplete ? `${topic.color}20` : `${topic.color}15` }}>
+                        {isComplete ? (
+                          <CheckCircle2 className="h-5 w-5 sm:h-6 sm:w-6" style={{ color: topic.color }} />
+                        ) : (
+                          <Icon className="h-4 w-4 sm:h-5 sm:w-5" style={{ color: topic.color }} />
                         )}
                       </div>
-                      <span className="mt-0.5 block font-semibold">{topic.label}</span>
-                      <p className="mt-0.5 truncate text-sm text-text-secondary">
-                        {topic.description}
-                      </p>
 
-                      {/* Progress bar */}
-                      {mastery && mastery.totalReviews > 0 && (
-                        <div className="mt-2 flex items-center gap-2">
-                          <div className="h-1.5 w-24 overflow-hidden rounded-full bg-bg-input">
-                            <motion.div
-                              initial={{ width: 0 }}
-                              animate={{ width: `${mastery.mastery}%` }}
-                              transition={{ delay: 0.5 + i * 0.04, duration: 0.5 }}
-                              className="h-full rounded-full"
-                              style={{ backgroundColor: topic.color }}
-                            />
-                          </div>
-                          <span className="text-xs font-medium text-text-tertiary">
-                            {mastery.seen}/{topic.count} done · {mastery.mastery}%
-                          </span>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs font-bold text-text-tertiary">STEP {topic.order}</span>
+                          {isCurrent && (
+                            <span className="rounded-md bg-accent/20 px-1.5 py-0.5 text-xs font-semibold text-accent">
+                              START HERE
+                            </span>
+                          )}
+                          {isComplete && (
+                            <span className="rounded-md bg-ok/20 px-1.5 py-0.5 text-xs font-semibold text-ok">
+                              DONE
+                            </span>
+                          )}
                         </div>
-                      )}
-                      {(!mastery || mastery.seen === 0) && isCurrent && (
-                        <p className="mt-1 text-xs text-accent">Not started yet — tap to begin!</p>
-                      )}
+                        <span className="mt-0.5 block font-semibold">{topic.label}</span>
+                        <p className="mt-0.5 text-sm text-text-secondary">
+                          {topic.description}
+                        </p>
+
+                        {/* Progress bar */}
+                        {mastery && mastery.totalReviews > 0 && (
+                          <div className="mt-2 flex items-center gap-2">
+                            <div className="h-1.5 w-24 overflow-hidden rounded-full bg-bg-input">
+                              <motion.div
+                                initial={{ width: 0 }}
+                                animate={{ width: `${mastery.mastery}%` }}
+                                transition={{ delay: 0.5 + i * 0.04, duration: 0.5 }}
+                                className="h-full rounded-full"
+                                style={{ backgroundColor: topic.color }}
+                              />
+                            </div>
+                            <span className="text-xs font-medium text-text-tertiary">
+                              {mastery.seen}/{topic.count} · {mastery.mastery}%
+                            </span>
+                          </div>
+                        )}
+                      </div>
                     </div>
 
-                    <ChevronRight className="h-5 w-5 flex-shrink-0 text-muted transition-transform group-hover:translate-x-0.5" />
-                  </Link>
+                    {/* Learn + Quiz buttons */}
+                    <div className="mt-3 grid grid-cols-2 gap-2">
+                      <Link
+                        href={`/learn/${topic.id}`}
+                        className="group flex items-center justify-center gap-1.5 rounded-xl border border-border bg-bg-input py-2.5 text-sm font-semibold text-text transition hover:border-border-strong hover:bg-bg-hover"
+                      >
+                        <BookOpen className="h-4 w-4 text-text-secondary transition group-hover:text-text" />
+                        Learn
+                      </Link>
+                      <Link
+                        href={`/practice/${topic.id}`}
+                        className="group flex items-center justify-center gap-1.5 rounded-xl py-2.5 text-sm font-semibold text-white transition hover:opacity-90"
+                        style={{ backgroundColor: topic.color }}
+                      >
+                        <FlaskConical className="h-4 w-4" />
+                        Quiz
+                      </Link>
+                    </div>
+                  </div>
                 ) : (
-                  <div className="flex items-center gap-3 rounded-2xl border border-border bg-bg-card/50 p-3.5 opacity-60 sm:gap-4 sm:p-4">
-                    {/* Locked icon */}
+                  <div className="flex items-center gap-3 rounded-2xl border border-border bg-bg-card/50 p-4 opacity-60 sm:p-5">
                     <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-bg-input sm:h-12 sm:w-12">
                       <Lock className="h-4 w-4 text-text-tertiary sm:h-5 sm:w-5" />
                     </div>
-
-                    {/* Content */}
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
                         <span className="text-xs font-bold text-text-tertiary">STEP {topic.order}</span>

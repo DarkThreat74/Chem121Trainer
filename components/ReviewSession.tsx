@@ -51,10 +51,13 @@ export default function ReviewSession({
   const [bestStreak, setBestStreak] = useState(0);
   const [totalTime, setTotalTime] = useState(0);
   const [confettiTrigger, setConfettiTrigger] = useState(0);
+  const [questionOrder, setQuestionOrder] = useState<number[]>([]);
+  const masteryRef = useRef(0); // tracks consecutive correct for "4 in a row" completion
+  const MASTERY_THRESHOLD = 4;
   const router = useRouter();
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const question = questions[currentIndex];
+  const question = questions[questionOrder[currentIndex] ?? currentIndex];
 
   // Guard against empty questions array
   if (questions.length === 0) {
@@ -76,6 +79,8 @@ export default function ReviewSession({
     const now = Date.now();
     setStartTime(now);
     setCurrentTime(now);
+    // Initialize question order (shuffled)
+    setQuestionOrder(Array.from({ length: questions.length }, (_, i) => i).sort(() => Math.random() - 0.5));
   }, []);
 
   // Live timer
@@ -99,6 +104,7 @@ export default function ReviewSession({
       setFeedback({ status: isCorrect ? "correct" : "incorrect", explanation });
       if (isCorrect) {
         setCorrectCount((c) => c + 1);
+        masteryRef.current += 1;
         setSessionStreak((s) => {
           const newStreak = s + 1;
           setBestStreak((b) => Math.max(b, newStreak));
@@ -109,6 +115,7 @@ export default function ReviewSession({
           return newStreak;
         });
       } else {
+        masteryRef.current = 0;
         setSessionStreak(0);
       }
 
@@ -133,14 +140,21 @@ export default function ReviewSession({
   );
 
   function handleNext() {
+    // Check if mastery threshold reached (4 in a row)
+    if (masteryRef.current >= MASTERY_THRESHOLD) {
+      setSessionFinished(true);
+      setConfettiTrigger((t) => t + 1);
+      return;
+    }
+
     const nextIndex = currentIndex + 1;
     if (nextIndex >= questions.length) {
-      setSessionFinished(true);
-      // Show confetti if accuracy >= 80%
-      const pct = Math.round((correctCount / questions.length) * 100);
-      if (pct >= 80) {
-        setConfettiTrigger((t) => t + 1);
-      }
+      // Ran through all questions but haven't mastered yet — reshuffle and continue
+      setQuestionOrder(Array.from({ length: questions.length }, (_, i) => i).sort(() => Math.random() - 0.5));
+      setCurrentIndex(0);
+      setFeedback(null);
+      setStartTime(Date.now());
+      setCurrentTime(Date.now());
     } else {
       setCurrentIndex(nextIndex);
       setFeedback(null);
@@ -171,7 +185,7 @@ export default function ReviewSession({
           transition={{ delay: 0.2 }}
           className="mt-5 text-2xl font-bold tracking-tight sm:mt-6 sm:text-3xl"
         >
-          Session Complete
+          Mastered!
         </motion.h2>
         <motion.p
           initial={{ opacity: 0 }}
@@ -179,7 +193,7 @@ export default function ReviewSession({
           transition={{ delay: 0.3 }}
           className="mt-2 text-sm text-text-secondary sm:text-base"
         >
-          You reviewed {questions.length} cards
+          You got {MASTERY_THRESHOLD} in a row correct
         </motion.p>
 
         {/* Stats grid */}
@@ -288,11 +302,31 @@ export default function ReviewSession({
                 {formatTime(elapsedThisQuestion)}
               </div>
               <span className="text-sm font-medium text-text-secondary">
-                {currentIndex + 1} / {questions.length}
+                Q{currentIndex + 1}
               </span>
             </div>
           </div>
-          <div className="h-1.5 w-full overflow-hidden rounded-full bg-bg-input">
+          {/* Mastery streak indicator: 4 in a row */}
+          <div className="mt-2 flex items-center gap-2">
+            <span className="text-xs font-medium text-text-tertiary">
+              Get {MASTERY_THRESHOLD} in a row to finish:
+            </span>
+            <div className="flex gap-1">
+              {Array.from({ length: MASTERY_THRESHOLD }, (_, i) => (
+                <motion.div
+                  key={i}
+                  initial={false}
+                  animate={{
+                    backgroundColor: i < masteryRef.current ? "#34d399" : "#27272a",
+                    scale: i < masteryRef.current ? [1, 1.2, 1] : 1,
+                  }}
+                  transition={{ duration: 0.3 }}
+                  className="h-2 w-6 rounded-full"
+                />
+              ))}
+            </div>
+          </div>
+          <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-bg-input">
             <motion.div
               animate={{
                 width: `${((currentIndex + (feedback ? 1 : 0)) / questions.length) * 100}%`,

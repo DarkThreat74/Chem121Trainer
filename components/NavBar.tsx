@@ -2,20 +2,19 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Sparkles, BookOpen, FlaskConical } from "lucide-react";
+import { LayoutDashboard, Sparkles, FlaskConical } from "lucide-react";
 import { motion } from "framer-motion";
 
 const NAV_ITEMS = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/review", label: "Review", icon: Sparkles },
-  { href: "/learn", label: "Learn", icon: BookOpen },
 ];
 
 export default function NavBar() {
   const pathname = usePathname();
 
-  // Don't show nav on landing page or during active review/practice sessions
-  if (pathname === "/" || pathname.startsWith("/review") || pathname.startsWith("/practice/")) {
+  // Don't show nav on landing page or during active review/practice/learn sessions
+  if (pathname === "/" || pathname.startsWith("/review") || pathname.startsWith("/practice/") || pathname.startsWith("/learn/")) {
     return null;
   }
 
