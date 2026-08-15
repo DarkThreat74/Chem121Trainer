@@ -1166,7 +1166,7 @@ export const SAMPLE_QUESTIONS: Question[] = [
       solution_chain: [
         { numerator: "58.44 g", denominator: "1 mol", numerator_value: 58.44, denominator_value: 1 },
       ],
-      final_answer: { value: 175.32, unit: "g", sigfigs: 3, tolerance_pct: 1 },
+      final_answer: { value: 175, unit: "g", sigfigs: 3, tolerance_pct: 1 },
       explanation: "3.00 mol × (58.44 g / 1 mol) = 175.32 g → 175 g. 3 sig figs from 3.00.",
     },
   },

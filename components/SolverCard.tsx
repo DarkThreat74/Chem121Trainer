@@ -123,13 +123,17 @@ export default function SolverCard({ question, onAnswer, disabled }: SolverCardP
     if (!s) return 0;
     const parts = s.split(/[eE]/);
     let mantissa = parts[0];
-    const withoutDecimal = mantissa.replace(/\./g, "");
-    const noLeadingZeros = withoutDecimal.replace(/^0+/, "");
-    if (noLeadingZeros.length === 0) return 0;
+    // If there's a decimal point, all digits after the first non-zero digit count
     if (mantissa.includes(".")) {
-      const trimmed = mantissa.replace(/^0+/, "");
-      return trimmed.replace(/\./g, "").length;
+      // Remove the decimal point, then strip leading zeros
+      const digits = mantissa.replace(/\./g, "");
+      const noLeadingZeros = digits.replace(/^0+/, "");
+      if (noLeadingZeros.length === 0) return 0;
+      return noLeadingZeros.length;
     }
+    // No decimal point: trailing zeros are NOT significant
+    const noLeadingZeros = mantissa.replace(/^0+/, "");
+    if (noLeadingZeros.length === 0) return 0;
     const noTrailingZeros = noLeadingZeros.replace(/0+$/, "");
     return noTrailingZeros.length || 1;
   }
