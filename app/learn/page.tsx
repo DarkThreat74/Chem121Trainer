@@ -158,6 +158,39 @@ const WORKED_EXAMPLES = [
     ],
     answer: "2.11 × 10²⁴ molecules (3 sig figs)",
   },
+  {
+    topic: "Dimensional Analysis",
+    problem: "Convert 65.0 miles per hour to meters per second. (1 mi = 1.609 km)",
+    steps: [
+      { label: "Start with the given", detail: "65.0 mi/h — we need to convert mi → m and h → s" },
+      { label: "Convert miles to km", detail: "65.0 × (1.609 km / 1 mi) = 104.585 km/h" },
+      { label: "Convert km to m", detail: "104.585 × (1000 m / 1 km) = 104585 m/h" },
+      { label: "Convert hours to seconds", detail: "104585 × (1 h / 3600 s) = 24.58 m/s" },
+      { label: "Round to sig figs", detail: "65.0 has 3 sig figs → 24.6 m/s" },
+    ],
+    answer: "24.6 m/s (3 sig figs)",
+  },
+  {
+    topic: "Significant Figures",
+    problem: "Calculate the density of an object: mass = 27.0 g, volume = 10.0 mL. How many sig figs?",
+    steps: [
+      { label: "Identify the operation", detail: "Density = mass / volume → this is division" },
+      { label: "Count sig figs in each value", detail: "27.0 has 3 sig figs, 10.0 has 3 sig figs" },
+      { label: "Apply the rule", detail: "Division → result has the fewest sig figs = 3" },
+      { label: "Calculate", detail: "27.0 / 10.0 = 2.70 g/mL (3 sig figs)" },
+    ],
+    answer: "2.70 g/mL (3 sig figs)",
+  },
+  {
+    topic: "Molarity",
+    problem: "What is the molarity of a solution made by dissolving 5.85 g NaCl in enough water to make 250 mL?",
+    steps: [
+      { label: "Convert mass to moles", detail: "5.85 g ÷ 58.44 g/mol = 0.100 mol NaCl" },
+      { label: "Convert volume to liters", detail: "250 mL ÷ 1000 = 0.250 L" },
+      { label: "Calculate molarity", detail: "M = moles / liters = 0.100 / 0.250 = 0.400 M" },
+    ],
+    answer: "0.400 M (3 sig figs)",
+  },
 ];
 
 // Vocabulary flashcards from "Terms in CHEM 121" PDF
@@ -186,6 +219,76 @@ const VOCAB_CARDS = [
   { term: "Dimensional Analysis", def: "Problem-solving method using unit cancellation" },
   { term: "Balanced Equation", def: "Equation with equal atoms on both sides (conservation of mass)" },
   { term: "Percent Yield", def: "(actual yield / theoretical yield) × 100" },
+  { term: "Excess Reactant", def: "The reactant that remains after the limiting reactant is consumed" },
+  { term: "Theoretical Yield", def: "Maximum product possible based on stoichiometry" },
+  { term: "Actual Yield", def: "Amount of product actually obtained in a reaction" },
+  { term: "Mass Number", def: "Protons + neutrons in an atom's nucleus" },
+  { term: "Atomic Mass", def: "Weighted average mass of an element's naturally occurring isotopes" },
+  { term: "Empirical Formula", def: "Simplest whole-number ratio of atoms in a compound" },
+  { term: "Molecular Formula", def: "Actual number of atoms of each element in a molecule" },
+  { term: "Law of Conservation of Mass", def: "Mass is neither created nor destroyed in a chemical reaction" },
+  { term: "Heterogeneous Mixture", def: "Non-uniform composition (e.g., sand and water)" },
+  { term: "Homogeneous Mixture", def: "Uniform composition throughout (e.g., salt water)" },
+  { term: "Compound", def: "Two or more elements chemically bonded in fixed ratio" },
+  { term: "Element", def: "Pure substance that cannot be broken down further" },
+];
+
+// Matter classification tree
+const MATTER_CLASSIFICATION = [
+  {
+    category: "Matter",
+    sub: [
+      {
+        name: "Pure Substances",
+        items: [
+          { label: "Elements", desc: "One type of atom (Fe, O₂, He)" },
+          { label: "Compounds", desc: "Two+ elements chemically bonded (H₂O, NaCl, CO₂)" },
+        ],
+      },
+      {
+        name: "Mixtures",
+        items: [
+          { label: "Homogeneous", desc: "Uniform throughout (salt water, air)" },
+          { label: "Heterogeneous", desc: "Distinct phases (sand + water, oil + water)" },
+        ],
+      },
+    ],
+  },
+];
+
+// Physical vs chemical changes
+const CHANGES_TABLE = [
+  { type: "Physical Change", desc: "No new substance formed; identity preserved", examples: "Melting ice, boiling water, dissolving salt, cutting paper" },
+  { type: "Chemical Change", desc: "New substance(s) formed; bonds broken/formed", examples: "Burning, rusting, cooking, digestion, electrolysis" },
+];
+
+// Atomic structure details
+const ATOMIC_STRUCTURE_DETAILS = [
+  {
+    concept: "Atomic Number (Z)",
+    detail: "Number of protons. Defines the element. All atoms of the same element have the same Z.",
+    example: "Carbon: Z = 6 → always 6 protons",
+  },
+  {
+    concept: "Mass Number (A)",
+    detail: "Protons + neutrons. Can vary between atoms of the same element (isotopes).",
+    example: "Carbon-12: A = 12 (6p + 6n). Carbon-14: A = 14 (6p + 8n)",
+  },
+  {
+    concept: "Isotopes",
+    detail: "Same element (same Z), different neutrons (different A). Same chemical behavior.",
+    example: "¹H (protium), ²H (deuterium), ³H (tritium) — all hydrogen",
+  },
+  {
+    concept: "Ions",
+    detail: "Atom with unequal protons and electrons. Cation = lost electrons (+). Anion = gained electrons (−).",
+    example: "Na → Na⁺ + e⁻ (11p, 10e → +1 charge)",
+  },
+  {
+    concept: "Electron Configuration",
+    detail: "Electrons fill orbitals by energy: 1s → 2s → 2p → 3s → 3p → 4s → 3d. Max 2 e⁻ per orbital.",
+    example: "Oxygen (8 e⁻): 1s² 2s² 2p⁴",
+  },
 ];
 
 // ─── Components ───
@@ -410,6 +513,49 @@ export default function LearnPage() {
         </motion.div>
 
         <div className="space-y-12">
+          {/* Matter Classification */}
+          <Section id="matter" icon={Atom} title="Matter & Classification" color="#818cf8">
+            <div className="space-y-3">
+              <p className="text-sm text-text-secondary">
+                Everything around you is <strong>matter</strong> — anything that has mass and takes up space.
+                Chemists classify matter based on its composition.
+              </p>
+              {MATTER_CLASSIFICATION.map((m, i) => (
+                <div key={i} className="rounded-xl border border-border bg-bg-card p-4">
+                  {m.sub.map((s, j) => (
+                    <div key={j} className={j > 0 ? "mt-4" : ""}>
+                      <p className="font-semibold text-text">{s.name}</p>
+                      <div className="mt-2 grid gap-2 sm:grid-cols-2">
+                        {s.items.map((item, k) => (
+                          <div key={k} className="rounded-lg bg-bg-input p-3">
+                            <p className="text-sm font-medium text-text">{item.label}</p>
+                            <p className="mt-0.5 text-xs text-text-tertiary">{item.desc}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+
+            {/* Physical vs Chemical Changes */}
+            <div className="mt-4">
+              <h3 className="mb-2 text-sm font-semibold uppercase tracking-wider text-text-tertiary">
+                Physical vs Chemical Changes
+              </h3>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {CHANGES_TABLE.map((c, i) => (
+                  <div key={i} className="rounded-xl border border-border bg-bg-card p-4">
+                    <p className="font-semibold" style={{ color: i === 0 ? "#60a5fa" : "#fb923c" }}>{c.type}</p>
+                    <p className="mt-1 text-sm text-text-secondary">{c.desc}</p>
+                    <p className="mt-2 text-xs text-text-tertiary">{c.examples}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </Section>
+
           {/* Significant Figures */}
           <Section id="sig-figs" icon={Hash} title="Significant Figures" color="#fbbf24">
             <div className="space-y-3">
@@ -539,6 +685,22 @@ export default function LearnPage() {
                 <span className="font-semibold">weighted average</span> of all
                 naturally occurring isotopes.
               </p>
+            </div>
+
+            {/* Atomic structure deep dive */}
+            <div className="mt-4">
+              <h3 className="mb-2 text-sm font-semibold uppercase tracking-wider text-text-tertiary">
+                Key Concepts
+              </h3>
+              <div className="space-y-2">
+                {ATOMIC_STRUCTURE_DETAILS.map((d, i) => (
+                  <div key={i} className="rounded-xl border border-border bg-bg-card p-3">
+                    <p className="font-semibold text-text">{d.concept}</p>
+                    <p className="mt-1 text-sm text-text-secondary">{d.detail}</p>
+                    <p className="mt-1 font-mono text-xs text-text-tertiary">{d.example}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </Section>
 

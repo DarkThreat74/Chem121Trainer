@@ -1,0 +1,26 @@
+--- PAGE 1 ---
+STRUCTURE OF THE ATOM STUDY GUIDE
+Chemistry 121
+Problems:
+1. Define the following subatomic particles and note their location in an atom:
+a. Electron
+b. Proton
+c. Neutron
+2. What is the difference between an orbital and an orbit? What is the maximum number of electrons that
+can occupy one orbital? What is the minimum?
+3. Are electrons massless? Why do we treat them as if they have no mass when determining the mass of
+an isotope?
+4. What is an isotope? How is it possible to have atoms of the same element but different masses?
+5. Do the masses on the periodic table correlate to a specific isotope? How are the masses on the periodic
+table calculated?
+6. If intelligent life is found on another planet, would you expect their periodic table to have the same
+masses noted for the elements as our periodic table? Explain.
+7. Complete the following table for the isotopes listed.
+Symbol # protons # neutrons # electrons mass (amu) Charge
+1 4C
+34 64 2+
+5 10 12
+20 28 18
+48 112 2+
+28 P 3 −
+17 23 1-

@@ -80,7 +80,7 @@ export default async function PracticePage({
 
   return (
     <div className="min-h-screen safe-top safe-bottom">
-      <div className="mx-auto max-w-2xl px-4 py-6">
+      <div className="mx-auto max-w-3xl px-4 py-6 lg:max-w-4xl">
         <div className="mb-4">
           <a
             href="/dashboard"
@@ -88,7 +88,11 @@ export default async function PracticePage({
           >
             ← Back to dashboard
           </a>
-          <h1 className="mt-1 text-lg font-bold">{topicInfo.label}</h1>
+          <div className="mt-1 flex items-center gap-2">
+            <span className="text-xs font-bold text-text-tertiary">STEP {topicInfo.order}</span>
+            <h1 className="text-lg font-bold">{topicInfo.label}</h1>
+          </div>
+          <p className="mt-0.5 text-sm text-text-secondary">{topicInfo.description}</p>
         </div>
         <ReviewSession questions={questions} reviewStates={stateMap} />
       </div>

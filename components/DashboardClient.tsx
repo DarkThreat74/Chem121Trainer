@@ -18,6 +18,9 @@ import {
   Orbit,
   Sparkles,
   BookOpen,
+  Lock,
+  CheckCircle2,
+  PlayCircle,
   type LucideIcon,
 } from "lucide-react";
 import type { TopicInfo } from "@/lib/types";
@@ -215,11 +218,11 @@ export default function DashboardClient({
         </Link>
       </motion.div>
 
-      {/* Topic list */}
+      {/* Guided learning path */}
       <div>
         <div className="mb-3 flex items-center justify-between">
           <h2 className="text-sm font-semibold uppercase tracking-wider text-text-tertiary">
-            Topics
+            Learning Path
           </h2>
           <Link
             href="/learn"
@@ -229,11 +232,47 @@ export default function DashboardClient({
             Study Guide
           </Link>
         </div>
-        <div className="grid gap-2.5 sm:gap-3 lg:grid-cols-2">
-          {topicsWithCounts.map((topic, i) => {
-            const mastery = topicMastery[topic.id] || { mastery: 0, totalReviews: 0, seen: 0, total: 0 };
+
+        {/* Guidance banner */}
+        {(() => {
+          const sortedTopics = [...topicsWithCounts].sort((a, b) => (a.order || 0) - (b.order || 0));
+          const currentTopic = sortedTopics.find((t) => {
+            const m = topicMastery[t.id] || { mastery: 0, totalReviews: 0, seen: 0, total: t.count };
+            return m.seen < t.count;
+          }) || sortedTopics[sortedTopics.length - 1];
+          const currentMastery = topicMastery[currentTopic.id] || { mastery: 0, totalReviews: 0, seen: 0, total: currentTopic.count };
+          const isStarted = currentMastery.seen > 0;
+
+          return (
+            <div className="mb-4 rounded-2xl border border-accent/20 bg-accent/5 p-4">
+              <div className="flex items-center gap-2">
+                <PlayCircle className="h-5 w-5 flex-shrink-0 text-accent" />
+                <p className="text-sm font-medium">
+                  {isStarted
+                    ? `Continue with "${currentTopic.label}" — ${currentMastery.seen}/${currentTopic.count} questions done`
+                    : `Start here: "${currentTopic.label}"`}
+                </p>
+              </div>
+              <p className="mt-1.5 pl-7 text-xs text-text-secondary">
+                {isStarted
+                  ? "Keep going! Finish this topic to unlock the next one."
+                  : `Step ${currentTopic.order} of ${sortedTopics.length}. ${currentTopic.description}`}
+              </p>
+            </div>
+          );
+        })()}
+
+        <div className="space-y-2.5">
+          {[...topicsWithCounts].sort((a, b) => (a.order || 0) - (b.order || 0)).map((topic, i) => {
+            const mastery = topicMastery[topic.id] || { mastery: 0, totalReviews: 0, seen: 0, total: topic.count };
             const hasContent = topic.count > 0;
             const Icon = ICON_MAP[topic.icon] || Atom;
+            const sortedTopics = [...topicsWithCounts].sort((a, b) => (a.order || 0) - (b.order || 0));
+            const prevTopic = i > 0 ? sortedTopics[i - 1] : null;
+            const prevMastery = prevTopic ? (topicMastery[prevTopic.id] || { mastery: 0, totalReviews: 0, seen: 0, total: prevTopic.count }) : null;
+            const isUnlocked = i === 0 || (prevMastery !== null && prevTopic !== null && prevMastery.seen >= prevTopic.count * 0.5);
+            const isComplete = mastery.seen >= topic.count && topic.count > 0;
+            const isCurrent = isUnlocked && !isComplete;
 
             return (
               <motion.div
@@ -242,63 +281,90 @@ export default function DashboardClient({
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.35 + i * 0.04, duration: 0.3 }}
               >
-                <Link
-                  href={`/practice/${topic.id}`}
-                  className="group flex items-center gap-3 rounded-2xl border border-border bg-bg-card p-3.5 transition-all duration-200 hover:border-border-strong hover:bg-bg-hover sm:gap-4 sm:p-4"
-                >
-                  {/* Icon */}
-                  <div
-                    className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl transition-transform group-hover:scale-110 sm:h-12 sm:w-12"
-                    style={{
-                      backgroundColor: `${topic.color}15`,
-                    }}
+                {isUnlocked ? (
+                  <Link
+                    href={`/practice/${topic.id}`}
+                    className={`group flex items-center gap-3 rounded-2xl border p-3.5 transition-all duration-200 sm:gap-4 sm:p-4 ${
+                      isCurrent
+                        ? "border-accent/40 bg-accent/5 hover:border-accent/60 hover:bg-accent/10"
+                        : "border-border bg-bg-card hover:border-border-strong hover:bg-bg-hover"
+                    }`}
                   >
-                    <Icon
-                      className="h-4 w-4 sm:h-5 sm:w-5"
-                      style={{ color: topic.color }}
-                    />
-                  </div>
-
-                  {/* Content */}
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-2">
-                      <span className="font-semibold">{topic.label}</span>
-                      {hasContent && (
-                        <span className="rounded-md bg-bg-input px-1.5 py-0.5 text-xs font-medium text-text-tertiary">
-                          {topic.count}
-                        </span>
+                    {/* Step number / status icon */}
+                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl sm:h-12 sm:w-12" style={{ backgroundColor: isComplete ? `${topic.color}20` : `${topic.color}15` }}>
+                      {isComplete ? (
+                        <CheckCircle2 className="h-5 w-5 sm:h-6 sm:w-6" style={{ color: topic.color }} />
+                      ) : (
+                        <Icon className="h-4 w-4 sm:h-5 sm:w-5" style={{ color: topic.color }} />
                       )}
                     </div>
-                    <p className="mt-0.5 truncate text-sm text-text-secondary">
-                      {hasContent
-                        ? topic.description
-                        : "No content yet"}
-                    </p>
 
-                    {/* Progress bar */}
-                    {mastery && mastery.totalReviews > 0 && (
-                      <div className="mt-2 flex items-center gap-2">
-                        <div className="h-1.5 w-24 overflow-hidden rounded-full bg-bg-input">
-                          <motion.div
-                            initial={{ width: 0 }}
-                            animate={{ width: `${mastery.mastery}%` }}
-                            transition={{ delay: 0.5 + i * 0.04, duration: 0.5 }}
-                            className="h-full rounded-full"
-                            style={{ backgroundColor: topic.color }}
-                          />
+                    {/* Content */}
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-bold text-text-tertiary">STEP {topic.order}</span>
+                        {isCurrent && (
+                          <span className="rounded-md bg-accent/20 px-1.5 py-0.5 text-xs font-semibold text-accent">
+                            START HERE
+                          </span>
+                        )}
+                        {isComplete && (
+                          <span className="rounded-md bg-ok/20 px-1.5 py-0.5 text-xs font-semibold text-ok">
+                            DONE
+                          </span>
+                        )}
+                      </div>
+                      <span className="mt-0.5 block font-semibold">{topic.label}</span>
+                      <p className="mt-0.5 truncate text-sm text-text-secondary">
+                        {topic.description}
+                      </p>
+
+                      {/* Progress bar */}
+                      {mastery && mastery.totalReviews > 0 && (
+                        <div className="mt-2 flex items-center gap-2">
+                          <div className="h-1.5 w-24 overflow-hidden rounded-full bg-bg-input">
+                            <motion.div
+                              initial={{ width: 0 }}
+                              animate={{ width: `${mastery.mastery}%` }}
+                              transition={{ delay: 0.5 + i * 0.04, duration: 0.5 }}
+                              className="h-full rounded-full"
+                              style={{ backgroundColor: topic.color }}
+                            />
+                          </div>
+                          <span className="text-xs font-medium text-text-tertiary">
+                            {mastery.seen}/{topic.count} done · {mastery.mastery}%
+                          </span>
                         </div>
-                        <span className="text-xs font-medium text-text-tertiary">
-                          {mastery.mastery}% mastery
+                      )}
+                      {(!mastery || mastery.seen === 0) && isCurrent && (
+                        <p className="mt-1 text-xs text-accent">Not started yet — tap to begin!</p>
+                      )}
+                    </div>
+
+                    <ChevronRight className="h-5 w-5 flex-shrink-0 text-muted transition-transform group-hover:translate-x-0.5" />
+                  </Link>
+                ) : (
+                  <div className="flex items-center gap-3 rounded-2xl border border-border bg-bg-card/50 p-3.5 opacity-60 sm:gap-4 sm:p-4">
+                    {/* Locked icon */}
+                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-bg-input sm:h-12 sm:w-12">
+                      <Lock className="h-4 w-4 text-text-tertiary sm:h-5 sm:w-5" />
+                    </div>
+
+                    {/* Content */}
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-bold text-text-tertiary">STEP {topic.order}</span>
+                        <span className="rounded-md bg-bg-input px-1.5 py-0.5 text-xs font-medium text-text-tertiary">
+                          LOCKED
                         </span>
                       </div>
-                    )}
-                    {hasContent && (!mastery || mastery.seen === 0) && (
-                      <p className="mt-1 text-xs text-text-tertiary">Not started</p>
-                    )}
+                      <span className="mt-0.5 block font-semibold text-text-secondary">{topic.label}</span>
+                      <p className="mt-0.5 truncate text-sm text-text-tertiary">
+                        Complete "{prevTopic?.label}" to unlock
+                      </p>
+                    </div>
                   </div>
-
-                  <ChevronRight className="h-5 w-5 flex-shrink-0 text-muted transition-transform group-hover:translate-x-0.5" />
-                </Link>
+                )}
               </motion.div>
             );
           })}

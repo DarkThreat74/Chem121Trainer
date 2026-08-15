@@ -1,0 +1,641 @@
+--- PAGE 1 ---
+DILUTIONS-ANSWERS
+Chemistry 121
+Problems:
+1. We make stock solutions & then dilute for our desired concentration for two main reasons: 1) It tends
+to be more time consuming to weigh out the mass of a solid and dissolve it each time we make a
+solution. It is faster to simply measure a volume of a stock solution. 2) We often have to make a
+solution with so little of the solid that it can be difficult to get an accurate mass (e.g., it is easier to
+measure 1.0 g than 0.100 mg). We therefore make a concentrated stock solution and dilute to get our
+desired concentration.
+For problems 1-8, use the formula C V =C V where C is the concentration of the concentrated solution,
+1 1 2 2 1
+V is the volume of the concentrated solution, C is the concentration of the dilute solution, and V is the
+1 2 2
+volume of the dilute solution. Further, remember that the units for M and M must be the same and the
+1 2
+units for V and V must be the same.
+1 2
+2.
+(
+C
+1
+2
+5 .0 M
+( 
+= 
+1
+)
+5
+( 5
+.0
+(
+.0
+M
+1 0
+m
+)
+0
+L
+(
+m
+) =
+5 .0
+) L
+m
+( C
+L
+2
+)
+)
+
+(1
+=
+0 0 m
+0 .7
+L
+5 M
+)
+3.
+C
+1
+(
+=
+C
+
+1
+(
+)
+4
+( 0 .0 5
+2 m M
+( 0 .0
+0
+5
+L
+) (
+0
+)
+1
+L
+=
+.3
+)
+(
+L
+4
+)
+2
+
+m
+=
+M
+1
+)
+.0
+(
+9
+1
+x
+.3 L
+3 1 0
+)
+m M
+4.
+(
+V
+0
+1
+.4
+=
+5
+
+m
+(
+M
+0 .0
+) ( V
+3 m
+( 0
+)
+1
+M
+.4 5
+=
+)
+m
+( 0 .0
+( 7 5 0
+) M
+3
+m
+m
+L
+M
+) 
+) (
+=
+7
+5
+5
+0
+0 m
+.0
+L
+m
+)
+L
+You would take 50.0 mL of stock solution and add enough water to bring the solution to 750 mL of
+total solution (you cannot simply add 700 mL of water!!).
+5.
+V
+2
+( 2 5
+(
+.0
+2 5
+m g
+.0
+)
+m L
+m g
+m
+( 2
+( 5
+)
+L
+m g
+0
+(
+m
+0
+5
+L
+0
+)
+L
+0
+)
+L )
+( 2 m g
+6
+m L
+.2
+)
+5
+( V
+x 1
+2
+0
+)
+3 L
+
+
+ =
+
+=
+
+=
+6. You must convert units so that the volumes have the same units.
+C
+( 2
+2
+0 .0
+( 2
+M
+0
+)
+.0
+( 1 8
+M
+( 2 0
+.0 m
+) (
+0 m
+L
+1 8
+L
+)
+.0
+)
+m
+( C
+L
+2
+)
+) ( 2 0 0
+1 .8
+m
+0
+L )
+M
+
+
+ =
+
+=
+
+=
+7. You must convert units so that the volumes have the same units.
+(C )(30L)=(35mM)(400000L)
+1
+(35mM)(400000L)
+C = =4.67x105mM
+1  (30L) 
+ 
+
+--- PAGE 2 ---
+8. You must convert units so that the concentrations have the same units.
+( 1 2
+V
+5
+1
+0 0 0
+( 6
+g
+5
+( 1
+m
+2
+L
+g
+5 0
+)
+m
+0
+( V
+L
+0
+)
+1
+) (
+g
+5
+( 6 5
+0 0 m
+m L
+L
+)
+g
+)
+m L
+0
+) ( 5
+.2 6
+0
+0
+0
+m
+m
+L
+L )  
+
+
+=
+
+=
+
+=
+You would take 0.260 mL of stock solution and add enough water to bring the solution to 500 mL of
+total solution (you cannot simply add 499.74 mL of water!!).
+9. You must convert units so that the concentrations have the same units.
+V
+2
+( 1
+=
+0
+
+0 0
+( 1
+0
+0
+m
+0
+) M
+0 0 m
+( 3 0
+( 3
+M
+m
+0 0
+) (
+M
+L
+3
+)
+)
+0
+=
+0 L
+( 3
+)
+0
+
+m
+=
+M
+1 .0
+)
+0
+( V
+x
+)
+2
+5 1 0 L
+10. a. 500/10 = 50.0 mM
+b. 500/100 = 5.00 mM
+c. 500/1000 = 0.500 mM
+d. Final dilution factor = 10*10 = 100. The final concentration = 500/100 = 5.00 mM.
+11. a. 15*10 = 150 mg/mL
+b. 15*100 = 1500 mg/mL
+c. 15*1000 = 15000 mg/mL
+d. Final dilution factor = 100*10 = 1000. The final concentration = 15*1000 = 15000 mg/mL.
+12. a. You must convert units so that the volumes have the same units.
+C
+( C
+1
+1
+=
+)
+
+( 0 .1 m
+( 0 .0 2
+L
+m
+(
+) =
+M
+0 .1
+( 0 .0 2 0
+) ( 3 .5 m
+) m L
+0
+L
+m
+)
+M
+
+=
+) (
+0
+3 .5
+.7 0
+m
+0
+L
+m
+)
+M
+b. You must convert 0.7 mM to mg/dL units.
+ 0 .7 0 0
+1
+m
+L
+m o l  
+1
+1
+0
+L
+d L
+ 
+1 0
+1 m
+0 0
+o
+m
+l
+m o l
+  1 8
+m
+0
+o
+g
+l
+  1 0 0
+1
+0 m
+g
+g 
+= 1 2 .6
+m g
+d L
+Yes, this is within the “normal” range.
+13. You must convert units so that the concentrations have the same units.
+
+1
+1 1 9
+f lu
+m
+id
+g
+o z
+  1
+2
+f
+9
+lu
+.5
+id o
+7 m
+z
+L
+  1 0 0
+1
+0 m
+L
+L  
+1 0
+1
+0
+g
+0 m g
+ 
+1
+1
+9
+m
+4 .1
+o
+9
+l
+g
+  1 0 0
+1
+0 m
+m o
+m
+l
+o l 
+= 2 0 .7 m M
+Then you can use the dilution equation:
+(
+V
+2
+1
+0
+=
+.7
+
+m
+( 3
+) M
+.0 m
+( 2
+( V
+1
+M
+0 .7
+) ( =
+) (1 0
+m M
+3 .0
+m
+)
+m
+L )
+M
+
+=
+) (1 0
+1 .4
+m
+5 m
+L )
+L
+
+--- PAGE 3 ---
+14. In this problem, you have to ignore the extraneous information.
+a. First determine the total volume of the assay. Remember to make all of the units the same. Then,
+you can use the dilution equation to solve the problem.
+Total Assay Volume: 0.0500 mL+0.150 mL+1.00 mL+0.100 mL=1.30 mL
+(C )(0.050mL)=(0.308mg )(1.30 mL)
+1 mL
+(0.308mg )(1.30 mL)
+C = mL =8.00mg
+1  (0.050mL)  mL
+ 
+b. 2 5 0 m L ju ic e
+ 8 .0 0
+1
+m
+m
+g
+L
+p
+ju
+r o
+ic
+te
+e
+in  
+1 0
+1
+0
+g p r
+0 m g
+o te
+p r
+in
+o te in
+
+= 2 .0 g p r o te in
+15. This IS NOT a problem that you can solve using C V = C V . Note that you do not have a final
+1 1 2 2
+volume nor a final concentration. Instead, you are simply given a final AMOUNT (not concentration).
+This is therefore a unit cancelation problem:
+1 .5 0 x 1 0 − 5 m o le a la n in e
+ 1 0 0
+1
+0 m
+m o
+m
+l
+o l  
+2 5
+1
+m
+L
+m o l
+  1 0 0 0
+L
+m L 
+= 0 .6 0 0 m L s to c k
+16. Again, this IS NOT a problem that you can solve using C V = C V . Note that you do not have a final
+1 1 2 2
+volume nor a final concentration. First you must figure out how many moles (or millimoles) of
+Ba(NO ) you have. You will then double this number to get the 2:1 ratio (which must be in
+2 2
+moles/millimoles NOT g/mg) of NaCl. Finally, you will do a calculation as above to determine
+milliliters required.
+1) Determine millimoles of Ba(NO ) in 5.00 g Ba(NO ) :
+2 2 2 2
+5 .0 0 g B a ( N O
+2
+)
+2
+
+2
+1
+2
+m
+9
+o l B a
+.3 g B
+(
+a
+N
+(
+O
+N
+2
+O
+)
+2
+2)
+2
+  1 0 0
+1
+0 m
+m o
+m
+l
+o l 
+= 2 1 .8 m m o l B a ( N O
+2
+)
+2
+2) Find mmol NaCl needed by multiplying above answer by 2 (for the 2:1 ratio):
+2 1 .8 m m o l B a ( N O
+2
+)
+2
+
+1 m
+2 m
+m o
+m
+l
+o
+B
+l N(
+a
+a
+N
+C
+O
+l
+2
+)
+2
+
+= 4 3 .6 m m o l N a C l
+3) Determine milliliters of NaCl:
+4 3 .6 m m o le N a C l
+
+5 5 0
+1 L
+m m o l
+  1 0 0 0
+L
+m L 
+= 7 9 .3 m L s to c k
