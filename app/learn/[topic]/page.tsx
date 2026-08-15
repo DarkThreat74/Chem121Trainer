@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, use } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import {
@@ -197,9 +197,9 @@ function DiagramRenderer({ diagram, color }: { diagram: Diagram; color: string }
 export default function TopicLearnPage({
   params,
 }: {
-  params: Promise<{ topic: string }>;
+  params: { topic: string };
 }) {
-  const { topic: topicId } = use(params);
+  const { topic: topicId } = params;
   const content = LEARN_CONTENT[topicId];
   const topicInfo = TOPICS.find((t) => t.id === topicId);
 
