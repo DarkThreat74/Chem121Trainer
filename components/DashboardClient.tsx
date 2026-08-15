@@ -109,7 +109,7 @@ export default function DashboardClient({
       </motion.div>
 
       {/* Stats grid */}
-      <div className="grid grid-cols-3 gap-2 sm:gap-3">
+      <div className="grid grid-cols-3 gap-2 sm:gap-3 lg:grid-cols-3">
         <StatCard
           icon={Flame}
           label="Streak"
@@ -229,7 +229,7 @@ export default function DashboardClient({
             Study Guide
           </Link>
         </div>
-        <div className="space-y-2.5">
+        <div className="grid gap-2.5 sm:gap-3 lg:grid-cols-2">
           {topicsWithCounts.map((topic, i) => {
             const mastery = topicMastery[topic.id] || { mastery: 0, totalReviews: 0, seen: 0, total: 0 };
             const hasContent = topic.count > 0;

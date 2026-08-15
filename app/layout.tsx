@@ -1,10 +1,12 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import NavBar from "@/components/NavBar";
+import ServiceWorkerRegister from "@/components/ServiceWorkerRegister";
 
 export const metadata: Metadata = {
   title: "Chem 121 Trainer",
   description: "Master introductory chemistry through spaced repetition practice",
+  manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
@@ -15,8 +17,8 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
+  maximumScale: 5,
+  userScalable: true,
   themeColor: "#09090b",
 };
 
@@ -30,6 +32,7 @@ export default function RootLayout({
       <body className="min-h-screen bg-bg text-text" suppressHydrationWarning>
         <NavBar />
         {children}
+        <ServiceWorkerRegister />
       </body>
     </html>
   );

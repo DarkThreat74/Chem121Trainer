@@ -72,7 +72,7 @@ export default function LandingPage() {
         />
       </div>
 
-      <div className="relative mx-auto flex min-h-screen max-w-3xl flex-col items-center justify-center px-4 py-10 text-center safe-top safe-bottom sm:py-16">
+      <div className="relative mx-auto flex min-h-screen max-w-4xl flex-col items-center justify-center px-4 py-10 text-center safe-top safe-bottom sm:py-16">
         {/* Logo badge */}
         <motion.div
           initial={{ opacity: 0, scale: 0.5 }}

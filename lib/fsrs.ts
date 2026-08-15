@@ -7,7 +7,11 @@ import {
   generatorParameters,
 } from "ts-fsrs";
 
-const params = generatorParameters({ enable_fuzz: true });
+const params = generatorParameters({
+  enable_fuzz: true,
+  request_retention: 0.9,
+  maximum_interval: 365,
+});
 const f = fsrs(params);
 
 export { Rating, State };

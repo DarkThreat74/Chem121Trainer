@@ -42,8 +42,8 @@ export default function QuizCard({ question, onAnswer, disabled }: QuizCardProps
     }
 
     const explanation = isCorrect
-      ? content.explanation
-      : `Correct answer: ${content.correct_answer}. ${content.explanation}`;
+      ? `Correct! ${content.explanation}`
+      : `The correct answer is ${content.correct_answer}. ${content.explanation}`;
 
     onAnswer(isCorrect, explanation);
   }, [disabled, content, selectedChoice, userAnswer, onAnswer]);

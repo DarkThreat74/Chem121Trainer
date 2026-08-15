@@ -389,7 +389,7 @@ export default function LearnPage() {
         </div>
       </header>
 
-      <div className="mx-auto max-w-3xl px-4 py-6">
+      <div className="mx-auto max-w-5xl px-4 py-6 lg:py-8">
         {/* Intro */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}

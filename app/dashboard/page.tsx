@@ -106,7 +106,7 @@ export default async function DashboardPage() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-2xl px-4 py-6">
+      <main className="mx-auto max-w-5xl px-4 py-6 lg:py-8">
         <DashboardClient
           streak={streak}
           dueCount={dueCount}

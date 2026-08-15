@@ -286,7 +286,7 @@ export default function ReviewSession({
     <div className="min-h-screen safe-top safe-bottom">
       {/* Progress header */}
       <div className="sticky top-0 z-10 border-b border-border-subtle bg-bg/80 backdrop-blur-xl safe-top">
-        <div className="mx-auto max-w-2xl px-4 py-2.5 sm:py-3">
+        <div className="mx-auto max-w-3xl px-4 py-2.5 sm:py-3 lg:max-w-4xl">
           <div className="mb-2 flex items-center justify-between sm:mb-2.5">
             <button
               onClick={() => router.push("/dashboard")}
@@ -330,7 +330,7 @@ export default function ReviewSession({
       </div>
 
       {/* Question card */}
-      <div className="mx-auto max-w-2xl px-4 py-4 sm:py-6">
+      <div className="mx-auto max-w-3xl px-4 py-4 sm:py-6 lg:max-w-4xl">
         <AnimatePresence mode="wait">
           <motion.div
             key={question.id}
