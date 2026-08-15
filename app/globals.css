@@ -9,10 +9,81 @@
 @import "@fontsource/jetbrains-mono/400.css";
 @import "@fontsource/jetbrains-mono/500.css";
 
-:root {
+:root,
+.dark {
   color-scheme: dark;
   --font-inter: "Inter", system-ui, sans-serif;
   --font-jetbrains: "JetBrains Mono", ui-monospace, monospace;
+
+  /* Background colors */
+  --bg: #09090b;
+  --bg-card: #111113;
+  --bg-elevated: #18181b;
+  --bg-input: #1c1c20;
+  --bg-hover: #1f1f23;
+
+  /* Border colors */
+  --border: #27272a;
+  --border-subtle: #1e1e22;
+  --border-strong: #3f3f46;
+
+  /* Accent colors */
+  --accent: #818cf8;
+  --accent-hover: #6366f1;
+  --accent-muted: rgba(129, 140, 248, 0.125);
+  --accent-glow: rgba(129, 140, 248, 0.25);
+
+  /* Status colors */
+  --ok: #34d399;
+  --ok-muted: rgba(52, 211, 153, 0.125);
+  --warn: #fbbf24;
+  --warn-muted: rgba(251, 191, 36, 0.125);
+  --err: #f87171;
+  --err-muted: rgba(248, 113, 113, 0.125);
+
+  --muted: #71717a;
+
+  /* Text colors */
+  --text: #fafafa;
+  --text-secondary: #a1a1aa;
+  --text-tertiary: #71717a;
+}
+
+.light {
+  color-scheme: light;
+
+  /* Background colors */
+  --bg: #ffffff;
+  --bg-card: #f9f9fb;
+  --bg-elevated: #f0f0f3;
+  --bg-input: #f4f4f6;
+  --bg-hover: #ececef;
+
+  /* Border colors */
+  --border: #d4d4d8;
+  --border-subtle: #e4e4e7;
+  --border-strong: #a1a1aa;
+
+  /* Accent colors */
+  --accent: #6366f1;
+  --accent-hover: #4f46e5;
+  --accent-muted: rgba(99, 102, 241, 0.1);
+  --accent-glow: rgba(99, 102, 241, 0.2);
+
+  /* Status colors */
+  --ok: #059669;
+  --ok-muted: rgba(5, 150, 105, 0.1);
+  --warn: #d97706;
+  --warn-muted: rgba(217, 119, 6, 0.1);
+  --err: #dc2626;
+  --err-muted: rgba(220, 38, 38, 0.1);
+
+  --muted: #a1a1aa;
+
+  /* Text colors */
+  --text: #18181b;
+  --text-secondary: #52525b;
+  --text-tertiary: #71717a;
 }
 
 html {

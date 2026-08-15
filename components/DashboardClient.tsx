@@ -21,10 +21,12 @@ import {
   Lock,
   CheckCircle2,
   PlayCircle,
+  Settings as SettingsIcon,
   type LucideIcon,
 } from "lucide-react";
 // ChevronRight is imported but may be unused — keep for potential future use
 import type { TopicInfo } from "@/lib/types";
+import SettingsPanel from "@/components/SettingsPanel";
 
 const ICON_MAP: Record<string, LucideIcon> = {
   atom: Atom,
@@ -67,12 +69,14 @@ export default function DashboardClient({
 
   const maxActivity = Math.max(...weeklyActivity.map((d) => d.count), 1);
   const [todayLabel, setTodayLabel] = useState("");
+  const [settingsOpen, setSettingsOpen] = useState(false);
   useEffect(() => {
     setTodayLabel(new Date().toLocaleDateString("en-US", { weekday: "short" }));
   }, []);
 
   return (
     <div className="space-y-6">
+      <SettingsPanel open={settingsOpen} onClose={() => setSettingsOpen(false)} />
       {/* Hero progress card */}
       <motion.div
         initial={{ opacity: 0, y: 12 }}
@@ -91,9 +95,18 @@ export default function DashboardClient({
           className="absolute -left-8 -bottom-8 h-32 w-32 rounded-full bg-purple-500/10 blur-2xl"
         />
         <div className="relative">
-          <div className="flex items-center gap-2 text-text-secondary">
-            <Sparkles className="h-4 w-4 text-accent" />
-            <span className="text-sm font-medium">Your Progress</span>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 text-text-secondary">
+              <Sparkles className="h-4 w-4 text-accent" />
+              <span className="text-sm font-medium">Your Progress</span>
+            </div>
+            <button
+              onClick={() => setSettingsOpen(true)}
+              aria-label="Settings"
+              className="rounded-lg p-1.5 text-text-tertiary transition hover:bg-bg-hover hover:text-text"
+            >
+              <SettingsIcon className="h-4 w-4" />
+            </button>
           </div>
           <div className="mt-3 flex items-end gap-2">
             <motion.span

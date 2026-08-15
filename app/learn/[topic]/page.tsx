@@ -17,9 +17,12 @@ import {
   Calculator,
   Volume2,
   Square,
+  Settings as SettingsIcon,
 } from "lucide-react";
 import { LEARN_CONTENT, type Diagram } from "@/lib/learn-content";
 import { TOPICS } from "@/lib/types";
+import { useSettings } from "@/components/SettingsProvider";
+import SettingsPanel from "@/components/SettingsPanel";
 
 // ─── Text-to-Speech helpers ─────────────────────────────────────────────────
 // Clean up text for natural narration: strip ASCII art, expand symbols, etc.
@@ -126,28 +129,23 @@ function splitIntoChunks(text: string, maxLen = 200): string[] {
 // Compact text-to-speech button using the browser's built-in Web Speech API
 function SpeakButton({ text, color }: { text: string; color: string }) {
   const [isSpeaking, setIsSpeaking] = useState(false);
-  const voiceRef = useRef<SpeechSynthesisVoice | null>(null);
   const cancelledRef = useRef(false);
+  const { settings, voices } = useSettings();
 
-  // Load the best voice on mount (voices load asynchronously in some browsers)
-  useEffect(() => {
-    if (typeof window === "undefined" || !window.speechSynthesis) return;
+  // Resolve the voice to use: user-selected or auto-pick best
+  const getVoice = useCallback((): SpeechSynthesisVoice | null => {
+    if (typeof window === "undefined" || !window.speechSynthesis) return null;
+    const allVoices = voices.length > 0 ? voices : window.speechSynthesis.getVoices();
 
-    const loadVoice = () => {
-      const voices = window.speechSynthesis.getVoices();
-      if (voices.length > 0) {
-        voiceRef.current = pickBestVoice(voices);
-      }
-    };
+    // If user selected a specific voice, use it
+    if (settings.voiceURI) {
+      const selected = allVoices.find((v) => v.voiceURI === settings.voiceURI);
+      if (selected) return selected;
+    }
 
-    loadVoice();
-    // Chrome loads voices asynchronously
-    window.speechSynthesis.onvoiceschanged = loadVoice;
-
-    return () => {
-      window.speechSynthesis.onvoiceschanged = null;
-    };
-  }, []);
+    // Auto-pick best voice
+    return pickBestVoice(allVoices);
+  }, [settings.voiceURI, voices]);
 
   const handleSpeak = useCallback(() => {
     if (typeof window === "undefined" || !window.speechSynthesis) return;
@@ -168,7 +166,7 @@ function SpeakButton({ text, color }: { text: string; color: string }) {
     if (!cleaned) return;
 
     const chunks = splitIntoChunks(cleaned);
-    const voice = voiceRef.current || pickBestVoice(window.speechSynthesis.getVoices());
+    const voice = getVoice();
 
     let chunkIndex = 0;
 
@@ -187,7 +185,7 @@ function SpeakButton({ text, color }: { text: string; color: string }) {
         utterance.voice = voice;
         utterance.lang = voice.lang;
       }
-      utterance.rate = 0.92;   // slightly slower for clarity
+      utterance.rate = settings.rate;
       utterance.pitch = 1.0;
       utterance.volume = 1.0;
 
@@ -205,7 +203,7 @@ function SpeakButton({ text, color }: { text: string; color: string }) {
 
     setIsSpeaking(true);
     speakNext();
-  }, [text, isSpeaking]);
+  }, [text, isSpeaking, settings.rate, getVoice]);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -427,6 +425,7 @@ export default function TopicLearnPage({
   const [flipped, setFlipped] = useState(false);
   const [shuffled, setShuffled] = useState(content?.vocabulary || []);
   const [revealedSteps, setRevealedSteps] = useState<number[]>([]);
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   if (!content || !topicInfo) {
     return (
@@ -470,6 +469,8 @@ export default function TopicLearnPage({
 
   return (
     <div className="min-h-screen safe-top safe-bottom">
+      <SettingsPanel open={settingsOpen} onClose={() => setSettingsOpen(false)} />
+
       {/* Header */}
       <div className="sticky top-0 z-10 border-b border-border-subtle bg-bg/80 backdrop-blur-xl">
         <div className="mx-auto max-w-4xl px-4 py-3 sm:py-4">
@@ -481,9 +482,18 @@ export default function TopicLearnPage({
               <ArrowLeft className="h-4 w-4" />
               Dashboard
             </Link>
-            <span className="text-xs font-bold text-text-tertiary">
-              STEP {topicInfo.order}
-            </span>
+            <div className="flex items-center gap-3">
+              <span className="text-xs font-bold text-text-tertiary">
+                STEP {topicInfo.order}
+              </span>
+              <button
+                onClick={() => setSettingsOpen(true)}
+                aria-label="Settings"
+                className="rounded-lg p-1.5 text-text-tertiary transition hover:bg-bg-hover hover:text-text"
+              >
+                <SettingsIcon className="h-4 w-4" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
