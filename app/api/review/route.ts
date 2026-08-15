@@ -19,6 +19,13 @@ export async function POST(request: NextRequest) {
       timeTakenMs: number;
     };
 
+    if (!questionId || typeof isCorrect !== "boolean") {
+      return NextResponse.json(
+        { error: "Invalid request body" },
+        { status: 400 }
+      );
+    }
+
     // Get existing review state
     const existing = await sql`
       SELECT stability, difficulty, due, reps, lapses, state, elapsed_days, scheduled_days, last_review

@@ -231,7 +231,7 @@ export default function DashboardClient({
         </div>
         <div className="space-y-2.5">
           {topicsWithCounts.map((topic, i) => {
-            const mastery = topicMastery[topic.id];
+            const mastery = topicMastery[topic.id] || { mastery: 0, totalReviews: 0, seen: 0, total: 0 };
             const hasContent = topic.count > 0;
             const Icon = ICON_MAP[topic.icon] || Atom;
 

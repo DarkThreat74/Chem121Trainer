@@ -6,6 +6,14 @@ import DashboardClient from "@/components/DashboardClient";
 export const dynamic = "force-dynamic";
 export const runtime = "edge";
 
+function safeJsonParse(str: string): any {
+  try {
+    return JSON.parse(str);
+  } catch {
+    return {};
+  }
+}
+
 export default async function DashboardPage() {
   let questions: Array<{
     id: string;
@@ -35,7 +43,7 @@ export default async function DashboardPage() {
       dbQuestions.length > 0
         ? dbQuestions.map((q) => ({
             ...q,
-            content: typeof q.content === "string" ? JSON.parse(q.content) : q.content,
+            content: typeof q.content === "string" ? safeJsonParse(q.content) : q.content,
           }))
         : SAMPLE_QUESTIONS.map((q) => ({
             id: q.id,

@@ -179,7 +179,7 @@ export const SAMPLE_QUESTIONS: Question[] = [
     content: {
       prompt: "An object has a mass of 27.0 g and a volume of 10.0 mL. What is its density?",
       answer_type: "numeric",
-      correct_answer: 2.7,
+      correct_answer: 2.70,
       explanation: "Density = mass / volume = 27.0 g / 10.0 mL = 2.70 g/mL. This is the density of aluminum.",
     },
   },
@@ -1231,8 +1231,8 @@ export const SAMPLE_QUESTIONS: Question[] = [
     content: {
       prompt: "What is the molar mass of H₂SO₄? (H = 1.008, S = 32.07, O = 16.00 g/mol)",
       answer_type: "numeric",
-      correct_answer: 98.086,
-      explanation: "2×H(1.008) + S(32.07) + 4×O(16.00) = 2.016 + 32.07 + 64.00 = 98.086 g/mol.",
+      correct_answer: 98.09,
+      explanation: "2×H(1.008) + S(32.07) + 4×O(16.00) = 2.016 + 32.07 + 64.00 = 98.086. For addition, round to the least number of decimal places (2), so 98.09 g/mol.",
     },
   },
   {

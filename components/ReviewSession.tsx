@@ -84,6 +84,21 @@ export default function ReviewSession({
 
   const question = questions[currentIndex];
 
+  // Guard against empty questions array
+  if (questions.length === 0) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center px-4 text-center safe-top safe-bottom">
+        <p className="text-text-secondary">No questions available.</p>
+        <a
+          href="/dashboard"
+          className="mt-4 rounded-xl border border-border bg-bg-card px-6 py-3 font-medium text-text transition hover:bg-bg-hover"
+        >
+          Back to dashboard
+        </a>
+      </div>
+    );
+  }
+
   // Initialize timer after mount to avoid hydration mismatch
   useEffect(() => {
     const now = Date.now();
@@ -160,8 +175,8 @@ export default function ReviewSession({
   }
 
   if (sessionFinished) {
-    const pct = Math.round((correctCount / questions.length) * 100);
-    const avgTime = totalTime / questions.length;
+    const pct = questions.length > 0 ? Math.round((correctCount / questions.length) * 100) : 0;
+    const avgTime = questions.length > 0 ? totalTime / questions.length : 0;
 
     return (
       <div className="flex min-h-screen flex-col items-center justify-center px-4 py-8 text-center safe-top safe-bottom">

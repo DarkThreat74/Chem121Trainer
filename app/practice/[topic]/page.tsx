@@ -8,6 +8,14 @@ import { TOPICS } from "@/lib/types";
 export const dynamic = "force-dynamic";
 export const runtime = "edge";
 
+function safeJsonParse(str: string): any {
+  try {
+    return JSON.parse(str);
+  } catch {
+    return {};
+  }
+}
+
 export default async function PracticePage({
   params,
 }: {
@@ -30,7 +38,7 @@ export default async function PracticePage({
       dbQuestions.length > 0
         ? dbQuestions.map((q) => ({
             ...q,
-            content: typeof q.content === "string" ? JSON.parse(q.content) : q.content,
+            content: typeof q.content === "string" ? safeJsonParse(q.content) : q.content,
           }))
         : SAMPLE_QUESTIONS.filter((q) => q.topic === params.topic);
   } catch {
