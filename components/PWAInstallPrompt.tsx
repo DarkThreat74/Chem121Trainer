@@ -13,8 +13,12 @@ export default function PWAInstallPrompt() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showPrompt, setShowPrompt] = useState(false);
   const [dismissed, setDismissed] = useState(false);
+  const [isIOS, setIsIOS] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+
     // Check if already installed or previously dismissed
     const dismissedBefore = localStorage.getItem("pwa-install-dismissed") === "true";
     if (dismissedBefore) {
@@ -27,6 +31,10 @@ export default function PWAInstallPrompt() {
       return;
     }
 
+    // Detect iOS
+    const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
+    setIsIOS(ios);
+
     const handler = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
@@ -37,9 +45,7 @@ export default function PWAInstallPrompt() {
     window.addEventListener("beforeinstallprompt", handler);
 
     // iOS doesn't support beforeinstallprompt — detect iOS Safari for instructions
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
-    const isStandalone = window.matchMedia("(display-mode: standalone)").matches;
-    if (isIOS && !isStandalone && !dismissedBefore) {
+    if (ios) {
       const iosDismissed = localStorage.getItem("pwa-ios-dismissed") === "true";
       if (!iosDismissed) {
         setTimeout(() => setShowPrompt(true), 3000);
@@ -47,7 +53,7 @@ export default function PWAInstallPrompt() {
     }
 
     return () => window.removeEventListener("beforeinstallprompt", handler);
-  }, [dismissed]);
+  }, []);
 
   function handleInstall() {
     if (deferredPrompt) {
@@ -71,9 +77,7 @@ export default function PWAInstallPrompt() {
     setDismissed(true);
   }
 
-  if (dismissed) return null;
-
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
+  if (!mounted || dismissed) return null;
 
   return (
     <AnimatePresence>
