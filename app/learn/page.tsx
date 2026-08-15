@@ -15,6 +15,8 @@ import {
   Lightbulb,
   RotateCcw,
   Shuffle,
+  Check,
+  GraduationCap,
 } from "lucide-react";
 
 // ─── Data from CHEM 121 PDFs ───
@@ -122,6 +124,42 @@ const STOICHIOMETRY_STEPS = [
   "For limiting reactant: calculate product from each reactant, use the smaller amount",
 ];
 
+// Worked examples — step-by-step solutions for key problem types
+const WORKED_EXAMPLES = [
+  {
+    topic: "Stoichiometry",
+    problem: "How many grams of CO₂ are produced when 5.00 g of CH₄ burns? (MM CH₄ = 16.0, CO₂ = 44.0)",
+    steps: [
+      { label: "Balance the equation", detail: "CH₄ + 2O₂ → CO₂ + 2H₂O  (1 mol CH₄ → 1 mol CO₂)" },
+      { label: "Convert grams to moles", detail: "5.00 g CH₄ ÷ 16.0 g/mol = 0.313 mol CH₄" },
+      { label: "Apply mole ratio", detail: "0.313 mol CH₄ × (1 mol CO₂ / 1 mol CH₄) = 0.313 mol CO₂" },
+      { label: "Convert moles to grams", detail: "0.313 mol CO₂ × 44.0 g/mol = 13.8 g CO₂" },
+    ],
+    answer: "13.8 g CO₂ (3 sig figs)",
+  },
+  {
+    topic: "Dilutions",
+    problem: "How many mL of 12.0 M HCl stock are needed to make 250 mL of 2.00 M solution?",
+    steps: [
+      { label: "Identify the formula", detail: "C₁V₁ = C₂V₂  →  V₁ = (C₂ × V₂) / C₁" },
+      { label: "Plug in values", detail: "V₁ = (2.00 M × 250 mL) / 12.0 M" },
+      { label: "Calculate", detail: "V₁ = 500 / 12.0 = 41.7 mL" },
+      { label: "Interpret", detail: "Measure 41.7 mL of stock, add solvent to reach 250 mL total" },
+    ],
+    answer: "41.7 mL of stock (3 sig figs)",
+  },
+  {
+    topic: "The Mole",
+    problem: "How many molecules are in 3.50 moles of H₂O?",
+    steps: [
+      { label: "Identify the conversion", detail: "1 mole = 6.02 × 10²³ particles (Avogadro's number)" },
+      { label: "Set up the calculation", detail: "3.50 mol × (6.02 × 10²³ molecules / 1 mol)" },
+      { label: "Calculate", detail: "3.50 × 6.02 × 10²³ = 21.1 × 10²³ = 2.11 × 10²⁴" },
+    ],
+    answer: "2.11 × 10²⁴ molecules (3 sig figs)",
+  },
+];
+
 // Vocabulary flashcards from "Terms in CHEM 121" PDF
 const VOCAB_CARDS = [
   { term: "Accuracy", def: "How close a measurement is to the true value" },
@@ -169,8 +207,7 @@ function Section({
     <motion.section
       id={id}
       initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
       className="scroll-mt-24"
     >
@@ -230,6 +267,85 @@ function Flashcard({
           <p className="mt-2 text-sm font-medium text-text-secondary">{card.def}</p>
         </div>
       </motion.div>
+    </div>
+  );
+}
+
+function WorkedExample({
+  example,
+  index,
+}: {
+  example: (typeof WORKED_EXAMPLES)[number];
+  index: number;
+}) {
+  const [revealedSteps, setRevealedSteps] = useState(0);
+  const isFullyRevealed = revealedSteps >= example.steps.length;
+
+  return (
+    <div className="rounded-2xl border border-border bg-bg-card p-4 sm:p-5">
+      <div className="flex items-center gap-2">
+        <span className="rounded-lg bg-accent/10 px-2.5 py-1 text-xs font-semibold text-accent">
+          {example.topic}
+        </span>
+      </div>
+      <p className="mt-3 text-sm font-semibold leading-snug sm:text-base">
+        {example.problem}
+      </p>
+
+      <div className="mt-4 space-y-2">
+        {example.steps.map((step, i) => (
+          <div
+            key={i}
+            className={`overflow-hidden transition-all duration-300 ${
+              i < revealedSteps ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+            }`}
+          >
+            <div className="flex gap-3 rounded-xl border border-border-subtle bg-bg-input p-3">
+              <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-accent to-purple-500 text-xs font-bold text-white">
+                {i + 1}
+              </span>
+              <div>
+                <p className="text-sm font-semibold">{step.label}</p>
+                <p className="mt-0.5 font-mono text-xs text-text-secondary sm:text-sm">
+                  {step.detail}
+                </p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {isFullyRevealed && (
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mt-3 flex items-center gap-2 rounded-xl border border-ok/20 bg-ok/5 p-3"
+        >
+          <Check className="h-4 w-4 flex-shrink-0 text-ok" />
+          <span className="text-sm font-semibold text-ok">{example.answer}</span>
+        </motion.div>
+      )}
+
+      <div className="mt-3 flex gap-2">
+        {!isFullyRevealed && (
+          <button
+            onClick={() => setRevealedSteps((s) => s + 1)}
+            className="flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-accent-hover to-accent px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90"
+          >
+            <ChevronDown className="h-4 w-4" />
+            {revealedSteps === 0 ? "Show step-by-step solution" : "Next step"}
+          </button>
+        )}
+        {revealedSteps > 0 && (
+          <button
+            onClick={() => setRevealedSteps(0)}
+            className="flex items-center gap-1.5 rounded-lg border border-border bg-bg-input px-4 py-2 text-sm font-medium text-text-secondary transition hover:bg-bg-hover"
+          >
+            <RotateCcw className="h-3.5 w-3.5" />
+            Reset
+          </button>
+        )}
+      </div>
     </div>
   );
 }
@@ -307,8 +423,7 @@ export default function LearnPage() {
                   <motion.div
                     key={i}
                     initial={{ opacity: 0, x: -10 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
+                    animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: i * 0.05 }}
                     className="flex items-start gap-3 rounded-xl border border-border bg-bg-card p-3"
                   >
@@ -434,8 +549,7 @@ export default function LearnPage() {
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, scale: 0.95 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
+                  animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: i * 0.05 }}
                   className="rounded-2xl border border-border bg-bg-card p-4"
                 >
@@ -456,8 +570,7 @@ export default function LearnPage() {
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, x: -10 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
+                  animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.08 }}
                   className="flex items-center gap-3 rounded-xl border border-border bg-bg-card p-3"
                 >
@@ -503,6 +616,19 @@ export default function LearnPage() {
                 The grams cancel, leaving moles. Always check that units cancel
                 properly before calculating.
               </p>
+            </div>
+          </Section>
+
+          {/* Worked Examples */}
+          <Section id="worked-examples" icon={GraduationCap} title="Worked Examples" color="#34d399">
+            <p className="mb-4 text-sm text-text-secondary">
+              Reveal each step one at a time to follow along. Try to predict the
+              next step before revealing it.
+            </p>
+            <div className="space-y-4">
+              {WORKED_EXAMPLES.map((example, i) => (
+                <WorkedExample key={i} example={example} index={i} />
+              ))}
             </div>
           </Section>
 

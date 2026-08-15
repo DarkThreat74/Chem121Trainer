@@ -71,8 +71,8 @@ export default function ReviewSession({
 }: ReviewSessionProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [feedback, setFeedback] = useState<FeedbackState>(null);
-  const [startTime, setStartTime] = useState(Date.now());
-  const [currentTime, setCurrentTime] = useState(Date.now());
+  const [startTime, setStartTime] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
   const [sessionFinished, setSessionFinished] = useState(false);
   const [correctCount, setCorrectCount] = useState(0);
   const [sessionStreak, setSessionStreak] = useState(0);
@@ -83,6 +83,13 @@ export default function ReviewSession({
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const question = questions[currentIndex];
+
+  // Initialize timer after mount to avoid hydration mismatch
+  useEffect(() => {
+    const now = Date.now();
+    setStartTime(now);
+    setCurrentTime(now);
+  }, []);
 
   // Live timer
   useEffect(() => {

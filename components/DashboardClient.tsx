@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import {
@@ -61,7 +62,10 @@ export default function DashboardClient({
     totalQuestions > 0 ? Math.round((totalSeen / totalQuestions) * 100) : 0;
 
   const maxActivity = Math.max(...weeklyActivity.map((d) => d.count), 1);
-  const todayLabel = new Date().toLocaleDateString("en-US", { weekday: "short" });
+  const [todayLabel, setTodayLabel] = useState("");
+  useEffect(() => {
+    setTodayLabel(new Date().toLocaleDateString("en-US", { weekday: "short" }));
+  }, []);
 
   return (
     <div className="space-y-6">
