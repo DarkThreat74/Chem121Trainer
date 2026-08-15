@@ -1,0 +1,62 @@
+--- PAGE 1 ---
+DILUTIONS STUDY GUIDE
+Chemistry 121
+Problems:
+1. Why do we make stock solutions in labs instead of making the concentration we actually want?
+2. A solution was made by diluting 5.00 mL of a 15.0 M stock solution to 1.0 x 102 mL. What is the final
+concentration of the dilute solution?
+3. A 0.0500 L aliquot of a stock solution was diluted to 1.30 L. The final concentration was 42.0 mM.
+What was the concentration of stock solution?
+4. You have a stock solution of 0.450 mM. You need to make 7.50 x 102 mL of a dilute solution that has
+a concentration of 0.0300 mM. How will you do this?
+5. You are given a 5.00 x 102 L aliquot of 25.0 mg/mL solution. If you use all 5.00 x 102 L, what final
+volume of dilute solution will result in a 2.00 mg/mL solution?
+6. What is the final concentration of a solution made by diluting 18.0 mL of a 20.0 M stock solution to
+0.200 L.
+7. A 30.0 L aliquot of a stock solution was diluted to 400.0 mL. The final concentration was 35.0 mM.
+What was the concentration of stock solution?
+8. You have a stock solution of 125 mg/mL. You need to make 5.00 x 102 mL of a dilute solution that
+has a concentration of 65.0 g/mL. How will you do this?
+9. You are given a 3.00 x 102 L aliquot of 10.0 M solution. If you use all 3.00 x 102 L, what final volume
+of dilute solution will result in a 30 mM solution?
+10. a. A 5.00 x 102 mM solution is diluted 1:10. What is the final concentration?
+b. A 5.00 x 102 mM solution is diluted 1:100. What is the final concentration?
+c. A 5.00 x 102 mM solution is diluted 1:1000. What is the final concentration?
+d. A 5.00 x 102 mM solution is diluted 1:10. The resulting dilute solution is then diluted again 1:10.
+What is the final dilution factor? What is the final concentration?
+11. a. A solution of unknown concentration is diluted 1:10. The dilute solution is found to have a
+concentration of 15 mg/mL. What was the concentration in the original solution?
+b. A solution of unknown concentration is diluted 1:100. The dilute solution is found to have a
+concentration of 15 mg/mL. What was the concentration in the original solution?
+c. A solution of unknown concentration is diluted 1:1000. The dilute solution is found to have a
+concentration of 15 mg/mL. What was the concentration in the original solution?
+d. A solution of unknown concentration is diluted 1:100. The resulting dilute solution is then diluted
+again 1:10. What is the final dilution factor? This last solution was found to have a concentration
+of 15 mg/mL. What was the concentration in the original solution?
+12. A urine sample comes to the lab to be tested for glucose. 100 L of the urine sample is added various
+other reagents to give a final assay volume of 3.50 mL. After the test was done, it was determined that
+the glucose concentration in the assay was 0.0200 mM.
+a. What was the concentration (in mM) of glucose in the original urine sample?
+b. The normal range of glucose in urine is 0-14.0 mg/dL. Is this patient’s urine glucose level
+“normal”? Hint: 10 dL = 1 L and the molar mass of glucose is 180 g/mol.
+13. According to the label, a particular “energy drink” has 119 mg caffeine per fluid ounce. To confirm
+this concentration, you run an assay that requires a total of 10.0 mL after all of the reagents are mixed.
+The upper limit of this assay is 3.00 mM. Assuming that the nutrition label is correct, what is the
+
+--- PAGE 2 ---
+maximum volume (mL) of energy drink that you can add to your assay? Hint: 1 fluid ounce = 29.57
+mL and the molar mass of caffeine = 194.19 g/mol.
+14. In order to test the amount of protein present in a serving of V8® juice, a Lowry’s Assay was
+performed. To do this, 50.0 L of the cell extract was added to 150.0 L water and mixed. Then 1.00
+mL of Lowry’s Solution. The solution was then allowed to incubate at room temperature for exactly
+15.0 minutes. Then 100.0 L of 1.0 N Folin’s Phenol reagent was added and the total solution was
+incubated for an additional 30 minutes. The absorbance of the resulting solution indicated that the
+concentration of protein in the assay was 0.308 mg/mL.
+a. What was the original concentration (mg/mL) of protein in the vegetable juice?
+b. Assuming 1 serving = 250 mL, how much protein (in g) is a serving a V8® juice?
+15. You need to have 1.50 x 10-5 moles of the amino acid alanine in your reaction. You find a stock
+solution of 25.0 mM alanine in the lab. How many milliliters of this solution will you need to use?
+16. You need to have a 2:1 NaCl:Ba(NO ) ratio of reactants in your assay. You add 5.00 g Ba(NO ) to
+2 2 2 2
+your beaker & dissolve it in water. How many milliliters of 550.0 mM NaCl do you need to add to
+obtain the 2:1 ratio?

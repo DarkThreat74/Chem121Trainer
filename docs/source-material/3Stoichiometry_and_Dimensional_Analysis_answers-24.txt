@@ -1,0 +1,1379 @@
+--- PAGE 1 ---
+STOICHIOMETRY AND DIMENSIONAL ANALYSIS-ANSWERS
+Chemistry 121
+Problems:
+1. a. 2 C
+18
+H
+34
+O
+2 (l)
++ 5 1 O
+2 (g )
+→ 3 6 C O
+2 (g )
++ 3 4 H
+2
+O
+(l)
+or C
+18
+H
+34
+O
+2 (l)
++
+5 1
+2
+O
+2 (g )
+→ 1 8 C O
+2 (g )
++ 1 7 H
+2
+O
+(l)
+b. Two moles of liquid oleic acid react with fifty-one moles of oxygen gas to produce thirty-six
+moles of carbon dioxide gas and thirty-four moles of liquid water.
+c. ( 0 .2 5 0 g C
+18
+H
+34
+O
+2
+)
+ 1
+2
+m
+8
+o
+2
+l
+g
+C
+C
+H
+18
+H
+18
+O
+34
+O
+34
+2
+2
+ 
+2
+3
+m
+6
+o
+m
+l
+o
+C
+l C
+H
+18
+O
+2O
+34 2
+
+= 0 .0 1 6 0 m o l C O
+2
+( 0 .0 1 6 0 m o l C O
+2
+)
+ 6 .0 2 x 1 0 23
+1 m
+m
+o
+o le c
+l C O
+u
+2
+le s C O
+2
+
+= 9 .6 3 x 1 0 21 m o le c u le s C O
+2
+d. ( 1 .0 0 g C
+18
+H
+34
+O
+2
+)
+ 1
+2
+m
+8
+o
+2
+l
+g
+C
+C
+H
+18
+H
+18
+O
+34
+O
+34
+2
+2
+ 
+2
+3
+m
+6
+o
+m
+l
+o
+C
+l C
+H
+18
+O
+2O
+34 2
+  4
+1 m
+4 g
+o
+C
+l C
+O
+O
+2
+2
+
+= 2 .8 0 g C O
+2
+e. ( 1 0 .0 m g C
+18
+H
+34
+O
+2
+)
+
+1 0
+1
+0
+g
+0 m g
+  1
+2
+m
+8
+o
+2
+l
+g
+C
+C
+H
+18
+H
+18
+O
+34
+O
+34
+2
+2
+ 
+2
+3
+m
+4
+o
+m
+l
+o
+C
+l H
+H
+18
+O
+2
+34
+O
+2
+  1 8
+1 m
+g
+o
+H
+l H
+O
+2
+O
+2
+
+= 0 .0 1 0 9 g H
+2
+O
+1mol CO 2mol C H O 282g C H O 
+f. (50.0g CO )  2  18 34 2  18 34 2 =17.8g C H O
+2  44g CO  36mol CO 1mol C H O  18 34 2
+2 2 18 34 2
+g. ( 1 0 0 m L H
+2
+O )
+
+1
+1
+m
+g H
+L H
+2
+O
+2
+O
+  1 m
+1 8
+o
+g
+l H
+H
+O
+2O
+2
+  2 m
+3
+o
+4
+l
+m
+C
+o
+H
+18
+l H
+34O
+2
+O
+2
+  2
+1
+8
+m
+2
+o
+g
+l
+C
+C
+H
+18H
+18
+O
+34O
+34
+2
+2
+
+= 9 2 .2 g C
+18
+H
+34
+O
+2
+h. ( 5 .0 0 g C
+18
+H
+34
+O
+2
+)
+ 1
+2
+m
+8
+o
+2
+l
+g
+C
+C
+H
+18
+H
+18
+O
+34
+O
+34
+2
+2
+ 
+2 m
+5
+o
+1
+l
+m
+C
+o l
+18
+O
+H
+2
+34
+O
+2
+  2
+1
+2
+m
+.4
+o
+L
+l
+O
+O
+2
+2
+
+= 1 0 .1 L O
+2
+2. a. 3 C a C l2
+(aq )
++ 2 H
+3
+P O
+4 (aq )
+→ 1 C a
+3
+( P O
+4
+)
+2 (s)
++ 6 H C l(aq
+)
+b. Three moles of aqueous calcium chloride react with two moles of aqueous phosphoric acid to
+produce one mole of solid calcium phosphate and six moles of aqueous hydrochloric acid.
+c. ( 3 .0 g C a C l2 )
+
+1
+1
+1
+m
+0
+o
+.9
+l
+8
+C a
+g C
+C
+a
+l2C
+l2
+  1 m
+3
+o
+m
+l C
+o l
+a
+3
+C
+( P
+a
+O
+C
+4l2
+)
+2
+
+= 9 .0 9 x 1 0 − 3 m o l C a
+3
+( P O
+4
+)
+2
+6.02x1023 molecules Ca (PO ) 
+( 9.09 x 10−3mol Ca (PO ) )  3 4 2 =5.47 x 1021 molecules Ca (PO )
+3 4 2  1mol Ca (PO )  3 4 2
+3 4 2
+ 1mol CaCl 1mol Ca (PO ) 310.18g Ca (PO ) 
+d. (20.0g CaCl )  2  3 4 2  3 4 2 =18.6g Ca (PO )
+2 110.98g CaCl  3mol CaCl  1mol Ca (PO )  3 4 2
+2 2 3 4 2
+e. ( 2 0 .0 g H
+3
+P O
+4
+)
+
+9
+1
+7
+m
+.9
+o
+7
+l H
+3
+g H
+P
+3
+O
+P
+4O
+4
+  1 m
+2
+o
+m
+l C
+o l
+a
+3
+H
+( P
+P
+3
+O
+O
+4
+4
+)
+2
+  3 1
+1
+0
+m
+.1
+o
+8
+l
+g
+C
+C
+a
+a
+(
+3
+3P
+( P
+O
+O
+4
+)
+4
+2
+)
+2
+
+= 3 1 .7 g C a
+3
+( P O
+4
+)
+2
+f. You would make 18.6 g calcium phosphate. Even though you have enough phosphoric acid to
+make 31.7 g calcium phosphate, after making 18.6 g, you will run out of the reactant calcium
+chloride and not be able to have any more reaction occur.
+g.
+ 1mol Ca (PO )  2mol H PO 97.99g H PO  1mL H PO 
+(500g Ca (PO ) )  3 4 2  3 4  3 4  3 4 =175.5mL H PO
+3 4 2 310.18g Ca (PO ) 1mol Ca (PO )  1mol H PO 1.834g H PO  3 4
+3 4 2 3 4 2 3 4 3 4
+
+--- PAGE 2 ---
+h.
+( 1 , 3 2 0 g C a
+3
+( P O
+4
+)
+2
+)
+
+3
+1
+1
+m
+0
+o
+.1
+l
+8
+C
+g
+a
+C
+(
+3a
+P
+3
+O
+( P
+4O
+)
+2
+4
+)
+2
+ 
+1 m
+2 m
+o l
+o l
+C
+H
+a
+3
+P
+3(
+P
+O
+O
+4
+4
+)
+2
+ 
+1 5
+1
+.2
+L
+m
+H
+o
+P
+3l
+H
+O
+3
+4P
+O
+4
+  1 0 0
+1
+0
+L
+m L
+H
+H
+P
+3
+3O
+P
+4
+O
+4
+
+= 5 6 0 m L H
+3
+P O
+4
+3. a. 4 F e S
+2 (s)
++ 1 1 O
+2 (g )
+→ 2 F e
+2
+O
+3 (s)
++ 8 S O
+2 (g )
+or 2 F e S
+2 (s)
++
+1 1
+2
+O
+2 (g )
+→ 1 F e
+2
+O
+3 (s)
++ 4 S O
+2 (g )
+b. Four moles of solid iron pyrite reacts with eleven moles of oxygen gas to produce two moles of
+solid iron oxide and eight moles of sulfur dioxide.
+c. ( 5 2 0 g F e S
+2
+)
+
+1
+1
+2
+m
+0
+o
+.0
+l F e
+g F
+S
+e
+2S
+2
+  8
+4
+m
+m
+o
+o
+l S
+l F
+O
+e S
+2
+2
+
+= 8 .6 7 m o l S O
+2
+( 8 .6 7 m o l S O
+2
+)
+ 6 .0 2 x 1 0
+1
+23
+m
+m
+o l
+o
+S
+le
+O
+c
+2
+u le s S O
+2
+
+= 5 .2 2 x 1 0 24 m o le c u le s S O
+2
+d. ( 1 .0 0 k g F e S
+2
+)
+ 1 0
+1
+0
+k
+0
+g
+g
+F
+F
+e
+e
+S
+S
+2
+2
+ 
+1
+1
+2
+m
+0
+o
+.0
+l F e
+g F
+S
+e
+2S
+2
+  8
+4
+m
+m
+o
+o
+l S
+l F
+O
+e S
+2
+2
+  6
+1
+4
+m
+.1
+o
+g
+l
+S O
+S O
+2
+2
+
+= 1 0 7 0 g S O
+2
+e. ( 0 .6 0 0 k g O
+2
+)
+ 1 0
+1
+0
+k
+0
+g
+g
+O
+O
+2
+2
+  1 m
+3 2
+o
+g
+l O
+O
+2
+2
+  8
+1
+m
+1
+o
+m
+l
+o
+S O
+l O
+2
+2
+  6
+1
+4
+m
+.1
+o
+g
+l
+S O
+S O
+2
+2
+
+= 8 7 4 g S O
+2
+f. You would make 874 g sulfur dioxide. Even though you have enough iron pyrite to make 1070 g
+sulfur dioxide, after making 874 g, you will run out of the reactant oxygen and not be able to have
+any more reaction occur.
+g. ( 7 5 0 g F e S
+2
+)
+
+1
+1
+2
+m
+0
+o
+.0
+l F e
+g F
+S
+e
+2S
+2
+  1
+4
+1
+m
+m
+o
+o l
+l F
+O
+e
+2S
+2
+  2
+1
+2
+m
+.4
+o
+L
+l
+O
+O
+2
+2
+  1 0 0
+1
+0
+L
+m L
+O
+O
+2
+2
+
+= 3 .8 5 x 1 0 5 m L O
+2
+h. ( 1 0 0 L S O
+2
+)
+ 1
+2
+m
+2
+o
+.4
+l
+L
+S O
+S O
+2
+2
+  2 m
+8 m
+o l
+o
+F e
+2
+l S O
+O
+2
+3
+  1 5
+1
+9
+m
+.7
+o
+g F
+l F e
+e
+2O
+2
+O
+3
+3
+
+= 1 7 8 g F e
+2
+O
+3
+4. a. 2 C
+3
+H
+6 (g )
++ 3 O
+2 (g )
++ 2 N H
+3 (g )
+→ 2 C
+3
+H
+3
+N
+(l)
++ 6 H
+2
+O
+(g )
+b. Two moles of propene gas, three moles of oxygen gas and two moles of ammonia gas all react
+with each other to produce two moles of liquid acrylonitrile and six moles of gaseous water.
+c. ( 3 5 g C
+3
+H
+6
+)
+ 1 m
+4 2
+o
+g
+l C
+C
+H
+3H
+3
+6
+6
+  2 m
+2 m
+o l
+o
+C
+3
+l C
+H
+3
+H
+3
+N
+6
+
+= 0 .8 3 m o l C
+3
+H
+3
+N
+( 0 .8 3 m o l C
+3
+H
+3
+N )
+ 6 .0 2 x 1 0
+1
+23
+m
+m
+o l
+o
+C
+le
+3
+c
+H
+u le
+N
+3
+s C
+3
+H
+3
+N 
+= 5 .0 x 1 0 23 m o le c u le s C
+3
+H
+3
+N
+d. ( 5 0 0 g C
+3
+H
+6
+)
+ 1 m
+4 2
+o
+g
+l C
+C
+H
+3H
+3
+6
+6
+  2 m
+2 m
+o l
+o
+C
+3
+l C
+H
+3
+H
+3
+N
+6
+  5 3
+1 m
+g
+o
+C
+l C
+H
+3
+H
+3
+N
+3
+N
+3
+
+= 6 3 1 g C
+3
+H
+3
+N
+e. ( 5 0 0 g O
+2
+)
+ 1 m
+3 2
+o
+g
+l O
+O
+2
+2
+  2 m
+3
+o
+m
+l C
+o l
+H
+3
+O
+3
+2
+N   5 3
+1 m
+g
+o
+C
+l C
+H
+3
+H
+3
+N
+3
+N
+3
+
+= 5 5 2 g C
+3
+H
+3
+N
+f. ( 3 0 0 g N H
+3
+)
+ 1 m
+1 7
+o
+g
+l N
+N
+H
+H
+3
+3
+  2 m
+2
+o
+m
+l
+o
+C
+l
+3
+N
+H
+H
+N
+3
+3
+  5 3
+1 m
+g
+o
+C
+l C
+H
+3
+H
+3
+N
+3
+N
+3
+
+= 9 3 5 g C
+3
+H
+3
+N
+g. You would make 552 g acrylonitrile. Even though you have enough propene to make 631 g
+acrylonitrile and enough ammonia to make 935 g acrylonitrile , after making 552 g, you will run
+out of the reactant oxygen and not be able to have any more reaction occur.
+
+--- PAGE 3 ---
+5. a. 1 P b ( N O
+3
+)
+2 (aq )
++ 2 K I
+(aq )
+→ 1 P b I
+2 (s)
++ 2 K N O
+3 (aq )
+b. One mole of aqueous lead nitrate and two moles of aqueous potassium iodide react with each other
+to produce one mole of solid lead iodide and two moles of aqueous potassium iodide.
+c.
+( 1 5 0 m L P b ( N O
+3
+)
+2
+)
+
+1 0
+1
+0
+L P
+0 m
+b
+L
+(
+P
+N
+b
+O
+(
+3N
+)
+2O
+3
+)
+2
+  0 .7 5 m
+1 L
+o
+P
+l P
+b (
+b
+N
+(
+O
+N
+3
+O
+)
+2
+3
+)
+2
+ 
+1 m
+1 m o
+o l P
+l P
+b (
+b
+N
+I
+O
+2
+3
+)
+2
+  4
+1
+6
+m
+1 g P
+o l P
+b
+b
+I
+I
+2
+2
+
+= 5 2 g P b I
+2
+d. ( 1 5 0 m L K I )
+
+1 0
+1
+0
+L K
+0 m L
+I
+K I
+ 
+1
+0 .7 5
+L P
+m
+b (
+o
+N
+l K
+O
+3
+I
+)
+2
+  1 m o
+2 m
+l P b
+o l K
+I
+I
+2
+  4
+1
+6
+m
+1 g P
+o l P
+b
+b
+I
+I
+2
+2
+
+= 2 6 g P b I
+2
+e.
+ 1 L Pb(NO ) 175 mmol Pb(NO )  1 mol Pb(NO ) 
+(65.0 mL Pb(NO ) )  3 2  3 2  3 2 
+3 2 1000 mL Pb(NO )  1 L Pb(NO ) 1000 mmol Pb(NO ) 
+3 2 3 2 3 2
+ 2 mol KI  1 L KI 1000 mL KI 
+   =4.25 mL KI
+1 mol Pb(NO ) 5.35 mol KI  1 L KI 
+3 2
+f.
+( 1 .0 0 k g P b I
+2
+)
+ 1
+1
+0
+.0
+0
+0
+0 g
+k g
+P
+P
+b
+b
+I
+2I
+2
+  1
+4
+m
+6 1
+o l P
+g P
+b
+b
+I
+I
+2
+2
+ 
+1
+2 m
+m o
+o l K
+l P b
+I
+I
+2
+  1 0 0
+1
+0 m
+m o
+m o
+l K
+l K
+I
+I  
+8 5 5
+1 L
+m
+K
+m
+I
+o l K I
+
+= 5 .0 7 L K I
+g.
+( 3 5 5 g
+
+6 2 5 
+P b I
+1 L P
+m m
+ 1 m
+) 
+2 4 6 1 
+b ( N O
+3
+o l P b ( N
+o l P
+g P
+)
+2O
+3
+b
+b
+)
+2
+I
+2
+I
+2
+
+  1 m o l P b ( N
+ 
+1 m o l P b  
+ 1 0 0 0 m L P b (
+
+1 L P b ( N O 
+O
+3
+I
+2
+N O
+)
+3
+)
+2
+3
+2
+
+)
+2
+
+
+1 0
+=
+0
+1
+1
+0 m
+m o
+2 3 0
+m o l P b
+l P b ( N
+m L P b
+(
+O
+(
+N
+3
+N
+O
+)
+2
+O
+3
+3
+)
+2
+)
+2
+
+h. You are needing to find a concentration in molarity which is mol/L.
+So, first, determine the number of moles KNO that are formed.
+3
+ 1 L Pb(NO ) 255 mmol Pb(NO ) 
+(350.0 mL Pb(NO ) )  3 2  3 2 
+3 2 1000 mL Pb(NO )  1 L Pb(NO ) 
+3 2 3 2
+ 1 mol Pb(NO )  2 mol KNO 
+ 3 2  3 =0.1785 mol KNO
+1000 mmol Pb(NO ) 1 mol Pb(NO )  3
+3 2 3 2
+Second, Determine the concentration in molarity (mol/L)
+0.1785 mol KNO 1000 mL solution
+  855 mL solution 3     1 L solution   =0.209 M KNO 3

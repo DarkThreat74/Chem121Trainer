@@ -15,8 +15,9 @@ Chem 121 Trainer is a mobile-first Next.js 14 web app for interactive chemistry 
 - `neon/setup.sql` — Idempotent DB schema and seed data (run in Neon SQL Editor).
 - `lib/db.ts` — Neon serverless client (`sql` tagged template + `SINGLE_USER_ID`).
 - `lib/fsrs.ts` — FSRS scheduling wrapper around `ts-fsrs`.
-- `lib/types.ts` — `Question`, `Topic`, `ReviewState` types and `TOPICS` constant.
-- `lib/sample-data.ts` — 40 sample questions across all 7 modules (fallback when DB is empty).
+- `lib/types.ts` — `Question`, `Topic`, `ReviewState` types and `TOPICS` constant (8 topics).
+- `lib/sample-data.ts` — 162 sample questions across all 8 modules (fallback when DB is empty).
+- `docs/source-material/` — Extracted text from CHEM 121 PDF worksheets (study guides + answer keys).
 - `components/QuizCard.tsx` — Quiz mode (multiple-choice, numeric, short-text).
 - `components/SolverCard.tsx` — Guided solver with unit-cancellation validation and sig-fig checking.
 - `components/ReviewSession.tsx` — Review queue engine; calls `/api/review` to save results.

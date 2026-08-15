@@ -1,0 +1,60 @@
+--- PAGE 1 ---
+Significant Figures
+Why do we care about significant figures?
+Measurement, by its nature, has uncertainty. Did you measure to the nearest L? mL? L? The way we
+let people know how certain we are in our measurement is by significant figures. If I use a balance to
+find the mass of an object and the measurement is 2.000 g, that tells me that I have uncertainty in the
+mg place; I have measured to the nearest mg (0.001 g). If a balance gives a value of 2 g, then I only have
+certainty to the nearest gram.
+Rules for determining significant figures in a reported number
+Defined conversions
+Some conversions are exact because they are defined quantities. For example, there are exactly 1000
+mg in exactly 1 g; 1 inch ≡ 2.54 cm. Because it is exact, it would have an infinite number of significant
+figures.
+Basic Rules for determining significant figures in a measured quantity (see also Chapter 1 of your text)
+1. All non-zero numbers are significant.
+• Example: 12.3 has 3 significant figures
+2. All zeros between non-zero numbers are significant (your book calls these “captive” zeros). All
+zeros between significant zero digits are also significant.
+• Example: 12.03 has 4 significant figures
+3. All zeros to the left of the first non-zero number are insignificant (your book calls these
+“leading” zeros). These are simply place-holding zeros—they tell us where the decimal point is
+located.
+• Example: 0.0123 has 3 significant figures
+4. All zeros to the right of a non-zero number AND to the right of the decimal point are significant
+(your book calls these “trailing” zeros). These zeros do not need to be reported unless they are
+significant—so we know they are significant if they are reported.
+• Example: 123.0 and 12.30 both have 4 significant figures
+5. Zeros that are the last reported digits AND are to the right of a non-zero number AND before the
+decimal point (your book calls these “trailing” zeros) are ambiguous. They might be significant
+but they might not. Therefore, we have to count them as insignificant. If they are indeed
+significant, you need to use scientific notation to denote their significance. Otherwise, they are
+seen as simple place-holding zeros.
+• Examples: 123,000 has 3 significant figures but 1.23000 x 105 has 6 significant figures
+More examples are on the back
+
+--- PAGE 2 ---
+Examples:
+Number of
+Reported
+Significant Explanation
+Number
+Figures
+837 3 Rule 1. All non-zero numbers are significant
+Rule 1 & 2. All non-zero numbers are significant. All captive zeros are
+8307 4
+significant.
+Rule 1 & 3. All non-zero numbers are significant. All leading zeros are
+0.00837 3
+insignificant.
+Rule 1 & 4. All non-zero numbers are significant. All trailing zeros after the
+837.00 5
+decimal point are significant.
+Rule 1 & 5. All non-zero numbers are significant. All trailing zeros before the
+83700 3
+decimal point are insignificant.
+Rule 1, 2, & 4. All non-zero numbers are significant. All captive zeros are
+significant. All trailing zeros after the decimal point are significant. Note that
+8370.00 6
+the zeros in the 1’s place (directly after the 7) is considered a captive zero
+because the zeros after the decimal point are significant.

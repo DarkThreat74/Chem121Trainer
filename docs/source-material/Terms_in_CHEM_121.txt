@@ -1,0 +1,125 @@
+--- PAGE 1 ---
+Terms/Vocabulary
+CHEM 121
+Science uses highly precise language. As a result, students in a first-year science course are often
+introduced to as many—or even more—new vocabulary terms as students in a first-year foreign language
+course. In addition, science students must learn both the terminology and the underlying concepts at the
+same time, whereas foreign language students are often learning new words for ideas and objects they
+already understand.
+To help make this process easier, we have compiled a list of key terms for each topic, along with the
+concepts associated with them. The terms are organized by topic, and we recommend reviewing them
+before we begin each unit so that you can recognize and focus on them during lectures.
+After each lecture, take time to review the terms and write your own definitions. Do not wait until just
+before an exam. Once a term has been introduced, it will be used regularly in class, so it is important that
+you understand and can use the vocabulary by the next lecture.
+High School Review:
+Accuracy Liquid Nano (n)
+Atom Liter (L) Precision
+Concentration Mass Significant figures
+Deci (d) Meter (m) Solid
+Gas Micro () Volume
+Gram (g) Milli (m) Weight
+Kilo (k) Molecule
+Excel Lab:
+Dependent Variable Linear regression
+Independent Variable R2 (in relation to graph)
+Atomic Structure:
+Atomic Mass Unit (amu) Electron Neutron
+Atomic number Molar mass Orbital
+Avogadro’s Number Mole Proton
+Dilutions, Chemical equations and Stoichiometry:
+Aqueous Dilution/Dilution equation Reactants
+Balanced equation Heteroatom States of matter
+Chemical equation Molarity Stoichiometry
+Concentration Products
+Valence electrons, Lewis Dot and Lewis Structures:
+Bond Lone pair of electrons Unshared electron pairs
+Hund’s rule Noble gasses Valence electrons
+Lewis Dot Structure Nonbonding electron pairs
+Lewis Structure s, p, and d orbitals
+Beers Law:
+Absorbance Beer’s Law Equation Extinction coefficient
+Absorptivity coefficient Cell length (cm) Linear Regression
+
+--- PAGE 2 ---
+Line Drawings:
+Bond
+Heteroatom
+Intermolecular Forces:
+Boiling Point Hydrogen-Bonding Reverse Phase
+Chromatography Hydrophilic R
+f
+Column Chromatography Hydrophobic Solubility
+Dipole-Dipole Attraction Instantaneous Dipole Solute
+Electronegativity Intermolecular Force Solvate
+Electrostatic London Dispersion Force Solvent
+Eluate Mobile phase Stationary phase
+Hydrogen acceptor Normal Phase Thin Layer
+Hydrogen donor Permanent Dipole Chromatography (TLC)
+Nomenclature, Isomers, Structural Isomers and Geometric Isomers:
+Alkane CIP Priority Rules Nomenclature
+Alkene Geometric Isomer Rigid plane
+Alkyne Isomer Structural Isomer
+Atomic connectivity IUPAC Superimposable
+VSEPR:
+Atomic Group Lone pair of electrons Trigonal pyramidal
+Bent Molecular Geometry Unshared electron pair
+Electronic Geometry Nonbonding electron pair VSEPR
+Ideal bond angle Tetrahedron
+Linear Trigonal planar
+Hybridization, Shape and Bonding
+Bent Linear Tetrahedral
+Bonds Molecular shape Trigonal planar
+Electronic Shape Orbitals Trigonal pyramidal
+Hybridization Pi bond
+Ideal bond angle Sigma Bond
+Stereochemistry
+(R) and (S), rectus & Enantiomer Plane polarized light
+sinister Geometric Isomer Racemic Mixture
+Absolute Configuration Isomer Rigid plane
+Atomic Connectivity Meso Specific optical rotation,
+Biot’s Law Mirror image []
+Chiral center Observed optical rotation, Stereoisomer
+Chirality  Structural Isomer
+CIP Priority Rules Optical rotation
+Diastereomer Optically Active
+
+--- PAGE 3 ---
+Organic Polymers-general
+Acid Chloride Carbonyl carbon Monomer
+Addition polymer Carboxylic acid Thioester
+Alcohol Condensation polymer Thiol
+Alkyl halide Condensed polymer Trimer, tetramer, etc.
+Amide structure
+Amine Ester
+Organic Polymers-Properties
+Borax (cross-linker Flexibility Nylon
+example) Fraying Oxygen (cross-linker
+Chitosan/Binding Glue/silly-putty example)
+Cross-link Guar gum/slime Polymer-Polymer
+Cross-linker High density polyethylene interactions
+Crystallinity Latex Rigidity
+Elasticity Low density polyethylene Tensile Strength
+Protein Polymers
+-amino acids Heat Peptide backbone
+-helix Hydrophilic pH
+-sheet (parallel vs. Hydrophobic Primary structure
+antiparallel) Hydrophobic effect Quaternary structure
+Denature/Denaturation Hygroscopic Secondary structure
+Detergent Lutefisk Side chain/R-group
+Mechanical agitation Tertiary structure
+Equilibrium
+Le Châtelier’s Principle
+Equilibrium
+Equilibrium Constant (K )
+eq
+Binding
+Agonist B Inhibitor
+max
+Antagonist Dissociation Constant Intermolecular Forces
+Association Constant (K ) (K ) Scatchard Equation/Plot
+a d
+Binding Equation/Curve Equilibrium
+Drug Design
+Folk Medicine Natural Products Screening
+Lead Compound Rational Design Serendipity

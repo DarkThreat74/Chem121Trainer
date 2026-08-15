@@ -14,6 +14,7 @@ import {
   Beaker,
   Scale,
   FlaskConical,
+  Orbit,
   Sparkles,
   BookOpen,
   type LucideIcon,
@@ -28,6 +29,7 @@ const ICON_MAP: Record<string, LucideIcon> = {
   molecule: Beaker,
   scale: Scale,
   "flask-conical": FlaskConical,
+  orbit: Orbit,
 };
 
 interface DashboardClientProps {

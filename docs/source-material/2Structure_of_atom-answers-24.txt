@@ -1,0 +1,42 @@
+--- PAGE 1 ---
+STRUCTURE OF THE ATOM
+Chemistry 121
+1. Define the following subatomic particles and note their location in an atom:
+Particle Charge Mass (amu) Location Other
+Orbitals define the shape and size of atoms.
+Electron -1 0 Orbital(s)
+Electrons responsible for the chemical reactivity.
+Proton +1 1 Nucleus The number of protons define an element.
+Neutron none 1 Nucleus Neutrons help to stabilize nuclei.
+2. An orbital is the space in an atom where there is a high probability (~95%) of finding an electron
+according to quantum theory & is our current model for the structure of an atom. Electrons in orbitals
+do not act the same way as the macro-world. The electrons move from one place to another without
+having been between those two points. You cannot know with certainty where an electron will appear
+next or where it was previously. These orbitals have specific shapes (s =spherical; p = dumbbell, etc).
+Electrons in these orbitals have higher energy as the average distance from the nucleus increases.
+An orbit is a specific path around a central object. Because of this, if an electron were in an orbit, it
+would be possible to know where an electron is going & where it has been. This is an outdated model
+for the structure of an atom.
+One orbital can have a maximum of 2 electrons. An orbital can have a minimum of 0 (zero) electrons.
+3. Electrons are not massless. Their mass is about 1/1836 of a proton or neutron. Therefore, when you
+add the protons + neutrons + electrons, the electrons have such low mass that they do not add mass
+when you consider significant figures. For example, consider Carbon with 6 protons, 6 neutrons & 6
+electrons:
+6*(1 amu/proton) + 6*(1amu/neutron) + 6*(5 x 10-4 amu/electron) = 6.003 amu = 6 amu
+4. Isotopes are atoms of the same element with different numbers of neutrons and therefore different
+masses. The identity of an element is determined by the number of protons, so changing the number of
+neutrons does not change the element.
+5. No, the masses on the periodic table do not correlate to a specific isotope. Instead, the masses are a
+weighted average of all of the different isotopes found on Earth. The weighting is calculated by their
+natural abundance.
+6. No, but it would probably be close. It is likely a different planet might have different isotope
+abundance which would change the average mass.
+7. Complete the following table for the isotopes listed.
+Symbol # protons # neutrons # electrons mass (amu) Charge
+1 4C 6 8 6 14 0
+64 Z n 2 + 30 34 28 64 2+
+12N3− 7 5 10 12 3-
+48C a 2 + 20 28 18 48 2+
+112 S n 2 + 50 62 48 112 2+
+28P3− 15 13 18 28 3-
+40Cl− 17 23 18 40 1-

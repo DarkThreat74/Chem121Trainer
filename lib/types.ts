@@ -3,6 +3,7 @@ export type AnswerType = "multiple-choice" | "short-text" | "numeric";
 export type Topic =
   | "fundamentals"
   | "metric-system"
+  | "atomic-structure"
   | "significant-figures"
   | "dimensional-analysis"
   | "the-mole"
@@ -109,11 +110,20 @@ export const TOPICS: TopicInfo[] = [
     color: "#34d399",
   },
   {
+    id: "atomic-structure",
+    label: "Atomic Structure",
+    description: "Subatomic particles, isotopes, orbitals, atomic mass",
+    mode: "quiz",
+    order: 3,
+    icon: "orbit",
+    color: "#a78bfa",
+  },
+  {
     id: "significant-figures",
     label: "Significant Figures",
     description: "Counting sig figs, rounding in calculations",
     mode: "mixed",
-    order: 3,
+    order: 4,
     icon: "hash",
     color: "#fbbf24",
   },
@@ -122,7 +132,7 @@ export const TOPICS: TopicInfo[] = [
     label: "Dimensional Analysis",
     description: "Unit conversion chains, single to multi-step",
     mode: "solver",
-    order: 4,
+    order: 5,
     icon: "arrow-left-right",
     color: "#f0abfc",
   },
@@ -131,7 +141,7 @@ export const TOPICS: TopicInfo[] = [
     label: "The Mole",
     description: "Mole-to-particle, mole-to-mass, Avogadro's number",
     mode: "solver",
-    order: 5,
+    order: 6,
     icon: "molecule",
     color: "#60a5fa",
   },
@@ -140,7 +150,7 @@ export const TOPICS: TopicInfo[] = [
     label: "Stoichiometry",
     description: "Grams/moles/molecules, limiting reactants, % yield",
     mode: "solver",
-    order: 6,
+    order: 7,
     icon: "scale",
     color: "#fb923c",
   },
@@ -149,7 +159,7 @@ export const TOPICS: TopicInfo[] = [
     label: "Molarity & Dilutions",
     description: "Molarity, C1V1=C2V2, stock solutions",
     mode: "solver",
-    order: 7,
+    order: 8,
     icon: "flask-conical",
     color: "#2dd4bf",
   },

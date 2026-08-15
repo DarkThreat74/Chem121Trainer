@@ -1,0 +1,172 @@
+--- PAGE 1 ---
+HIGH SCHOOL REVIEW STUDY GUIDE
+Chemistry 121
+Problems:
+1. Be able to define the following terms:
+Accuracy Hypothesis Mole
+Atom Ion (cation & anion) Molecule
+Avogadro’s Number Mass Physical property
+Chemical Property Millimolarity Precision
+Concentration Millimole Significant Figures
+Control Micromolarity Theory
+Conversion Factors Micromole Variables
+Density Molarity Weight
+2. All measured quantities consist of two things, a number and a what? Why will you lose points on
+an exam, quiz and/or lab if both parts are not there (i.e., why is it important to have both)?
+3. Define gas, liquid and solid. At the molecular level, describe the arrangement and motion of
+atoms or molecules in each state.
+4. In the questions below, choose which expressions (could be more than 1) are equivalent to the first
+quantity.
+a. 40 mi/hr:
+40 mi 1 hr 40 mi/hr
+A. B. C. D. 1 hr = 40 mi
+1 hr 40 mi 1 hr
+b. 1000 m/km:
+1 m 1 km
+A. B. C.
+1000 km 1000 m
+1 m = 1 0 0 0 k m D.
+1 0
+1
+0 0
+k m
+m
+c. In every one mol of gas, there are 22.4 L of gas.
+A. 22.4 L gas = 1 mole gas B.
+2
+1
+2
+m
+. 4
+o
+L
+le
+g
+g
+a
+a
+s
+s
+C. 2 2 .4 L / m o l g a s D.
+2 2 .4
+1
+m
+L
+o
+g
+l g
+a s
+a s
+d. The molecular mass of glucose is 180 g/mol.
+A.
+1
+1
+8 0
+m
+g
+o l
+180 g/mol 1 mol
+B. C. D.
+1 g glucose 180 g
+1 8 0
+1
+m
+g
+o l
+5. In the above question, you determined that 40 mi/hr is the same as 1 hr/40 mi. However, 40 is not
+equal to 0.025 (1/40). Explain this apparent discrepancy. Hint: See question 2 above.
+
+--- PAGE 2 ---
+6. For each of the following numbers, determine how many significant figures are in each.
+a. 235 e. 0.5300 i. 4.900 x 102
+b. 0.457 f. 0.090 j 6.37549 x 10-2
+c. 6,090 g. 300 k. 0.333 x 103
+d. 0.00210 h. 4.900 x 105 l. 0.033 x 103
+7. What is the base unit for the following in the metric system?
+a. Volume
+b. Length
+c. Mass
+d. Molarity
+8. Determine if the following units indicate volume, length, mass or concentration.
+a. mg f. dg k. g/L
+b. mL g. cm l. dm
+c. mm h. cm3 m. g
+d. mM i. kL n. L
+e. mg/mL j. kg/L
+9. Write the following in a conversion unit ratio (fraction). You are expected to know these
+conversions so you should be able to answer the questions below without looking in your book.
+a. The number of m in 1 mm. d. The number of cm in 1 dm
+b. The number of L in 1 mL. e. The number of m in 1 nm
+c. The number of mg in 1 kg f. The number of g in 1 g
+10. Jennifer drives 30 minutes at 70 miles per hour. Mark drives for 1 hour at 1.2 km per minute.
+Who travels farther? Note: 1.609 km = 1.000 mile.
+11. An “average” mature healthy oak tree has approximately 2.0 x 105 leaves. Each leaf has a mass of
+5.0 g. What is the difference in weight between this average tree in the summer (in full leaf) vs
+the winter (after all of the leaves have dropped)? Give your answer in pounds. Note: 1.00 pound
+= 453.6 g.
+12. In 2016, Morgan Korn from ABC News reported that the average American eats 3,000 Calories
+for Thanksgiving dinner (not including drinks, deserts & snacks). To burn off these Calories,
+many people will take an evening walk after dinner. Walking burns about 1.0 x 102 Calories per
+mile. If you walked 3.5 miles per hour, how many hours would you have to walk to burn the 3.00
+x 103 Calories from Thanksgiving dinner?
+13. Sea salt is harvested by the evaporation of water from ocean water. Assuming a concentration of
+35,000 ppm salt (parts-per-million or mg/L) how many gallons of ocean water must be used to
+make a 26.0-oz container of sea salt (which is sold in stores)? Note: 1.00 g = 0.03527 oz; 1.00
+gallon = 3.78 L.
+14. Vitamin C is made industrially by transforming glucose to ascorbic acid (vitamin C). When doing
+this, about 0.50 g of Vit C will be synthesized from 1.00 g Glucose. Glucose in the United States
+is primarily isolated from corn starch. It requires 1.00 kg corn to produce 0.572 kg starch which
+then can be enzymatically hydrolyzed to glucose. In Illinois, you can harvest 180 bushels of corn
+per acre and there is about 25 kg of corn per bushel. How many acres of land are needed to
+
+--- PAGE 3 ---
+produce 185 g of Vitamin C, the amount consumed if a person consumes one 500-mg supplement
+of vitamin C every day for a year. Assume a 1:1 ratio of g starch to g glucose.
+15. One way to differentiate between diamond and cubic zirconia is density. Diamonds have a density
+of 3.50-3.53 g/cm3 whereas cubic zirconia has a density of 5.65-5.95 g/cm3. A 1.75 carat stone to
+be identified as diamond or zirconia was analyzed. The volume displacement of the stone was
+99.5 L. Determine whether the stone is diamond or cubic zirconia. 1.00 carat = 200 mg; 1.00
+mL = 1.00 cubic centimeters.
+16. Ben has decided that he wants to increase his exercise by walking 2 miles a day. He determines
+his stride by walking 10 steps which measured 7.25 meters. He also found he walks an average of
+1.50 steps/s. How many minutes per day must he walk to add 2.00 miles per day? 1.609 km =
+1.000 mile.
+17. a. What is the difference between the units “mole” and “molarity”?
+b. What is the difference between the amount of a molecule and the concentration of a molecule
+in a solution. For example, is 1.0 mole NaCl the same as 1.0 molar NaCl?
+c. Define the following abbreviations in the SI system:
+a. m c. mol e. mM
+b. M d. mmol f. M
+d. Assign the correct abbreviation for the following (it is expected that you will use the correct
+abbreviation for credit on exams, quizzes, labs, etc):
+a. meter c. mole e. millimolar
+b. molarity d. millimole f. micromolar
+18. Which of the pairs below has the most sodium ions (Na+)—Hint: Determine the number of mmol
+Na+ in each.
+a. 120 mmol NaCl or 75 mmol Na SO
+2 4
+b. 0.45 mmol NaNO or 750 mL of 450 M NaNO
+3 3
+19. Determine the concentration of each of the following.
+a. When we make solutions, we first dissolve the solute in a small amount of solvent. Then, we
+add solvent to the final volume. Why do we do it this way rather than simply adding the
+solute to the final volume of solvent? Why do we make sure to dissolve the solution before
+adding the final volume of solvent instead of just adding solvent while there is still
+undissolved solute?
+b. A salt solution is made by dissolving 55.0 g of NaCl in 50.0 mL of water and then the volume
+is brought up to 75.0 mL with additional water. What is the concentration in g/mL? What is
+the concentration in mg/mL? What is the concentration in g/L?
+c. A glucose solution is made by dissolving 0.500 mole of glucose in 100 mL of water and then
+the volume is brought up to 1.65 liter with additional water. What is the concentration in
+molarity (M)? What is the concentration in millimolarity (mM)? What is the concentration in
+micromolarity (M)?
+d. An aspirin solution is made by dissolving 0.0050 mmole of aspirin in 100 L of ethanol and
+then the volume is brought up to 10.0 mL with additional ethanol. What is the concentration
+in molarity (M)? What is the concentration in millimolarity (mM)? What is the concentration
+in micromolarity (M)?
+20. Your book discusses precision vs. accuracy (chapter 1). Be sure you understand the difference.
+a. Using “range” of your data is not always a good measure of precision. Instead, standard
+deviation is often used as a better statistical analysis of precision. Look up standard deviation
+and give a definition (don’t use an equation, but rather one that makes sense to you).
+b. Using the dart board analogy, draw an example of a large range but a relatively good
+precision.

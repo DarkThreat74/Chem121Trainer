@@ -1,0 +1,128 @@
+--- PAGE 1 ---
+STOICHIOMETRY AND DIMENSIONAL ANALYSIS STUDY GUIDE
+Chemistry 121
+Problems:
+1. a. Oleic acid (C H O ) is an essential fatty acid found in abundance in olive oil. When the body
+18 34 2
+uses it for energy, it is “burned” with oxygen to form carbon dioxide and water. Balance the
+equation below and then use this balanced equation to answer questions b-h. Do not leave any
+blanks empty; if the answer is 1, then put a one in the blank.
+___C H O +___O →___CO +___H O
+18 34 2(l) 2(g) 2(g) 2 (l)
+b. In words, explain what the above equation means.
+c. How many moles of carbon dioxide are produced from the burning of 0.250 g oleic acid? How
+many molecules of carbon dioxide?
+d. How many grams of carbon dioxide would be made if you reacted 1.00 g oleic acid with excess
+oxygen?
+e. How many grams of water would be produced if you reacted 10.0 mg oleic acid with excess
+oxygen?
+f. How many grams of oleic acid are required to produce 50.0 g carbon dioxide?
+g. How many grams of oleic acid are required to produce 1.00 x 102 mL of water? Remember that
+by definition, the density of water is 1g/mL.
+h. How many liters of oxygen (1.00 mole oxygen gas = 22.4 L oxygen gas) would be required to
+react with 5.00 g oleic acid?
+2. a. Balance the equation below and then use this balanced equation to answer questions b-h. Do not
+leave any blanks empty; if the answer is 1, then put a one in the blank.
+___CaCl +___H PO →___Ca (PO ) +___HCl
+2(aq) 3 4(aq) 3 4 2(s) (aq)
+b. In words, explain what the above equation means. CaCl is calcium chloride, H PO is phosphoric
+2 3 4
+acid, Ca (PO ) is calcium phosphate and HCl is hydrochloric acid.
+3 4 2
+c. How many moles of calcium phosphate are produced when you react of 3.00 g calcium chloride?
+How many molecules calcium phosphate?
+d. How many grams of calcium phosphate would be made if you reacted 20.0 g calcium chloride
+with excess phosphoric acid?
+e. How many grams of calcium phosphate would be made if you reacted 20.0 g phosphoric acid with
+excess calcium chloride?
+f. How many grams of calcium phosphate would be made if you reacted 20.0 g phosphoric acid with
+20.0 g calcium chloride? You do not need to do any additional calculations, simply compare your
+answers to d & e above.
+g. How many milliliters of phosphoric acid would you need to react with excess calcium chloride to
+produce 500.0 g calcium phosphate? The density of phosphoric acid is 1.834 g/mL.
+h. How many milliliters of 15.2 M solution of phosphoric acid would you need to react with excess
+calcium chloride to produce 1.32 kg calcium phosphate?
+
+--- PAGE 2 ---
+3. a. Sulfur dioxide (SO ) can be commercially made by the roasting of iron pyrite (FeS ) which also
+2 2
+forms iron oxide as a byproduct (Fe O ). Balance the equation below and then use this balanced
+2 3
+equation to answer questions b-h. Do not leave any blanks empty; if the answer is 1, then put a
+one in the blank.
+_ _ _ F e S
+2 (s)
++ _ _ _ O
+2 (g )
+→ _ _ _ F e
+2
+O
+3 (s)
++ _ _ _ S O
+2 (g )
+b. In words, explain what the above equation means.
+c. How many moles of sulfur dioxide would be made if you reacted 5.20 x 102 g iron pyrite with
+excess oxygen? How many molecules sulfur dioxide?
+d. How many grams of sulfur dioxide would be made if you reacted 1.00 kg iron pyrite with excess
+oxygen?
+e. How many grams of sulfur dioxide would be made if you reacted 0.600 kg oxygen with excess
+iron pyrite?
+f. How many grams of sulfur dioxide would be made if you reacted 1.00 kg phosphoric acid with
+0.600 kg oxygen? You do not need to do any additional calculations, simply compare your
+answers to d & e above.
+g. How many milliliters of oxygen (1.00 mole gas = 22.4 L gas) would be required to react with 750
+g iron pyrite?
+h. Enough iron pyrite was reacted to form 100.0 L sulfur dioxide gas (1.00 mole gas = 22.4 L gas).
+How many grams of iron oxide were formed?
+4. a. Acrylonitrile (C H N) is used as a monomer for making synthetic polymers. It can be
+3 3
+commercially made by reacting propene (C H ), oxygen gas and ammonia (NH ). Balance the
+3 6 3
+equation below and then use this balanced equation to answer questions b-g. Do not leave any
+blanks empty; if the answer is 1, then put a one in the blank.
+___C H +___O +___NH →___C H N +___H O
+3 6(g) 2(g) 3(g) 3 3 (l) 2 (g)
+b. In words, explain what the above equation means.
+c. How many moles of acrylonitrile would be made if you reacted 35 g propene with excess oxygen
+and ammonia? How many molecules of acrylonitrile?
+d. How many grams of acrylonitrile would be made if you reacted 5.00 x 102 g propene with excess
+oxygen and ammonia?
+e. How many grams of acrylonitrile would be made if you reacted 5.00 x 102 g oxygen with excess
+propene and ammonia?
+f. How many grams of acrylonitrile would be made if you reacted 3.00 x 102 g ammonia with excess
+propene and oxygen?
+g. How many grams of acrylonitrile would be made if you reacted 5.00 x 102 g propene and 5.00 x
+102 g oxygen and 3.00 x 102 g ammonia? You do not need to do any additional calculations,
+simply compare your answers to d, e & f above.
+5. a. Lead(II) iodide, PbI is used in the manufacturing of solar cells. It is commonly synthesized by
+2
+mixing a solution of lead nitrate, Pb(NO ) , with a solution of potassium Iodide, KI. Balance the
+3 2
+equation below and then use this balanced equation to answer questions b-h. Do not leave any
+blanks empty; if the answer is 1, then put a one in the blank.
+_ _ _ P b ( N O
+3
+)
+2 (aq )
++ _ _ _ K I
+(aq )
+→ _ _ _ P b I
+2 (s)
++ _ _ _ K N O
+3 (aq )
+b. In words, explain what the above equation means.
+c. How many grams of lead iodide would be produced if you reacted 150 mL of 0.75 M lead nitrate
+with excess potassium iodide?
+d. How many grams of lead iodide would be produced if you reacted 150 mL of 0.75 M potassium
+iodide with excess lead nitrate?
+
+--- PAGE 3 ---
+e. How many mL of a 5.35 M solution of potassium iodide would be required to react with 65.0 mL
+of a 175 mM solution of lead nitrate?
+f. You want to make 1.00 kg of lead iodide. How many liters of a 855 mM potassium iodide
+solution would you need to use?
+g. You want to make 355 g of lead iodide. How many mL of a 625 mM lead nitrate solution would
+you need to use?
+h. In an experiment, 350.0 mL of 255 mM lead nitrate solution is completely reacted with excess
+potassium iodide resulting in a final volume of 855 mL. What is the final concentration (in
+molarity) of potassium nitrate?

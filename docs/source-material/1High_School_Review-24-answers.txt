@@ -1,0 +1,569 @@
+--- PAGE 1 ---
+HIGH SCHOOL REVIEW--ANSWERS
+Chemistry 121
+Problems:
+1. Be able to define the following terms: See your text and class notes for definitions
+2. All measured quantities consist of two things, a number and a unit. You will lose points on
+assignments because the unit tells what the number actually means. For example, 1000 grams and
+1000 kg are very different whereas 1000 grams and 1 kg are the same. Without the units you do
+not know what the number means.
+3. See Chapter 1 for the proper definitions. At the molecular level, the particles in a solid are packed
+closely together, are organized, and their motion is small vibrations in place. In a liquid, the
+particles are also close together, but they are disorganized and can slip/move past each other so
+they have more kinetic energy than a solid. In a gas, the particles are far from each other and are
+not touching at all; they have high kinetic energy.
+4. In the questions below, choose which expressions are equivalent to the first quantity.
+a. 40 mi/hr: A, B, and D
+b. 1000 m/km: B and D
+c. In every one mol of gas, there are 22.4 L of gas: A, B, and C
+d. The molecular mass of glucose is 180 g/mol: A and C
+5. The reason that 40 mi/hr and 0.025 hr/mi are the same is because of the units.
+6. For each of the following numbers, determine how many significant figures are in each.
+a. 3 e. 4 i. 4
+b. 3 f. 2 j 6
+c. 3 g. 1 k. 3
+d. 3 h. 4 l. 2
+7. Correct units
+a. Volume = liters (L)
+b. Length = meters (m)
+c. Mass = grams (g)
+d. Molarity = moles per liter (mol/L)
+8. Correct type of quantity
+a. mg = mass f. dg = mass k. g/L = concentration
+b. mL = volume g. cm = length l. dm = length
+c. mm = length h. cm3 = volume m. g = mass
+d. mM = concentration i. kL = volume n. L = volume
+e. mg/mL = concentration j. kg/L = concentration
+
+--- PAGE 2 ---
+9. a.
+1
+1 m
+− 0 3
+m
+m
+o r
+1
+1
+− 0
+m
+3 m
+m
+b.
+1
+1
+0
+m
+0 0
+L
+L
+o r
+1 0
+1
+0 0
+m L
+L 
+
+c.
+1 0
+1
+6 m
+k g
+g
+o r
+1
+1
+0
+k g
+6 m g
+d.
+1 0 c
+1 d m
+m
+o r
+1
+1 d m
+0 c m
+e.
+1 0
+1
+9 −
+n
+m
+m
+o r
+1
+1
+0
+n
+9 −
+m
+m
+ f.
+
+1 0 6
+1 g
+g o r
+1 0
+1 g
+6 g
+10. Jennifer: 3 0 m in
+
+6
+1
+0
+h
+m
+r
+in
+  7 0 m
+1 h r
+i 
+= 3 5 m ile s
+60 min1.2 km 1 mi 
+Mark: 1 hr   =45 miles
+ 1 hr  1 min 1.609 km
+Mark travels farther.
+11. 2 0 0 , 0 0 0 le a v e s
+ 5
+1
+.0 0
+le
+g
+a f
+  1
+4
+p
+5
+o
+3
+u
+.6
+n d
+g
+
+= 2 , 2 0 0 p o u n d s ( > 1 T O N ! )
+12. 3 , 0 0 0 C a l
+
+1
+1 m
+0 0 C
+i
+a l
+ 
+3
+1 h r
+.5 m i
+
+= 8 .6 h r
+13. 2 6 .0 o z
+
+0
+1
+.0
+.0
+3 5
+0
+2
+g
+7 o z
+  1 , 0 0
+1
+0 m
+g
+g  
+3 5
+1 L
+,0 0 0 m g
+ 
+3
+1 g
+.7
+a
+8
+l
+L
+
+= 5 .5 7 g a l
+14.
+1
+
+8
+1
+5
+b
+2
+g
+u
+5
+V
+s h
+k g
+it C
+e l c
+c o
+ 1 .0 0
+
+0 .5 0 
+ o r n 
+ 
+r n  
+g G lc
+g V it C
+1 a c r
+1 8 0 b u
+
+e
+s
+ 1
+
+la
+h e
+g s ta
+1 g G
+n d
+l c o r n
+r c
+lc
+
+h
+=
+ 
+ 
+1  
+1 .4
+1
+,0
+3
+k g s
+0 0 g
+x 7 1 0
+ta
+s
+4 −
+r c
+ta
+a
+h
+r c h
+c r e
+ 
+0
+1
+.5
+.0
+7 2
+k
+k
+g
+g
+c
+s
+o r
+ta
+n
+r c h
+
+x
+15.
+1 .7
+9
+5
+9
+c a
+.5
+r a
+L
+t 2
+1
+0 0
+c
+m
+a r a
+g
+t 1 0
+1
+0
+g
+0 m g
+1 0
+1
+0 0
+m L
+L 1
+1
+m
+c m
+L
+3
+3 .5 2 g /c m 3 = D IA M O N D
+
+
+         
+=
+16. 2 .0 0 m
+i 1 .6 0
+1
+9
+m
+k
+i
+m   1 , 0
+1
+0
+k
+0
+m
+m   1 0
+7
+s
+.2
+te p
+5 m
+s  
+1 .5 0
+1 s
+s te p s
+  1 m
+6 0
+in
+s
+
+= 4 9 .3 m in
+17. a. Mole is a quantity—6.02 x 1023. It is similar to dozen—12. Molarity is a concentration
+(moles/Liter)—depending on the volume, you may have more or less than a mole.
+b. The amount of something is the quantity of that thing. If you have 1.0 mole NaCl, then you
+have 6.02 x 1023 molecules of NaCl. Concentration is the quantity of a thing per volume. If
+you have 1.0 molar NaCl, then the actual amount of NaCl would depend on the volume. If
+you have a liter of 1.0 molar NaCl, then you would have 1.0 mole of NaCl. But if you only
+have 0.5 liter of 1.0 molar NaCl, then you would only have 0.5 mole of NaCl. The
+concentration of a solution does not tell you how much of that molecule you have unless you
+also know the volume of your solution.
+c. Define the following abbreviations in the SI system:
+a. m = meter c. mol = mole e. mM = millimolar = mmol/L
+b. M = molarity = mol/L d. mmol = millimole f. M = micromolar = mol/L
+d. Assign the correct abbreviation for the following (it is expected that you will use the correct
+abbreviation for credit on exams, quizzes, labs, etc):
+
+--- PAGE 3 ---
+a. m = meter c. mol = mole e. mM = millimolar = mmol/L
+b. M = molarity = mol/L d. mmol = millimole f. M = micromolar = mol/L
+18. a. 1 2 0 m m o l N a C l
+ 1 m
+1 m
+m
+m
+o
+o
+l N
+l N
+a
+a
++
+C l
+
+= 1 2 0 m m o l N a +
+7 5 m m o l N a
+2
+S O
+4
+
+1
+2
+m
+m
+m
+m
+o
+o
+l N
+l N
+a
+2
+a
+S
++
+O
+4
+
+= 1 5 0 m m o l N a + MORE Na+
+b. 0 .4 5 m m o l N a N O
+3
+
+1
+1
+m
+m
+m
+m
+o
+o
+l N
+l N
+a
+a
+N
++
+O
+3
+
+= 0 .4 5 m m o l N a + MORE Na+
+
+
+7 5 0 m L N a N O
+3
+
+1 0
+1
+0
+L N
+0 m
+a N
+L N
+O
+a
+3
+N O
+3
+  4 5 0
+1 L
+m
+N
+o l N
+a N
+a
+O
+N
+3
+O
+3
+ 
+1
+1
+0
+m
+0 0
+m o
+m
+l N a
+o l N
+N
+a
+O
+N
+3
+O
+3
+ 
+1
+1
+m
+m
+m
+m
+o
+o l N
+l N a
+a
+N
++
+O
+3
+
+= 0 .3 4 m m o l N a +
+19. Determine the concentration of each of the following.
+a. The solute adds volume to the solution so you cannot simply add the final volume of solvent.
+For example, imagine you want to make a 0.10 g/mL solution of glucose. If you add 10 g
+glucose to 100 mL water, your final volume of solution is now more than 100 mL (closer to
+108 mL or so) and therefore your concentration would be slightly less than 0.10 g/mL
+glucose. While masses are additive, volumes are not. Therefore, you must allow the solute to
+dissolve because a dissolved solute takes up a different volume than the solid or pure liquid.
+The volume might be more or less depending on the properties of both the solute and solvent.
+b. Notes: your answer should have 3 sig figs. You use 75 mL for the final volume because of
+your answer to in (a) above.
+
+7
+5
+5
+5 g
+m L
+
+= 0 .7 3 3 g /m L
+
+7
+5
+5
+5 g
+m L
+  1 0 0
+1
+0 m
+g
+g 
+= 7 3 3 m g /m L
+
+7
+5
+5
+5 g
+m L
+  1 0 0
+1
+0 m
+L
+L 
+= 7 3 3 g /L
+c. Notes: your answer should have 3 sig figs. You use 1.65 L for the final volume because of
+your answer to in (a) above.
+0.500 mol
+ =0.303 mol/L=0.303 M
+ 1.65 L 
+0.500 mol1,000 mmol
+  =303 mmol/L=303 mM
+ 1.65 L  1 mol 
+0.500 mol1x106 mol
+  =3.03x105 mol/L=3.03x105 M
+ 1.65 L  1 mol 
+d. Notes: your answer should have 2 sig figs (the 100 L is not used in the calculation so it
+doesn’t matter that there is only 1 sig fig in that number). You use 10.0 mL for the final
+volume because of your answer to in (a) above.
+0.0050 mmol 1 mol 1000 mL
+   =5.0x10−4 mol/L=5.0x10−4 M
+ 10 mL 1000 mmol 1 L 
+0.0050 mmol1000 mL
+  =0.50 mmol/L=0.50 mM
+ 10 mL  1 L 
+
+--- PAGE 4 ---
+
+ 
+ 0 .0 0
+1
+5
+0
+0 m
+m L
+m o l  
+1 0
+1
+0
+m
+0 m
+o l
+m o l
+  1 x 1 6 0
+1 m o
+m
+l
+o l   1 0 0
+1
+0 m
+L
+L 
+= 5 .0 x 1 0 2 m o l/L = 5 .0 x 1 0 2 M
+20. a. Standard deviation is a statistical analysis of data to measure precision. If the data being
+analyzed is a normal bell curve, then plus/minus one standard deviation from the average will
+include approximately 70% of the data points.
+b. Below is a diagram where the standard deviation would be relatively small because most of
+the data points are clustered but the range would be large because of two data points that are
+far from the rest.
