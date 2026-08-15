@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import {
@@ -15,9 +15,64 @@ import {
   GraduationCap,
   FlaskConical,
   Calculator,
+  Volume2,
+  Square,
 } from "lucide-react";
 import { LEARN_CONTENT, type Diagram } from "@/lib/learn-content";
 import { TOPICS } from "@/lib/types";
+
+// Compact text-to-speech button using the browser's built-in Web Speech API
+function SpeakButton({ text, color }: { text: string; color: string }) {
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+
+  const handleSpeak = useCallback(() => {
+    if (typeof window === "undefined" || !window.speechSynthesis) return;
+
+    // If already speaking this text, stop it
+    if (isSpeaking) {
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+      return;
+    }
+
+    // Cancel any ongoing speech first
+    window.speechSynthesis.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = 0.95;
+    utterance.pitch = 1;
+    utterance.onend = () => setIsSpeaking(false);
+    utterance.onerror = () => setIsSpeaking(false);
+    utteranceRef.current = utterance;
+    window.speechSynthesis.speak(utterance);
+    setIsSpeaking(true);
+  }, [text, isSpeaking]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (typeof window !== "undefined" && window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, []);
+
+  return (
+    <button
+      onClick={handleSpeak}
+      aria-label={isSpeaking ? "Stop reading" : "Read aloud"}
+      className="flex flex-shrink-0 items-center justify-center rounded-lg p-1.5 transition-all duration-200 hover:bg-bg-hover"
+      style={{ color: isSpeaking ? color : undefined }}
+    >
+      {isSpeaking ? (
+        <Square className="h-4 w-4 fill-current" />
+      ) : (
+        <Volume2 className="h-4 w-4 text-text-tertiary" />
+      )}
+    </button>
+  );
+}
 
 function DiagramRenderer({ diagram, color }: { diagram: Diagram; color: string }) {
   if (diagram.type === "visual" && diagram.visual) {
@@ -297,9 +352,12 @@ export default function TopicLearnPage({
               </p>
             </div>
           </div>
-          <p className="relative mt-4 text-sm leading-relaxed text-text-secondary sm:text-base">
-            {content.intro}
-          </p>
+          <div className="relative mt-4 flex items-start gap-2">
+            <p className="flex-1 text-sm leading-relaxed text-text-secondary sm:text-base">
+              {content.intro}
+            </p>
+            <SpeakButton text={content.intro} color={color} />
+          </div>
         </motion.div>
 
         {/* Concepts */}
@@ -330,7 +388,13 @@ export default function TopicLearnPage({
                     {i + 1}
                   </span>
                   <div className="min-w-0 flex-1">
-                    <h3 className="font-semibold text-text">{concept.title}</h3>
+                    <div className="flex items-center gap-1">
+                      <h3 className="font-semibold text-text">{concept.title}</h3>
+                      <SpeakButton
+                        text={`${concept.title}. ${concept.body}${concept.example ? `. Example: ${concept.example}` : ""}${concept.misconception ? `. Common mistake: ${concept.misconception}` : ""}`}
+                        color={color}
+                      />
+                    </div>
                     <p className="mt-1.5 text-sm leading-relaxed text-text-secondary">
                       {concept.body}
                     </p>
@@ -385,9 +449,15 @@ export default function TopicLearnPage({
                   transition={{ delay: 0.25 + i * 0.05 }}
                   className="rounded-2xl border border-border bg-bg-card p-4"
                 >
-                  <p className="text-xs font-semibold uppercase tracking-wider text-text-tertiary">
-                    {formula.name}
-                  </p>
+                  <div className="flex items-center justify-between gap-1">
+                    <p className="text-xs font-semibold uppercase tracking-wider text-text-tertiary">
+                      {formula.name}
+                    </p>
+                    <SpeakButton
+                      text={`${formula.name}. ${formula.formula}. ${formula.desc}${formula.example ? `. Example: ${formula.example}` : ""}`}
+                      color={color}
+                    />
+                  </div>
                   <p
                     className="mt-2 font-mono text-base font-bold sm:text-lg"
                     style={{ color }}
@@ -423,9 +493,15 @@ export default function TopicLearnPage({
                   key={idx}
                   className="rounded-2xl border border-border bg-bg-card p-4 sm:p-5"
                 >
-                  <p className="text-sm font-semibold leading-snug sm:text-base">
-                    {example.problem}
-                  </p>
+                  <div className="flex items-start justify-between gap-2">
+                    <p className="text-sm font-semibold leading-snug sm:text-base">
+                      {example.problem}
+                    </p>
+                    <SpeakButton
+                      text={`${example.problem}. ${example.steps.map((s, i) => `Step ${i + 1}: ${s.label}. ${s.detail}`).join(". ")}. The answer is ${example.answer}.`}
+                      color={color}
+                    />
+                  </div>
                   <div className="mt-4 space-y-2">
                     {example.steps.map((step, i) => (
                       <div
