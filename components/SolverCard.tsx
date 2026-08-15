@@ -188,21 +188,21 @@ export default function SolverCard({ question, onAnswer, disabled }: SolverCardP
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-      className="rounded-3xl border border-border bg-bg-card p-6"
+      className="rounded-3xl border border-border bg-bg-card p-4 sm:p-6"
     >
       {/* Topic tag + difficulty */}
-      <div className="mb-4 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <span className="rounded-lg bg-bg-input px-2.5 py-1 text-xs font-medium capitalize text-text-secondary">
+      <div className="mb-4 flex items-center justify-between gap-2">
+        <div className="flex min-w-0 items-center gap-2">
+          <span className="flex-shrink-0 rounded-lg bg-bg-input px-2.5 py-1 text-xs font-medium capitalize text-text-secondary">
             {question.topic.replace(/-/g, " ")}
           </span>
-          <span className="text-text-tertiary">·</span>
-          <span className="text-xs capitalize text-text-tertiary">
+          <span className="flex-shrink-0 text-text-tertiary">·</span>
+          <span className="truncate text-xs capitalize text-text-tertiary">
             {question.subtopic.replace(/-/g, " ")}
           </span>
         </div>
         <div
-          className="flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold"
+          className="flex flex-shrink-0 items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold"
           style={{ backgroundColor: `${diffInfo.color}15`, color: diffInfo.color }}
         >
           <Zap className="h-3 w-3" />
@@ -211,12 +211,12 @@ export default function SolverCard({ question, onAnswer, disabled }: SolverCardP
       </div>
 
       {/* Problem prompt */}
-      <p className="text-xl font-semibold leading-snug tracking-tight">
+      <p className="text-lg font-semibold leading-snug tracking-tight sm:text-xl">
         {content.prompt}
       </p>
 
       {/* Given values + target */}
-      <div className="mt-4 flex flex-wrap items-center gap-3">
+      <div className="mt-4 flex flex-wrap items-center gap-2 sm:gap-3">
         {content.given.map((g, i) => (
           <div
             key={i}
@@ -348,54 +348,56 @@ export default function SolverCard({ question, onAnswer, disabled }: SolverCardP
             to cancel.
           </p>
 
-          <div className="flex items-end gap-3">
-            <span className="pb-3 font-mono text-muted">×</span>
-            <div className="flex flex-col items-center">
-              <input
-                type="text"
-                placeholder="value"
-                value={currentStep.numeratorValue}
-                onChange={(e) =>
-                  setCurrentStep({ ...currentStep, numeratorValue: e.target.value })
-                }
-                className="w-24 rounded-t-lg border border-b-0 border-border bg-bg-input px-2 py-1.5 text-center font-mono text-sm outline-none transition focus:border-accent"
-              />
-              <input
-                type="text"
-                placeholder="unit"
-                value={currentStep.numeratorUnit}
-                onChange={(e) =>
-                  setCurrentStep({ ...currentStep, numeratorUnit: e.target.value })
-                }
-                className="w-24 border-x border-border bg-bg-input px-2 py-1.5 text-center font-mono text-xs outline-none transition focus:border-accent"
-              />
-              <div className="h-px w-full bg-border" />
-              <input
-                type="text"
-                placeholder="value"
-                value={currentStep.denominatorValue}
-                onChange={(e) =>
-                  setCurrentStep({ ...currentStep, denominatorValue: e.target.value })
-                }
-                className="w-24 border-x border-border bg-bg-input px-2 py-1.5 text-center font-mono text-sm outline-none transition focus:border-accent"
-              />
-              <input
-                type="text"
-                placeholder={currentOutputUnit}
-                value={currentStep.denominatorUnit}
-                onChange={(e) =>
-                  setCurrentStep({ ...currentStep, denominatorUnit: e.target.value })
-                }
-                className="w-24 rounded-b-lg border border-t-0 border-border bg-bg-input px-2 py-1.5 text-center font-mono text-xs outline-none transition focus:border-accent"
-              />
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:gap-3">
+            <div className="flex items-center gap-3">
+              <span className="pb-3 font-mono text-muted">×</span>
+              <div className="flex flex-col items-center">
+                <input
+                  type="text"
+                  placeholder="value"
+                  value={currentStep.numeratorValue}
+                  onChange={(e) =>
+                    setCurrentStep({ ...currentStep, numeratorValue: e.target.value })
+                  }
+                  className="w-28 rounded-t-lg border border-b-0 border-border bg-bg-input px-2 py-1.5 text-center font-mono text-sm outline-none transition focus:border-accent sm:w-24"
+                />
+                <input
+                  type="text"
+                  placeholder="unit"
+                  value={currentStep.numeratorUnit}
+                  onChange={(e) =>
+                    setCurrentStep({ ...currentStep, numeratorUnit: e.target.value })
+                  }
+                  className="w-28 border-x border-border bg-bg-input px-2 py-1.5 text-center font-mono text-xs outline-none transition focus:border-accent sm:w-24"
+                />
+                <div className="h-px w-full bg-border" />
+                <input
+                  type="text"
+                  placeholder="value"
+                  value={currentStep.denominatorValue}
+                  onChange={(e) =>
+                    setCurrentStep({ ...currentStep, denominatorValue: e.target.value })
+                  }
+                  className="w-28 border-x border-border bg-bg-input px-2 py-1.5 text-center font-mono text-sm outline-none transition focus:border-accent sm:w-24"
+                />
+                <input
+                  type="text"
+                  placeholder={currentOutputUnit}
+                  value={currentStep.denominatorUnit}
+                  onChange={(e) =>
+                    setCurrentStep({ ...currentStep, denominatorUnit: e.target.value })
+                  }
+                  className="w-28 rounded-b-lg border border-t-0 border-border bg-bg-input px-2 py-1.5 text-center font-mono text-xs outline-none transition focus:border-accent sm:w-24"
+                />
+              </div>
             </div>
             <motion.button
               whileTap={{ scale: 0.95 }}
               onClick={handleAddStep}
-              className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-accent-hover to-accent px-4 py-2.5 text-sm font-semibold text-white transition hover:opacity-90"
+              className="flex items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-accent-hover to-accent px-4 py-2.5 text-sm font-semibold text-white transition hover:opacity-90 sm:justify-start"
             >
               <Plus className="h-4 w-4" />
-              Add
+              Add step
             </motion.button>
           </div>
 
@@ -425,7 +427,7 @@ export default function SolverCard({ question, onAnswer, disabled }: SolverCardP
             </div>
             <span>Unit chain complete! Enter your final answer.</span>
           </div>
-          <form onSubmit={handleFinalSubmit} className="flex items-end gap-3">
+          <form onSubmit={handleFinalSubmit} className="flex flex-col gap-3 sm:flex-row sm:items-end">
             <div className="flex-1">
               <label className="mb-1.5 block text-sm text-text-secondary">
                 Final answer (in {content.target_unit})

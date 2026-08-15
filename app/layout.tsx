@@ -5,6 +5,11 @@ import NavBar from "@/components/NavBar";
 export const metadata: Metadata = {
   title: "Chem 121 Trainer",
   description: "Master introductory chemistry through spaced repetition practice",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Chem 121",
+  },
 };
 
 export const viewport: Viewport = {

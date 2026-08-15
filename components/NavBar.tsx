@@ -64,7 +64,7 @@ export default function NavBar() {
 
       {/* Mobile bottom nav */}
       <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-border-subtle bg-bg/90 backdrop-blur-xl md:hidden safe-bottom">
-        <div className="flex items-center justify-around px-2 py-2">
+        <div className="flex items-center justify-around px-2 py-1.5">
           {NAV_ITEMS.map((item) => {
             const isActive = pathname === item.href;
             const Icon = item.icon;
@@ -72,7 +72,7 @@ export default function NavBar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`relative flex flex-1 flex-col items-center gap-1 rounded-xl py-2 transition-colors ${
+                className={`relative flex flex-1 flex-col items-center gap-0.5 rounded-xl py-2 transition-colors ${
                   isActive ? "text-accent" : "text-text-tertiary"
                 }`}
               >

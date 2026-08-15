@@ -18,18 +18,26 @@
 html {
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: transparent;
+  text-size-adjust: 100%;
 }
 
 body {
   @apply bg-bg text-text antialiased;
   overscroll-behavior-y: none;
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
+/* Prevent iOS input zoom — all inputs must be ≥16px */
 @supports (-webkit-touch-callout: none) {
   input,
   select,
   textarea {
+    font-size: 16px;
+  }
+  /* Allow smaller font in fraction-input fields that are already compact */
+  input[type="text"] {
     font-size: 16px;
   }
 }
@@ -89,6 +97,29 @@ body {
 button, a {
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
+}
+
+/* Prevent text selection on button taps (iOS) */
+button {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* Allow text selection in content areas */
+p, span, div, li, td, th, label {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* Prevent horizontal scroll from fraction inputs or long equations */
+body {
+  overflow-x: hidden;
+}
+
+/* Smooth scrolling with momentum on iOS */
+* {
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Animated gradient background for hero sections */

@@ -389,14 +389,14 @@ export default function LearnPage() {
           </Section>
 
           {/* Atomic Structure */}
-          <Section id="atomic" icon={Atom} title="Atomic Structure" color="#818cf8">
+          <Section id="atomic" icon={Atom} title="Atomic Structure" color="#a78bfa">
             <div className="overflow-hidden rounded-2xl border border-border">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-border bg-bg-elevated">
-                    <th className="px-4 py-3 text-left font-semibold">Particle</th>
-                    <th className="px-4 py-3 text-left font-semibold">Charge</th>
-                    <th className="px-4 py-3 text-left font-semibold">Mass</th>
+                    <th className="px-3 py-2.5 text-left font-semibold sm:px-4 sm:py-3">Particle</th>
+                    <th className="px-3 py-2.5 text-left font-semibold sm:px-4 sm:py-3">Charge</th>
+                    <th className="px-3 py-2.5 text-left font-semibold sm:px-4 sm:py-3">Mass</th>
                     <th className="hidden px-4 py-3 text-left font-semibold sm:table-cell">
                       Location
                     </th>
@@ -405,9 +405,9 @@ export default function LearnPage() {
                 <tbody>
                   {ATOMIC_PARTICLES.map((p, i) => (
                     <tr key={i} className="border-b border-border-subtle last:border-0">
-                      <td className="px-4 py-3 font-semibold">{p.particle}</td>
-                      <td className="px-4 py-3 font-mono">{p.charge}</td>
-                      <td className="px-4 py-3 font-mono text-text-secondary">{p.mass}</td>
+                      <td className="px-3 py-2.5 font-semibold sm:px-4 sm:py-3">{p.particle}</td>
+                      <td className="px-3 py-2.5 font-mono sm:px-4 sm:py-3">{p.charge}</td>
+                      <td className="px-3 py-2.5 font-mono text-text-secondary sm:px-4 sm:py-3">{p.mass}</td>
                       <td className="hidden px-4 py-3 text-text-secondary sm:table-cell">
                         {p.location}
                       </td>

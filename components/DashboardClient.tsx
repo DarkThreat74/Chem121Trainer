@@ -105,7 +105,7 @@ export default function DashboardClient({
       </motion.div>
 
       {/* Stats grid */}
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-3 gap-2 sm:gap-3">
         <StatCard
           icon={Flame}
           label="Streak"
@@ -240,17 +240,17 @@ export default function DashboardClient({
               >
                 <Link
                   href={`/practice/${topic.id}`}
-                  className="group flex items-center gap-4 rounded-2xl border border-border bg-bg-card p-4 transition-all duration-200 hover:border-border-strong hover:bg-bg-hover"
+                  className="group flex items-center gap-3 rounded-2xl border border-border bg-bg-card p-3.5 transition-all duration-200 hover:border-border-strong hover:bg-bg-hover sm:gap-4 sm:p-4"
                 >
                   {/* Icon */}
                   <div
-                    className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl transition-transform group-hover:scale-110"
+                    className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl transition-transform group-hover:scale-110 sm:h-12 sm:w-12"
                     style={{
                       backgroundColor: `${topic.color}15`,
                     }}
                   >
                     <Icon
-                      className="h-5 w-5"
+                      className="h-4 w-4 sm:h-5 sm:w-5"
                       style={{ color: topic.color }}
                     />
                   </div>
@@ -326,19 +326,19 @@ function StatCard({
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay, duration: 0.4 }}
-      className="rounded-2xl border border-border bg-bg-card p-4 transition hover:border-border-strong"
+      className="rounded-2xl border border-border bg-bg-card p-3 transition hover:border-border-strong sm:p-4"
     >
       <div className="flex items-center gap-2 text-text-secondary">
         <div
-          className={`flex h-8 w-8 items-center justify-center rounded-lg ${pulse ? "pulse-ring" : ""}`}
+          className={`flex h-7 w-7 items-center justify-center rounded-lg sm:h-8 sm:w-8 ${pulse ? "pulse-ring" : ""}`}
           style={{ backgroundColor: `${color}10` }}
         >
-          <Icon className="h-4 w-4" style={{ color }} />
+          <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4" style={{ color }} />
         </div>
       </div>
-      <p className="mt-2 text-2xl font-bold tracking-tight">
+      <p className="mt-2 text-xl font-bold tracking-tight sm:text-2xl">
         {value}
-        <span className="ml-1 text-sm font-normal text-text-tertiary">
+        <span className="ml-1 text-xs font-normal text-text-tertiary sm:text-sm">
           {unit}
         </span>
       </p>

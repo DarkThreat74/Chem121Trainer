@@ -157,22 +157,22 @@ export default function ReviewSession({
     const avgTime = totalTime / questions.length;
 
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center px-4 text-center safe-top safe-bottom">
+      <div className="flex min-h-screen flex-col items-center justify-center px-4 py-8 text-center safe-top safe-bottom">
         {showConfetti && <Confetti />}
         <motion.div
           initial={{ scale: 0, rotate: -180 }}
           animate={{ scale: 1, rotate: 0 }}
           transition={{ type: "spring", stiffness: 200, damping: 15 }}
-          className="flex h-24 w-24 items-center justify-center rounded-3xl bg-gradient-to-br from-accent/20 to-purple-500/20 glow-accent"
+          className="flex h-20 w-20 items-center justify-center rounded-3xl bg-gradient-to-br from-accent/20 to-purple-500/20 glow-accent sm:h-24 sm:w-24"
         >
-          <Trophy className="h-12 w-12 text-accent" />
+          <Trophy className="h-10 w-10 text-accent sm:h-12 sm:w-12" />
         </motion.div>
 
         <motion.h2
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="mt-6 text-3xl font-bold tracking-tight"
+          className="mt-5 text-2xl font-bold tracking-tight sm:mt-6 sm:text-3xl"
         >
           Session Complete
         </motion.h2>
@@ -180,7 +180,7 @@ export default function ReviewSession({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
-          className="mt-2 text-text-secondary"
+          className="mt-2 text-sm text-text-secondary sm:text-base"
         >
           You reviewed {questions.length} cards
         </motion.p>
@@ -190,28 +190,28 @@ export default function ReviewSession({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="mt-8 grid w-full max-w-md grid-cols-2 gap-3"
+          className="mt-6 grid w-full max-w-md grid-cols-2 gap-2.5 sm:mt-8 sm:gap-3"
         >
-          <div className="rounded-2xl border border-ok/20 bg-ok/5 p-4">
+          <div className="rounded-2xl border border-ok/20 bg-ok/5 p-3 sm:p-4">
             <Check className="mx-auto h-5 w-5 text-ok" />
-            <p className="mt-2 text-3xl font-bold text-ok">{correctCount}</p>
+            <p className="mt-2 text-2xl font-bold text-ok sm:text-3xl">{correctCount}</p>
             <p className="text-xs text-text-tertiary">Correct</p>
           </div>
-          <div className="rounded-2xl border border-err/20 bg-err/5 p-4">
+          <div className="rounded-2xl border border-err/20 bg-err/5 p-3 sm:p-4">
             <X className="mx-auto h-5 w-5 text-err" />
-            <p className="mt-2 text-3xl font-bold text-err">
+            <p className="mt-2 text-2xl font-bold text-err sm:text-3xl">
               {questions.length - correctCount}
             </p>
             <p className="text-xs text-text-tertiary">Missed</p>
           </div>
-          <div className="rounded-2xl border border-accent/20 bg-accent/5 p-4">
+          <div className="rounded-2xl border border-accent/20 bg-accent/5 p-3 sm:p-4">
             <Zap className="mx-auto h-5 w-5 text-accent" />
-            <p className="mt-2 text-3xl font-bold text-accent">{pct}%</p>
+            <p className="mt-2 text-2xl font-bold text-accent sm:text-3xl">{pct}%</p>
             <p className="text-xs text-text-tertiary">Accuracy</p>
           </div>
-          <div className="rounded-2xl border border-warn/20 bg-warn/5 p-4">
+          <div className="rounded-2xl border border-warn/20 bg-warn/5 p-3 sm:p-4">
             <Flame className="mx-auto h-5 w-5 text-warn" />
-            <p className="mt-2 text-3xl font-bold text-warn">{bestStreak}</p>
+            <p className="mt-2 text-2xl font-bold text-warn sm:text-3xl">{bestStreak}</p>
             <p className="text-xs text-text-tertiary">Best streak</p>
           </div>
         </motion.div>
@@ -220,7 +220,7 @@ export default function ReviewSession({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
-          className="mt-4 flex items-center gap-2 text-sm text-text-tertiary"
+          className="mt-4 flex items-center gap-2 text-xs text-text-tertiary sm:text-sm"
         >
           <Clock className="h-4 w-4" />
           <span>
@@ -232,17 +232,17 @@ export default function ReviewSession({
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
-          className="mt-8 flex flex-col gap-3 sm:flex-row"
+          className="mt-6 flex w-full max-w-md flex-col gap-3 sm:mt-8 sm:w-auto sm:flex-row"
         >
           <a
             href="/dashboard"
-            className="rounded-xl bg-gradient-to-r from-accent-hover to-accent px-8 py-3.5 font-semibold text-white transition hover:opacity-90 glow-accent"
+            className="rounded-xl bg-gradient-to-r from-accent-hover to-accent px-6 py-3.5 font-semibold text-white transition hover:opacity-90 glow-accent sm:px-8"
           >
             Back to dashboard
           </a>
           <a
             href={window.location.pathname}
-            className="flex items-center justify-center gap-2 rounded-xl border border-border bg-bg-card px-8 py-3.5 font-semibold text-text transition hover:bg-bg-hover"
+            className="flex items-center justify-center gap-2 rounded-xl border border-border bg-bg-card px-6 py-3.5 font-semibold text-text transition hover:bg-bg-hover sm:px-8"
           >
             <RotateCcw className="h-4 w-4" />
             Practice again
@@ -263,9 +263,9 @@ export default function ReviewSession({
   return (
     <div className="min-h-screen safe-top safe-bottom">
       {/* Progress header */}
-      <div className="sticky top-0 z-10 border-b border-border-subtle bg-bg/80 backdrop-blur-xl">
-        <div className="mx-auto max-w-2xl px-4 py-3">
-          <div className="mb-2.5 flex items-center justify-between">
+      <div className="sticky top-0 z-10 border-b border-border-subtle bg-bg/80 backdrop-blur-xl safe-top">
+        <div className="mx-auto max-w-2xl px-4 py-2.5 sm:py-3">
+          <div className="mb-2 flex items-center justify-between sm:mb-2.5">
             <button
               onClick={() => router.push("/dashboard")}
               className="flex items-center gap-1 text-sm text-text-tertiary transition hover:text-text"
@@ -273,7 +273,7 @@ export default function ReviewSession({
               <XCircle className="h-4 w-4" />
               Exit
             </button>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
               {/* Session streak */}
               {sessionStreak >= 2 && (
                 <motion.div
@@ -308,7 +308,7 @@ export default function ReviewSession({
       </div>
 
       {/* Question card */}
-      <div className="mx-auto max-w-2xl px-4 py-6">
+      <div className="mx-auto max-w-2xl px-4 py-4 sm:py-6">
         <AnimatePresence mode="wait">
           <motion.div
             key={question.id}

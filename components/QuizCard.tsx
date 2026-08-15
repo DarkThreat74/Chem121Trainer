@@ -90,21 +90,21 @@ export default function QuizCard({ question, onAnswer, disabled }: QuizCardProps
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-      className="rounded-3xl border border-border bg-bg-card p-6"
+      className="rounded-3xl border border-border bg-bg-card p-4 sm:p-6"
     >
       {/* Topic tag + difficulty */}
-      <div className="mb-4 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <span className="rounded-lg bg-bg-input px-2.5 py-1 text-xs font-medium capitalize text-text-secondary">
+      <div className="mb-4 flex items-center justify-between gap-2">
+        <div className="flex min-w-0 items-center gap-2">
+          <span className="flex-shrink-0 rounded-lg bg-bg-input px-2.5 py-1 text-xs font-medium capitalize text-text-secondary">
             {question.topic.replace(/-/g, " ")}
           </span>
-          <span className="text-text-tertiary">·</span>
-          <span className="text-xs capitalize text-text-tertiary">
+          <span className="flex-shrink-0 text-text-tertiary">·</span>
+          <span className="truncate text-xs capitalize text-text-tertiary">
             {question.subtopic.replace(/-/g, " ")}
           </span>
         </div>
         <div
-          className="flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold"
+          className="flex flex-shrink-0 items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold"
           style={{ backgroundColor: `${diffInfo.color}15`, color: diffInfo.color }}
         >
           <Zap className="h-3 w-3" />
@@ -113,12 +113,12 @@ export default function QuizCard({ question, onAnswer, disabled }: QuizCardProps
       </div>
 
       {/* Question */}
-      <p className="text-xl font-semibold leading-snug tracking-tight">
+      <p className="text-lg font-semibold leading-snug tracking-tight sm:text-xl">
         {content.prompt}
       </p>
 
       {/* Answer area */}
-      <div className="mt-6">
+      <div className="mt-5 sm:mt-6">
         {content.answer_type === "multiple-choice" && content.choices && (
           <div className="space-y-2.5">
             {content.choices.map((choice, i) => {
@@ -143,7 +143,7 @@ export default function QuizCard({ question, onAnswer, disabled }: QuizCardProps
                       : {}
                   }
                   transition={{ duration: 0.4 }}
-                  className={`group flex w-full items-center gap-3 rounded-xl border px-4 py-3.5 text-left transition-all duration-200 ${
+                  className={`group flex w-full items-center gap-3 rounded-xl border px-3.5 py-3.5 text-left transition-all duration-200 sm:px-4 ${
                     isCorrectChoice
                       ? "border-ok/40 bg-ok/10"
                       : isWrongChoice
