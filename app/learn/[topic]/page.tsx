@@ -18,6 +18,7 @@ import {
   Volume2,
   Square,
   Settings as SettingsIcon,
+  Clock,
 } from "lucide-react";
 import { LEARN_CONTENT, type Diagram } from "@/lib/learn-content";
 import { TOPICS } from "@/lib/types";
@@ -426,6 +427,40 @@ export default function TopicLearnPage({
   const [shuffled, setShuffled] = useState(content?.vocabulary || []);
   const [revealedSteps, setRevealedSteps] = useState<number[]>([]);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  // Estimate reading time: ~200 words per minute for dense educational content
+  // Count words across all content sections
+  const estimatedTotalMinutes = (() => {
+    if (!content) return 5;
+    const allText = [
+      content.intro,
+      ...content.concepts.map((c) => `${c.title} ${c.body} ${c.example || ""} ${c.misconception || ""}`),
+      ...(content.formulas?.map((f) => `${f.name} ${f.desc} ${f.example || ""}`) || []),
+      ...content.workedExamples.map((e) => `${e.problem} ${e.steps.map((s) => s.detail).join(" ")} ${e.answer}`),
+      ...content.vocabulary.map((v) => `${v.term} ${v.def}`),
+    ].join(" ");
+    const wordCount = allText.split(/\s+/).filter(Boolean).length;
+    // 200 WPM reading speed, plus ~30% overhead for diagrams/interaction
+    return Math.max(2, Math.ceil((wordCount / 200) * 1.3));
+  })();
+
+  // Track scroll progress
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (docHeight > 0) {
+        setScrollProgress(Math.min(1, Math.max(0, scrollTop / docHeight)));
+      }
+    };
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const remainingMinutes = Math.max(0, Math.ceil(estimatedTotalMinutes * (1 - scrollProgress)));
+  const progressPct = Math.round(scrollProgress * 100);
 
   if (!content || !topicInfo) {
     return (
@@ -480,11 +515,22 @@ export default function TopicLearnPage({
               className="flex items-center gap-1.5 text-sm text-text-secondary transition hover:text-text"
             >
               <ArrowLeft className="h-4 w-4" />
-              Dashboard
+              <span className="hidden sm:inline">Dashboard</span>
             </Link>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
+              {/* Time remaining estimate */}
+              <div className="flex items-center gap-1 text-xs text-text-tertiary">
+                <Clock className="h-3.5 w-3.5" />
+                <span>
+                  {progressPct >= 100
+                    ? "Done"
+                    : remainingMinutes === 0
+                    ? "<1 min left"
+                    : `${remainingMinutes} min left`}
+                </span>
+              </div>
               <span className="text-xs font-bold text-text-tertiary">
-                STEP {topicInfo.order}
+                {progressPct}%
               </span>
               <button
                 onClick={() => setSettingsOpen(true)}
@@ -494,6 +540,15 @@ export default function TopicLearnPage({
                 <SettingsIcon className="h-4 w-4" />
               </button>
             </div>
+          </div>
+          {/* Progress bar */}
+          <div className="mt-2.5 h-1 w-full overflow-hidden rounded-full bg-bg-input">
+            <motion.div
+              className="h-full rounded-full"
+              style={{ backgroundColor: color }}
+              animate={{ width: `${progressPct}%` }}
+              transition={{ type: "spring", stiffness: 120, damping: 20 }}
+            />
           </div>
         </div>
       </div>
