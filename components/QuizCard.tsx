@@ -251,14 +251,15 @@ export default function QuizCard({ question, onAnswer, disabled }: QuizCardProps
         {/* Submit button */}
         {!disabled && (
           <motion.button
-            whileTap={{ scale: 0.98 }}
+            whileTap={{ scale: 0.97 }}
+            whileHover={{ scale: 1.01 }}
             onClick={handleSubmit}
             disabled={
               content.answer_type === "multiple-choice"
                 ? !selectedChoice
                 : !userAnswer.trim()
             }
-            className="mt-4 w-full rounded-xl bg-gradient-to-r from-accent-hover to-accent py-3.5 font-semibold text-white transition-all duration-200 hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-30"
+            className="mt-4 w-full rounded-xl bg-gradient-to-r from-accent-hover to-accent py-3.5 font-semibold text-white transition-all duration-200 hover:shadow-lg hover:shadow-accent/20 disabled:cursor-not-allowed disabled:opacity-30"
           >
             Check answer
           </motion.button>

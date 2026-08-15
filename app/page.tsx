@@ -101,7 +101,8 @@ export default function LandingPage() {
           className="mt-3 max-w-xl text-base text-text-secondary sm:mt-4 sm:text-lg"
         >
           Master introductory chemistry through interactive practice, guided
-          problem-solving, and science-backed spaced repetition.
+          problem-solving, and science-backed spaced repetition. Built for
+          Illinois CHEM 121 students.
         </motion.p>
 
         {/* CTAs */}
@@ -160,12 +161,16 @@ export default function LandingPage() {
           transition={{ delay: 0.8, duration: 0.6 }}
           className="mt-10 grid w-full gap-3 sm:mt-16 sm:grid-cols-3 sm:gap-4"
         >
-          {FEATURES.map((feature) => {
+          {FEATURES.map((feature, i) => {
             const Icon = feature.icon;
             return (
-              <div
+              <motion.div
                 key={feature.title}
-                className="rounded-2xl border border-border bg-bg-card/50 p-4 text-left backdrop-blur-sm transition hover:border-border-strong sm:p-5"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.9 + i * 0.1 }}
+                whileHover={{ y: -4, scale: 1.02 }}
+                className="rounded-2xl border border-border bg-bg-card/50 p-4 text-left backdrop-blur-sm transition hover:border-border-strong hover:shadow-lg sm:p-5"
               >
                 <div
                   className="flex h-9 w-9 items-center justify-center rounded-xl sm:h-10 sm:w-10"
@@ -175,7 +180,7 @@ export default function LandingPage() {
                 </div>
                 <h3 className="mt-2.5 text-sm font-semibold sm:mt-3 sm:text-base">{feature.title}</h3>
                 <p className="mt-1 text-xs text-text-secondary sm:text-sm">{feature.desc}</p>
-              </div>
+              </motion.div>
             );
           })}
         </motion.div>

@@ -506,7 +506,7 @@ export default function LearnPage() {
             <div>
               <h1 className="text-2xl font-bold tracking-tight">Study Guide</h1>
               <p className="text-sm text-text-secondary">
-                Key concepts, formulas, and vocabulary for Chem 121
+                Key concepts, formulas, and vocabulary for Illinois CHEM 121
               </p>
             </div>
           </div>

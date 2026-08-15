@@ -1,6 +1,6 @@
 # Chem 121 Trainer — Project Context
 
-Chem 121 Trainer is a mobile-first Next.js 14 web app for interactive chemistry practice, using FSRS spaced repetition.
+Chem 121 Trainer is a mobile-first Next.js 14 web app for interactive chemistry practice, using FSRS spaced repetition. Built for Illinois CHEM 121 students.
 
 ## Architecture
 

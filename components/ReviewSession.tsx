@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import QuizCard from "@/components/QuizCard";
 import SolverCard from "@/components/SolverCard";
+import Confetti from "@/components/Confetti";
 import {
   Check,
   X,
@@ -36,35 +37,6 @@ function formatTime(ms: number): string {
   return `${m}:${rem.toString().padStart(2, "0")}`;
 }
 
-function Confetti() {
-  const colors = ["#818cf8", "#34d399", "#fbbf24", "#f0abfc", "#fb923c", "#2dd4bf"];
-  const pieces = Array.from({ length: 40 }, (_, i) => ({
-    id: i,
-    left: Math.random() * 100,
-    delay: Math.random() * 0.5,
-    duration: 2 + Math.random() * 2,
-    color: colors[i % colors.length],
-    rotation: Math.random() * 360,
-  }));
-
-  return (
-    <div className="pointer-events-none fixed inset-0 z-50 overflow-hidden">
-      {pieces.map((p) => (
-        <div
-          key={p.id}
-          className="confetti-piece"
-          style={{
-            left: `${p.left}%`,
-            backgroundColor: p.color,
-            animationDelay: `${p.delay}s`,
-            animationDuration: `${p.duration}s`,
-          }}
-        />
-      ))}
-    </div>
-  );
-}
-
 export default function ReviewSession({
   questions,
   reviewStates,
@@ -78,7 +50,7 @@ export default function ReviewSession({
   const [sessionStreak, setSessionStreak] = useState(0);
   const [bestStreak, setBestStreak] = useState(0);
   const [totalTime, setTotalTime] = useState(0);
-  const [showConfetti, setShowConfetti] = useState(false);
+  const [confettiTrigger, setConfettiTrigger] = useState(0);
   const router = useRouter();
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -130,6 +102,10 @@ export default function ReviewSession({
         setSessionStreak((s) => {
           const newStreak = s + 1;
           setBestStreak((b) => Math.max(b, newStreak));
+          // Celebrate on 3-streak and every 5 after that
+          if (newStreak === 3 || (newStreak > 3 && newStreak % 5 === 0)) {
+            setConfettiTrigger((t) => t + 1);
+          }
           return newStreak;
         });
       } else {
@@ -163,8 +139,7 @@ export default function ReviewSession({
       // Show confetti if accuracy >= 80%
       const pct = Math.round((correctCount / questions.length) * 100);
       if (pct >= 80) {
-        setShowConfetti(true);
-        setTimeout(() => setShowConfetti(false), 5000);
+        setConfettiTrigger((t) => t + 1);
       }
     } else {
       setCurrentIndex(nextIndex);
@@ -180,7 +155,7 @@ export default function ReviewSession({
 
     return (
       <div className="flex min-h-screen flex-col items-center justify-center px-4 py-8 text-center safe-top safe-bottom">
-        {showConfetti && <Confetti />}
+        <Confetti trigger={confettiTrigger} />
         <motion.div
           initial={{ scale: 0, rotate: -180 }}
           animate={{ scale: 1, rotate: 0 }}
@@ -358,58 +333,99 @@ export default function ReviewSession({
         </AnimatePresence>
 
         {/* Feedback panel */}
-        <AnimatePresence>
+        <AnimatePresence mode="wait">
           {feedback && (
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="mt-4 space-y-4"
+              initial={{ opacity: 0, y: 20, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -10, scale: 0.98 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              className="mt-4 space-y-3"
             >
               <div
-                className={`rounded-2xl border p-5 ${
+                className={`relative overflow-hidden rounded-3xl border p-5 sm:p-6 ${
                   feedback.status === "correct"
-                    ? "border-ok/30 bg-ok/10"
-                    : "border-err/30 bg-err/10"
+                    ? "border-ok/30 bg-gradient-to-br from-ok/10 to-ok/5"
+                    : "border-err/30 bg-gradient-to-br from-err/10 to-err/5"
                 }`}
               >
-                <div className="flex items-center gap-3">
+                {/* Decorative glow */}
+                <div
+                  className={`pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full blur-2xl ${
+                    feedback.status === "correct" ? "bg-ok/20" : "bg-err/20"
+                  }`}
+                />
+
+                <div className="relative flex items-center gap-3">
                   <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ type: "spring", stiffness: 300, damping: 15 }}
-                    className={`flex h-9 w-9 items-center justify-center rounded-full ${
-                      feedback.status === "correct" ? "bg-ok/20" : "bg-err/20"
+                    initial={{ scale: 0, rotate: -180 }}
+                    animate={{ scale: 1, rotate: 0 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 12, delay: 0.1 }}
+                    className={`flex h-11 w-11 items-center justify-center rounded-2xl ${
+                      feedback.status === "correct"
+                        ? "bg-ok/20 ring-2 ring-ok/30"
+                        : "bg-err/20 ring-2 ring-err/30"
                     }`}
                   >
                     {feedback.status === "correct" ? (
-                      <Check className="h-5 w-5 text-ok" />
+                      <Check className="h-6 w-6 text-ok" strokeWidth={3} />
                     ) : (
-                      <X className="h-5 w-5 text-err" />
+                      <X className="h-6 w-6 text-err" strokeWidth={3} />
                     )}
                   </motion.div>
-                  <span
-                    className={`text-lg font-bold ${
-                      feedback.status === "correct" ? "text-ok" : "text-err"
-                    }`}
-                  >
-                    {feedback.status === "correct" ? "Correct!" : "Not quite"}
-                  </span>
+                  <div>
+                    <motion.span
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.2 }}
+                      className={`block text-xl font-bold ${
+                        feedback.status === "correct" ? "text-ok" : "text-err"
+                      }`}
+                    >
+                      {feedback.status === "correct" ? "Correct!" : "Not quite"}
+                    </motion.span>
+                    {feedback.status === "correct" && sessionStreak >= 2 && (
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.3 }}
+                        className="mt-0.5 flex items-center gap-1 text-xs font-medium text-warn"
+                      >
+                        <Flame className="h-3 w-3" />
+                        {sessionStreak} streak!
+                      </motion.div>
+                    )}
+                  </div>
                 </div>
-                <p className="mt-3 text-sm leading-relaxed text-text-secondary">
+
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.25 }}
+                  className="relative mt-4 text-sm leading-relaxed text-text-secondary"
+                >
                   {feedback.explanation}
-                </p>
+                </motion.p>
               </div>
 
               <motion.button
-                whileTap={{ scale: 0.98 }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                whileTap={{ scale: 0.97 }}
+                whileHover={{ scale: 1.01 }}
                 onClick={handleNext}
-                className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-accent-hover to-accent py-4 font-semibold text-white transition-all duration-200 hover:opacity-90 glow-accent"
+                className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-accent-hover to-accent py-4 font-semibold text-white transition-all duration-200 hover:shadow-lg hover:shadow-accent/20"
               >
                 {currentIndex + 1 >= questions.length
                   ? "Finish session"
                   : "Next question"}
-                <ArrowRight className="h-4 w-4" />
+                <motion.div
+                  animate={{ x: [0, 3, 0] }}
+                  transition={{ repeat: Infinity, duration: 1.5 }}
+                >
+                  <ArrowRight className="h-4 w-4" />
+                </motion.div>
               </motion.button>
             </motion.div>
           )}

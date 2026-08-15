@@ -77,10 +77,18 @@ export default function DashboardClient({
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="relative overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-bg-card to-bg-elevated p-5"
+        className="relative overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-bg-card to-bg-elevated p-5 sm:p-6"
       >
-        <div className="absolute -right-12 -top-12 h-40 w-40 rounded-full bg-accent/5 blur-3xl" />
-        <div className="absolute -left-8 -bottom-8 h-32 w-32 rounded-full bg-purple-500/5 blur-2xl" />
+        <motion.div
+          animate={{ opacity: [0.3, 0.6, 0.3] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute -right-12 -top-12 h-40 w-40 rounded-full bg-accent/10 blur-3xl"
+        />
+        <motion.div
+          animate={{ opacity: [0.2, 0.4, 0.2] }}
+          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+          className="absolute -left-8 -bottom-8 h-32 w-32 rounded-full bg-purple-500/10 blur-2xl"
+        />
         <div className="relative">
           <div className="flex items-center gap-2 text-text-secondary">
             <Sparkles className="h-4 w-4 text-accent" />
