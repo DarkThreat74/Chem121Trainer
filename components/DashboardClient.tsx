@@ -22,7 +22,6 @@ import {
   CheckCircle2,
   PlayCircle,
   Settings as SettingsIcon,
-  CheckCheck,
   type LucideIcon,
 } from "lucide-react";
 // ChevronRight is imported but may be unused — keep for potential future use
@@ -392,15 +391,14 @@ export default function DashboardClient({
                       </Link>
                     </div>
 
-                    {/* Mark as completed button (only for unlocked, incomplete topics with some progress) */}
+                    {/* Mark as completed (small fallback link) */}
                     {isCurrent && mastery.seen > 0 && (
                       <button
                         onClick={() => handleMarkComplete(topic.id)}
                         disabled={markingTopic === topic.id}
-                        className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-lg py-1.5 text-xs font-medium text-text-tertiary transition hover:text-ok disabled:opacity-50"
+                        className="mt-1.5 text-[10px] text-text-tertiary/60 underline-offset-2 transition hover:text-text-tertiary hover:underline disabled:opacity-40"
                       >
-                        <CheckCheck className="h-3 w-3" />
-                        {markingTopic === topic.id ? "Marking..." : "Mark as completed"}
+                        {markingTopic === topic.id ? "marking…" : "mark done"}
                       </button>
                     )}
                   </div>
