@@ -445,19 +445,46 @@ export default function TopicLearnPage({
     return Math.max(2, Math.ceil((wordCount / 200) * 1.3));
   })();
 
-  // Track scroll progress
+  // Track scroll progress + save/restore scroll position for resuming reading
+  const scrollSaveKey = `chem121-scroll-${topicId}`;
+
   useEffect(() => {
+    // Restore saved scroll position on mount
+    const saved = localStorage.getItem(scrollSaveKey);
+    if (saved) {
+      const pos = parseInt(saved, 10);
+      if (!isNaN(pos) && pos > 0) {
+        // Wait for content to render before scrolling
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            window.scrollTo({ top: pos, behavior: "instant" });
+          });
+        });
+      }
+    }
+
+    let saveTimer: ReturnType<typeof setTimeout> | null = null;
     const handleScroll = () => {
       const scrollTop = window.scrollY;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       if (docHeight > 0) {
         setScrollProgress(Math.min(1, Math.max(0, scrollTop / docHeight)));
       }
+      // Debounce saving scroll position to localStorage
+      if (saveTimer) clearTimeout(saveTimer);
+      saveTimer = setTimeout(() => {
+        localStorage.setItem(scrollSaveKey, String(window.scrollY));
+      }, 500);
     };
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (saveTimer) clearTimeout(saveTimer);
+      // Save final position on unmount
+      localStorage.setItem(scrollSaveKey, String(window.scrollY));
+    };
+  }, [scrollSaveKey]);
 
   const remainingMinutes = Math.max(0, Math.ceil(estimatedTotalMinutes * (1 - scrollProgress)));
   const progressPct = Math.round(scrollProgress * 100);

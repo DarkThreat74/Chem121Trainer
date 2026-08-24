@@ -16,9 +16,20 @@ import {
   Clock,
   Zap,
   RotateCcw,
+  CheckCircle2,
 } from "lucide-react";
 import type { Question } from "@/lib/types";
 import { queueReview } from "@/lib/offline-sync";
+
+// Fisher-Yates shuffle — unbiased, unlike sort(() => Math.random() - 0.5)
+function fisherYatesShuffle<T>(arr: T[]): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
 
 interface ReviewSessionProps {
   questions: Question[];
@@ -65,6 +76,12 @@ export default function ReviewSession({
 
   const question = questions[questionQueue[currentIndex] ?? currentIndex];
 
+  // Count how many questions were already seen in previous sessions (reps > 0)
+  const previouslyCompleted = questions.filter((q) => {
+    const rs = reviewStates[q.id];
+    return rs && rs.reps > 0;
+  }).length;
+
   // Guard against empty questions array
   if (questions.length === 0) {
     return (
@@ -85,8 +102,20 @@ export default function ReviewSession({
     const now = Date.now();
     setStartTime(now);
     setCurrentTime(now);
-    // Initialize question queue (shuffled indices)
-    setQuestionQueue(Array.from({ length: questions.length }, (_, i) => i).sort(() => Math.random() - 0.5));
+    // Build question queue: unseen questions first (shuffled), then seen ones (shuffled).
+    // This ensures the user always makes progress on NEW questions instead of
+    // repeating ones they already answered in previous sessions.
+    const indices = Array.from({ length: questions.length }, (_, i) => i);
+    const unseenIndices = indices.filter((i) => {
+      const rs = reviewStates[questions[i].id];
+      return !rs || rs.reps === 0;
+    });
+    const seenIndices = indices.filter((i) => {
+      const rs = reviewStates[questions[i].id];
+      return rs && rs.reps > 0;
+    });
+    const queue = [...fisherYatesShuffle(unseenIndices), ...fisherYatesShuffle(seenIndices)];
+    setQuestionQueue(queue);
     // Capture current path for "practice again" link (avoid SSR hydration mismatch)
     if (typeof window !== "undefined") {
       setCurrentPath(window.location.pathname);
@@ -412,6 +441,13 @@ export default function ReviewSession({
               </span>
             </div>
           </div>
+          {/* Previously completed count (practice mode only) */}
+          {!autoAdvance && previouslyCompleted > 0 && (
+            <div className="mb-1.5 flex items-center gap-1.5 text-xs text-text-tertiary">
+              <CheckCircle2 className="h-3 w-3 text-ok" />
+              <span>{previouslyCompleted} completed in previous sessions · {questions.length - previouslyCompleted} new</span>
+            </div>
+          )}
           {/* Mastery streak indicator: 6 in a row (only in practice/quiz mode) */}
           {!autoAdvance && (
             <div className="mt-2 flex items-center gap-2">
