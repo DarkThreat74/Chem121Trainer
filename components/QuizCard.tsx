@@ -34,7 +34,11 @@ export default function QuizCard({ question, onAnswer, disabled }: QuizCardProps
       isCorrect = answer === String(content.correct_answer);
     } else if (content.answer_type === "numeric") {
       const parsed = parseFloat(userAnswer);
-      isCorrect = !isNaN(parsed) && parsed === Number(content.correct_answer);
+      const expected = Number(content.correct_answer);
+      // Use tolerance-based comparison to handle floating-point precision
+      // and equivalent representations (e.g. 2.7 vs 2.70, 0.375 vs .375)
+      const tolerance = Math.max(Math.abs(expected) * 0.001, 1e-9);
+      isCorrect = !isNaN(parsed) && Math.abs(parsed - expected) <= tolerance;
       answer = userAnswer;
     } else {
       answer = userAnswer.trim().toLowerCase();

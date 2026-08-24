@@ -57,6 +57,7 @@ export default function ReviewSession({
   const [currentPath, setCurrentPath] = useState("");
   const masteryRef = useRef(0); // consecutive correct for "6 in a row" completion
   const correctQuestionsRef = useRef<Set<string>>(new Set()); // question IDs answered correctly
+  const attemptedQuestionsRef = useRef<Set<string>>(new Set()); // question IDs attempted (correct or incorrect)
   const MASTERY_THRESHOLD = 6;
   const router = useRouter();
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -140,6 +141,7 @@ export default function ReviewSession({
       if (feedback) return;
 
       setFeedback({ status: isCorrect ? "correct" : "incorrect", explanation });
+      attemptedQuestionsRef.current.add(question.id);
       if (isCorrect) {
         setCorrectCount((c) => c + 1);
         masteryRef.current += 1;
@@ -156,11 +158,13 @@ export default function ReviewSession({
       } else {
         masteryRef.current = 0;
         setSessionStreak(0);
-        // Move this question to the end of the queue so it comes back
+        // Append this question to the end of the queue so it comes back later.
+        // We do NOT remove it from its current position — removing would shift
+        // all subsequent indices down by 1, causing handleNext to skip a question.
         setQuestionQueue((prev) => {
           if (prev.length <= 1) return prev;
           const currentQIdx = prev[currentIndex];
-          return [...prev.filter((_, i) => i !== currentIndex), currentQIdx];
+          return [...prev, currentQIdx];
         });
       }
 
@@ -205,7 +209,11 @@ export default function ReviewSession({
     }
 
     // In practice/quiz mode: 6-in-a-row mastery system
-    if (masteryRef.current >= MASTERY_THRESHOLD) {
+    // Only end the session when ALL questions have been attempted at least once
+    // AND the user has hit the 6-in-a-row streak. This prevents the session from
+    // ending early before the student has seen every question.
+    const allAttempted = attemptedQuestionsRef.current.size >= questions.length;
+    if (masteryRef.current >= MASTERY_THRESHOLD && allAttempted) {
       const allMastered = correctQuestionsRef.current.size >= questions.length;
       setSessionFinished(true);
       if (allMastered) {
@@ -216,8 +224,8 @@ export default function ReviewSession({
 
     const nextIndex = currentIndex + 1;
     if (nextIndex >= questionQueue.length) {
-      // Reached end of queue but haven't hit 6-in-a-row yet
-      // Reshuffle remaining unseen questions and continue
+      // Reached end of queue but haven't met completion criteria yet
+      // Reshuffle and continue (wrong answers were already recycled to end)
       setCurrentIndex(0);
       setFeedback(null);
       setStartTime(Date.now());
@@ -232,9 +240,11 @@ export default function ReviewSession({
 
   if (sessionFinished) {
     const allMastered = correctQuestionsRef.current.size >= questions.length;
+    const masteredCount = correctQuestionsRef.current.size;
+    const missedCount = questions.length - masteredCount;
     const pct = autoAdvance
       ? (questions.length > 0 ? Math.round((correctCount / questions.length) * 100) : 0)
-      : (questions.length > 0 ? Math.round((correctQuestionsRef.current.size / questions.length) * 100) : 0);
+      : (questions.length > 0 ? Math.round((masteredCount / questions.length) * 100) : 0);
     const avgTime = questions.length > 0 ? totalTime / questions.length : 0;
 
     return (
@@ -279,13 +289,15 @@ export default function ReviewSession({
         >
           <div className="rounded-2xl border border-ok/20 bg-ok/5 p-3 sm:p-4">
             <Check className="mx-auto h-5 w-5 text-ok" />
-            <p className="mt-2 text-2xl font-bold text-ok sm:text-3xl">{correctCount}</p>
+            <p className="mt-2 text-2xl font-bold text-ok sm:text-3xl">
+              {autoAdvance ? correctCount : masteredCount}
+            </p>
             <p className="text-xs text-text-tertiary">Correct</p>
           </div>
           <div className="rounded-2xl border border-err/20 bg-err/5 p-3 sm:p-4">
             <X className="mx-auto h-5 w-5 text-err" />
             <p className="mt-2 text-2xl font-bold text-err sm:text-3xl">
-              {questions.length - correctCount}
+              {autoAdvance ? questions.length - correctCount : missedCount}
             </p>
             <p className="text-xs text-text-tertiary">Missed</p>
           </div>
@@ -407,7 +419,10 @@ export default function ReviewSession({
           <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-bg-input">
             <motion.div
               animate={{
-                width: `${((currentIndex + (feedback ? 1 : 0)) / questions.length) * 100}%`,
+                width: `${Math.min(100, (autoAdvance
+                  ? (currentIndex + (feedback ? 1 : 0)) / (questionQueue.length || questions.length)
+                  : correctQuestionsRef.current.size / questions.length
+                ) * 100)}%`,
               }}
               transition={{ duration: 0.3 }}
               className="h-full rounded-full bg-gradient-to-r from-accent to-purple-400"
@@ -531,7 +546,7 @@ export default function ReviewSession({
               >
                 {autoAdvance && autoAdvanceCountdown > 0 ? (
                   <>
-                    {currentIndex + 1 >= questions.length
+                    {currentIndex + 1 >= questionQueue.length
                       ? "Finishing"
                       : "Continuing"}
                     {" in "}
@@ -545,7 +560,7 @@ export default function ReviewSession({
                   </>
                 ) : (
                   <>
-                    {currentIndex + 1 >= questions.length
+                    {currentIndex + 1 >= questionQueue.length
                       ? "Finish session"
                       : "Next question"}
                     <motion.div

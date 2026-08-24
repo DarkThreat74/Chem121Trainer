@@ -56,9 +56,21 @@ export default async function PracticePage({
     let prevSeenCount = 0;
     let prevTotalCount = 0;
     try {
-      const prevQuestionIds = SAMPLE_QUESTIONS.filter(
-        (q) => q.topic === prevTopic.id
-      ).map((q) => q.id);
+      // Get previous topic's actual question IDs from the DB (not sample data)
+      // so the 50% unlock threshold is calculated against the real question set
+      const prevDbQuestions = await sql`
+        SELECT id FROM public.questions
+        WHERE topic = ${prevTopic.id}
+      ` as any[];
+      let prevQuestionIds: string[];
+      if (prevDbQuestions.length > 0) {
+        prevQuestionIds = prevDbQuestions.map((q) => q.id);
+      } else {
+        // Fallback to sample data if DB has no questions for this topic
+        prevQuestionIds = SAMPLE_QUESTIONS.filter(
+          (q) => q.topic === prevTopic.id
+        ).map((q) => q.id);
+      }
       prevTotalCount = prevQuestionIds.length;
       if (prevTotalCount > 0) {
         const seenResult = await sql`
