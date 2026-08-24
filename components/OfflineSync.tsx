@@ -1,15 +1,72 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { WifiOff, CloudUpload, CheckCircle2 } from "lucide-react";
-import { flushQueue, getQueueCount, isOnline } from "@/lib/offline-sync";
+import { WifiOff, CloudUpload, CheckCircle2, X } from "lucide-react";
+import { flushQueue, getQueueCount, isOnline, clearQueue } from "@/lib/offline-sync";
 
-type SyncStatus = "online" | "offline" | "syncing" | "synced";
+type SyncStatus = "online" | "offline" | "syncing" | "synced" | "stuck";
 
 export default function OfflineSync() {
   const [status, setStatus] = useState<SyncStatus>("online");
   const [pendingCount, setPendingCount] = useState(0);
+  const flushingRef = useRef(false);
+  const flushAttempts = useRef(0);
+
+  const doFlush = useCallback(async () => {
+    // Prevent concurrent flush calls — Background Sync and online events
+    // can fire multiple times simultaneously
+    if (flushingRef.current) return;
+    flushingRef.current = true;
+    flushAttempts.current += 1;
+
+    setStatus("syncing");
+    const timeout = setTimeout(() => {
+      flushingRef.current = false;
+      // If we've tried multiple times and still have items, show "stuck" state
+      getQueueCount().then((count) => {
+        if (count > 0 && flushAttempts.current >= 3) {
+          setStatus("stuck");
+        } else {
+          setStatus("online");
+        }
+      });
+    }, 15000);
+
+    try {
+      const flushed = await flushQueue();
+      const remaining = await getQueueCount();
+      setPendingCount(remaining);
+
+      if (remaining === 0) {
+        flushAttempts.current = 0;
+        if (flushed > 0) {
+          setStatus("synced");
+          setTimeout(() => setStatus("online"), 3000);
+        } else {
+          setStatus("online");
+        }
+      } else if (flushed > 0) {
+        // Partial flush — some succeeded, some remain. Try again.
+        setStatus("synced");
+        setTimeout(() => {
+          flushingRef.current = false;
+          doFlush();
+        }, 2000);
+      } else {
+        // Nothing flushed — items are failing. Show stuck state after retries.
+        if (flushAttempts.current >= 3) {
+          setStatus("stuck");
+        } else {
+          setStatus("online");
+        }
+      }
+    } catch {
+      setStatus("online");
+    }
+    clearTimeout(timeout);
+    flushingRef.current = false;
+  }, []);
 
   // Check pending count and online status on mount
   useEffect(() => {
@@ -19,37 +76,16 @@ export default function OfflineSync() {
       if (!isOnline()) {
         setStatus("offline");
       } else if (count > 0) {
-        // If we're online and have pending items, flush immediately
         doFlush();
       }
     };
     check();
-  }, []);
-
-  const doFlush = useCallback(async () => {
-    setStatus("syncing");
-    // Safety timeout: never let the syncing state hang forever
-    const timeout = setTimeout(() => setStatus("online"), 15000);
-    try {
-      const flushed = await flushQueue();
-      const remaining = await getQueueCount();
-      setPendingCount(remaining);
-      if (flushed > 0) {
-        setStatus("synced");
-        // Hide the "synced" message after 3 seconds
-        setTimeout(() => setStatus("online"), 3000);
-      } else {
-        setStatus("online");
-      }
-    } catch {
-      setStatus("online");
-    }
-    clearTimeout(timeout);
-  }, []);
+  }, [doFlush]);
 
   // Listen for online/offline events
   useEffect(() => {
     const handleOnline = () => {
+      flushAttempts.current = 0;
       doFlush();
     };
     const handleOffline = () => {
@@ -77,7 +113,14 @@ export default function OfflineSync() {
     return () => navigator.serviceWorker.removeEventListener("message", handleMessage);
   }, [doFlush]);
 
-  // Don't render anything when online with no pending items and not syncing
+  const handleClearQueue = async () => {
+    await clearQueue();
+    setPendingCount(0);
+    flushAttempts.current = 0;
+    setStatus("online");
+  };
+
+  // Don't render anything when online with no pending items
   if (status === "online") return null;
 
   return (
@@ -95,6 +138,8 @@ export default function OfflineSync() {
               ? "border-warn/30 bg-warn/10 text-warn"
               : status === "syncing"
               ? "border-accent/30 bg-accent/10 text-accent"
+              : status === "stuck"
+              ? "border-err/30 bg-err/10 text-err"
               : "border-ok/30 bg-ok/10 text-ok"
           }`}
         >
@@ -102,7 +147,7 @@ export default function OfflineSync() {
             <>
               <WifiOff className="h-4 w-4 flex-shrink-0" />
               <span className="text-sm font-medium">
-                Offline{pendingCount > 0 ? ` — ${pendingCount} answer${pendingCount > 1 ? "s" : ""} queued` : " — progress will sync when reconnected"}
+                Offline{pendingCount > 0 ? ` — ${pendingCount} queued` : " — progress will sync when reconnected"}
               </span>
             </>
           )}
@@ -123,6 +168,20 @@ export default function OfflineSync() {
             <>
               <CheckCircle2 className="h-4 w-4 flex-shrink-0" />
               <span className="text-sm font-medium">Progress synced!</span>
+            </>
+          )}
+          {status === "stuck" && (
+            <>
+              <span className="text-sm font-medium">
+                {pendingCount} save{pendingCount > 1 ? "s" : ""} failed — progress already saved to DB
+              </span>
+              <button
+                onClick={handleClearQueue}
+                className="flex items-center gap-1 rounded-lg bg-err/20 px-2 py-1 text-xs font-medium transition hover:bg-err/30"
+              >
+                <X className="h-3 w-3" />
+                Clear
+              </button>
             </>
           )}
         </div>

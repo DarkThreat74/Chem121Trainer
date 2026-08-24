@@ -11,7 +11,7 @@
  * - Background Sync is registered so the SW can trigger a flush when back online
  */
 
-const CACHE_NAME = "chem121-v2";
+const CACHE_NAME = "chem121-v3";
 
 // All 8 topic IDs — used to pre-cache practice and learn pages
 const TOPIC_IDS = [

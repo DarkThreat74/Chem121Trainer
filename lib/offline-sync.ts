@@ -88,15 +88,16 @@ export async function getQueueCount(): Promise<number> {
 }
 
 /** Attempt to flush all queued reviews to the server. Returns the number successfully sent. */
+let flushing = false;
 export async function flushQueue(): Promise<number> {
-  let flushed = 0;
+  // Prevent concurrent flushes — Background Sync can fire multiple times
+  // and the online event can overlap with SW messages
+  if (flushing) return 0;
+  flushing = true;
 
-  // Flush from IndexedDB
-  // IMPORTANT: IndexedDB transactions auto-commit when control returns to the
-  // event loop (e.g. during `await fetch`). So we must read all items in one
-  // transaction, close it, do the network requests, then delete successful
-  // items in a separate transaction. Keeping a single transaction open across
-  // async fetch calls causes it to die and the oncomplete promise to hang.
+  let flushed = 0;
+  const idsToDelete: number[] = [];
+
   try {
     const db = await openDB();
 
@@ -110,10 +111,12 @@ export async function flushQueue(): Promise<number> {
     });
     db.close();
 
-    if (items.length === 0) return 0;
+    if (items.length === 0) {
+      flushing = false;
+      return 0;
+    }
 
     // Step 2: Send each item to the server (no transaction open during fetches)
-    const succeededIds: number[] = [];
     for (const item of items) {
       try {
         const res = await fetch("/api/review", {
@@ -122,21 +125,26 @@ export async function flushQueue(): Promise<number> {
           body: JSON.stringify(item.body),
         });
         if (res.ok) {
-          if (item.id) succeededIds.push(item.id);
+          if (item.id) idsToDelete.push(item.id);
           flushed++;
+        } else if (res.status >= 400 && res.status < 500) {
+          // 4xx = permanent failure (bad data, question not found, etc.)
+          // Delete from queue — retrying will never succeed
+          if (item.id) idsToDelete.push(item.id);
         }
+        // 5xx = server error — leave in queue, might succeed on retry
       } catch {
-        // Still offline — stop trying, leave remaining in queue
+        // Network error — still offline, stop trying
         break;
       }
     }
 
-    // Step 3: Delete successfully synced items (separate write transaction)
-    if (succeededIds.length > 0) {
+    // Step 3: Delete processed items (separate write transaction)
+    if (idsToDelete.length > 0) {
       const db2 = await openDB();
       const writeTx = db2.transaction(STORE_NAME, "readwrite");
       const writeStore = writeTx.objectStore(STORE_NAME);
-      for (const id of succeededIds) {
+      for (const id of idsToDelete) {
         writeStore.delete(id);
       }
       await new Promise<void>((resolve, reject) => {
@@ -147,6 +155,8 @@ export async function flushQueue(): Promise<number> {
     }
   } catch (e) {
     console.error("Failed to flush IndexedDB queue:", e);
+  } finally {
+    flushing = false;
   }
 
   // Flush from localStorage fallback
@@ -179,6 +189,25 @@ export async function flushQueue(): Promise<number> {
   }
 
   return flushed;
+}
+
+/** Clear all queued reviews (for stuck queues / debugging). */
+export async function clearQueue(): Promise<void> {
+  try {
+    const db = await openDB();
+    const tx = db.transaction(STORE_NAME, "readwrite");
+    tx.objectStore(STORE_NAME).clear();
+    await new Promise<void>((resolve, reject) => {
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+    db.close();
+  } catch (e) {
+    console.error("Failed to clear IndexedDB queue:", e);
+  }
+  try {
+    localStorage.removeItem("chem121-offline-queue");
+  } catch {}
 }
 
 /** Check if the browser is currently online. */
