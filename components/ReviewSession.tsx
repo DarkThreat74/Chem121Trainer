@@ -255,15 +255,17 @@ export default function ReviewSession({
       return;
     }
 
-    // In practice/quiz mode: 6-in-a-row mastery system
-    // Only end the session when ALL questions have been attempted at least once
-    // AND the user has hit the 6-in-a-row streak. This prevents the session from
-    // ending early before the student has seen every question.
+    // In practice/quiz mode: the session ends when ALL questions have been
+    // attempted at least once. The 6-in-a-row streak is a mastery bonus that
+    // triggers confetti — it does NOT gate session completion. This prevents
+    // an infinite loop where the user has seen everything but can't get 6
+    // in a row because of one tricky question.
     const allAttempted = attemptedQuestionsRef.current.size >= questions.length;
-    if (masteryRef.current >= MASTERY_THRESHOLD && allAttempted) {
+    if (allAttempted) {
       const allMastered = correctQuestionsRef.current.size >= questions.length;
+      const hitStreak = masteryRef.current >= MASTERY_THRESHOLD;
       setSessionFinished(true);
-      if (allMastered) {
+      if (allMastered || hitStreak) {
         setConfettiTrigger((t) => t + 1);
       }
       return;
@@ -271,8 +273,8 @@ export default function ReviewSession({
 
     const nextIndex = currentIndex + 1;
     if (nextIndex >= questionQueue.length) {
-      // Reached end of queue but haven't met completion criteria yet
-      // Reshuffle and continue (wrong answers were already recycled to end)
+      // Reached end of queue but haven't attempted all unique questions yet
+      // (wrong answers were recycled, extending the queue). Continue from start.
       setCurrentIndex(0);
       setFeedback(null);
       setStartTime(Date.now());
@@ -289,6 +291,7 @@ export default function ReviewSession({
     const allMastered = correctQuestionsRef.current.size >= questions.length;
     const masteredCount = correctQuestionsRef.current.size;
     const missedCount = questions.length - masteredCount;
+    const hitStreak = masteryRef.current >= MASTERY_THRESHOLD;
     const pct = autoAdvance
       ? (questions.length > 0 ? Math.round((correctCount / questions.length) * 100) : 0)
       : (questions.length > 0 ? Math.round((masteredCount / questions.length) * 100) : 0);
@@ -312,7 +315,7 @@ export default function ReviewSession({
           transition={{ delay: 0.2 }}
           className="mt-5 text-2xl font-bold tracking-tight sm:mt-6 sm:text-3xl"
         >
-          {autoAdvance ? "Review Complete!" : allMastered ? "Mastered!" : "Completed!"}
+          {autoAdvance ? "Review Complete!" : allMastered ? "Mastered!" : hitStreak ? "Completed!" : "Session Complete!"}
         </motion.h2>
         <motion.p
           initial={{ opacity: 0 }}
@@ -323,8 +326,8 @@ export default function ReviewSession({
           {autoAdvance
             ? `You reviewed ${questions.length} cards`
             : allMastered
-            ? `You got all ${questions.length} questions correct and hit ${MASTERY_THRESHOLD} in a row`
-            : `You got ${MASTERY_THRESHOLD} in a row correct (${correctQuestionsRef.current.size}/${questions.length} questions mastered)`}
+            ? `You got all ${questions.length} questions correct!`
+            : `You completed all ${questions.length} questions (${masteredCount} correct, ${missedCount} to review later)`}
         </motion.p>
 
         {/* Stats grid */}
@@ -452,7 +455,7 @@ export default function ReviewSession({
           {!autoAdvance && (
             <div className="mt-2 flex items-center gap-2">
               <span className="text-xs font-medium text-text-tertiary">
-                Get {MASTERY_THRESHOLD} in a row to finish:
+                Streak bonus ({MASTERY_THRESHOLD} in a row):
               </span>
               <div className="flex gap-1">
                 {Array.from({ length: MASTERY_THRESHOLD }, (_, i) => (

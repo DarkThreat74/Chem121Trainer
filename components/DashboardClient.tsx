@@ -22,6 +22,7 @@ import {
   CheckCircle2,
   PlayCircle,
   Settings as SettingsIcon,
+  CheckCheck,
   type LucideIcon,
 } from "lucide-react";
 // ChevronRight is imported but may be unused — keep for potential future use
@@ -70,9 +71,29 @@ export default function DashboardClient({
   const maxActivity = Math.max(...weeklyActivity.map((d) => d.count), 1);
   const [todayLabel, setTodayLabel] = useState("");
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [markingTopic, setMarkingTopic] = useState<string | null>(null);
   useEffect(() => {
     setTodayLabel(new Date().toLocaleDateString("en-US", { weekday: "short" }));
   }, []);
+
+  const handleMarkComplete = async (topicId: string) => {
+    setMarkingTopic(topicId);
+    try {
+      const res = await fetch("/api/complete-topic", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ topicId }),
+      });
+      if (res.ok) {
+        // Reload the page to refresh dashboard data
+        window.location.reload();
+      }
+    } catch (e) {
+      console.error("Failed to mark topic complete:", e);
+    } finally {
+      setMarkingTopic(null);
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -370,6 +391,18 @@ export default function DashboardClient({
                         Quiz
                       </Link>
                     </div>
+
+                    {/* Mark as completed button (only for unlocked, incomplete topics with some progress) */}
+                    {isCurrent && mastery.seen > 0 && (
+                      <button
+                        onClick={() => handleMarkComplete(topic.id)}
+                        disabled={markingTopic === topic.id}
+                        className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-lg py-1.5 text-xs font-medium text-text-tertiary transition hover:text-ok disabled:opacity-50"
+                      >
+                        <CheckCheck className="h-3 w-3" />
+                        {markingTopic === topic.id ? "Marking..." : "Mark as completed"}
+                      </button>
+                    )}
                   </div>
                 ) : (
                   <div className="flex items-center gap-3 rounded-2xl border border-border bg-bg-card/50 p-4 opacity-60 sm:p-5">
