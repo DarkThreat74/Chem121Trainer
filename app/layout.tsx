@@ -3,6 +3,7 @@ import "./globals.css";
 import NavBar from "@/components/NavBar";
 import ServiceWorkerRegister from "@/components/ServiceWorkerRegister";
 import PWAInstallPrompt from "@/components/PWAInstallPrompt";
+import OfflineSync from "@/components/OfflineSync";
 import { SettingsProvider } from "@/components/SettingsProvider";
 
 export const metadata: Metadata = {
@@ -37,6 +38,7 @@ export default function RootLayout({
           {children}
           <ServiceWorkerRegister />
           <PWAInstallPrompt />
+          <OfflineSync />
         </SettingsProvider>
       </body>
     </html>

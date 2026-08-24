@@ -18,6 +18,7 @@ import {
   RotateCcw,
 } from "lucide-react";
 import type { Question } from "@/lib/types";
+import { queueReview } from "@/lib/offline-sync";
 
 interface ReviewSessionProps {
   questions: Question[];
@@ -172,7 +173,7 @@ export default function ReviewSession({
       setTotalTime((t) => t + timeTaken);
 
       try {
-        await fetch("/api/review", {
+        const res = await fetch("/api/review", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -181,8 +182,25 @@ export default function ReviewSession({
             timeTakenMs: timeTaken,
           }),
         });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
       } catch (error) {
-        console.error("Failed to save review:", error);
+        // Network failed or server error — queue for offline sync
+        console.error("Failed to save review, queuing offline:", error);
+        await queueReview({
+          questionId: question.id,
+          isCorrect,
+          timeTakenMs: timeTaken,
+        });
+        // Register Background Sync so the SW flushes the queue when back online
+        if ("serviceWorker" in navigator && "SyncManager" in window) {
+          try {
+            const reg = await navigator.serviceWorker.ready;
+            await (reg as any).sync.register("review-queue");
+          } catch {
+            // Background Sync not supported — the OnlineSync component
+            // will still flush via the `online` event listener
+          }
+        }
       }
     },
     [feedback, startTime, question]
