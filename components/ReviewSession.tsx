@@ -242,8 +242,8 @@ export default function ReviewSession({
       if (nextIndex >= questionQueue.length) {
         // All due questions reviewed
         setSessionFinished(true);
-        const pct = questions.length > 0 ? Math.round((correctCount / questions.length) * 100) : 0;
-        if (pct >= 80) {
+        const uniquePct = questions.length > 0 ? Math.round((correctQuestionsRef.current.size / questions.length) * 100) : 0;
+        if (uniquePct >= 80) {
           setConfettiTrigger((t) => t + 1);
         }
       } else {
@@ -292,9 +292,10 @@ export default function ReviewSession({
     const masteredCount = correctQuestionsRef.current.size;
     const missedCount = questions.length - masteredCount;
     const hitStreak = masteryRef.current >= MASTERY_THRESHOLD;
-    const pct = autoAdvance
-      ? (questions.length > 0 ? Math.round((correctCount / questions.length) * 100) : 0)
-      : (questions.length > 0 ? Math.round((masteredCount / questions.length) * 100) : 0);
+    const dueQuestionsCount = questionQueue.length || questions.length;
+    // Use unique correct count for both modes — correctCount can be inflated
+    // by recycled wrong answers being answered correctly on retry
+    const pct = questions.length > 0 ? Math.round((masteredCount / questions.length) * 100) : 0;
     const avgTime = questions.length > 0 ? totalTime / questions.length : 0;
 
     return (
@@ -324,7 +325,7 @@ export default function ReviewSession({
           className="mt-2 text-sm text-text-secondary sm:text-base"
         >
           {autoAdvance
-            ? `You reviewed ${questions.length} cards`
+            ? `You reviewed ${dueQuestionsCount} cards`
             : allMastered
             ? `You got all ${questions.length} questions correct!`
             : `You completed all ${questions.length} questions (${masteredCount} correct, ${missedCount} to review later)`}
@@ -340,14 +341,14 @@ export default function ReviewSession({
           <div className="rounded-2xl border border-ok/20 bg-ok/5 p-3 sm:p-4">
             <Check className="mx-auto h-5 w-5 text-ok" />
             <p className="mt-2 text-2xl font-bold text-ok sm:text-3xl">
-              {autoAdvance ? correctCount : masteredCount}
+              {masteredCount}
             </p>
             <p className="text-xs text-text-tertiary">Correct</p>
           </div>
           <div className="rounded-2xl border border-err/20 bg-err/5 p-3 sm:p-4">
             <X className="mx-auto h-5 w-5 text-err" />
             <p className="mt-2 text-2xl font-bold text-err sm:text-3xl">
-              {autoAdvance ? questions.length - correctCount : missedCount}
+              {missedCount}
             </p>
             <p className="text-xs text-text-tertiary">Missed</p>
           </div>

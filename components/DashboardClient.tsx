@@ -84,11 +84,14 @@ export default function DashboardClient({
         body: JSON.stringify({ topicId }),
       });
       if (res.ok) {
-        // Reload the page to refresh dashboard data
         window.location.reload();
+      } else {
+        console.error("Failed to mark topic complete:", res.status);
+        alert("Failed to mark topic complete. Please try again.");
       }
     } catch (e) {
       console.error("Failed to mark topic complete:", e);
+      alert("Failed to mark topic complete. Check your connection and try again.");
     } finally {
       setMarkingTopic(null);
     }
