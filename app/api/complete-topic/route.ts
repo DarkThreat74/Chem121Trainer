@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sql, SINGLE_USER_ID } from "@/lib/db";
-import { SAMPLE_QUESTIONS } from "@/lib/sample-data";
 import { TOPICS } from "@/lib/types";
 
 export const runtime = "edge";
@@ -22,10 +21,15 @@ export async function POST(request: NextRequest) {
       const dbQs = await sql`
         SELECT id FROM public.questions WHERE topic = ${topicId}
       ` as any[];
-      questionIds = dbQs.length > 0
-        ? dbQs.map((q) => q.id)
-        : SAMPLE_QUESTIONS.filter((q) => q.topic === topicId).map((q) => q.id);
+      if (dbQs.length > 0) {
+        questionIds = dbQs.map((q) => q.id);
+      } else {
+        // DB empty — fall back to sample data via dynamic import
+        const { SAMPLE_QUESTIONS } = await import("@/lib/sample-data");
+        questionIds = SAMPLE_QUESTIONS.filter((q) => q.topic === topicId).map((q) => q.id);
+      }
     } catch {
+      const { SAMPLE_QUESTIONS } = await import("@/lib/sample-data");
       questionIds = SAMPLE_QUESTIONS.filter((q) => q.topic === topicId).map((q) => q.id);
     }
 
