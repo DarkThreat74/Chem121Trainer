@@ -28,6 +28,8 @@ export default function OfflineSync() {
 
   const doFlush = useCallback(async () => {
     setStatus("syncing");
+    // Safety timeout: never let the syncing state hang forever
+    const timeout = setTimeout(() => setStatus("online"), 15000);
     try {
       const flushed = await flushQueue();
       const remaining = await getQueueCount();
@@ -42,6 +44,7 @@ export default function OfflineSync() {
     } catch {
       setStatus("online");
     }
+    clearTimeout(timeout);
   }, []);
 
   // Listen for online/offline events

@@ -92,17 +92,28 @@ export async function flushQueue(): Promise<number> {
   let flushed = 0;
 
   // Flush from IndexedDB
+  // IMPORTANT: IndexedDB transactions auto-commit when control returns to the
+  // event loop (e.g. during `await fetch`). So we must read all items in one
+  // transaction, close it, do the network requests, then delete successful
+  // items in a separate transaction. Keeping a single transaction open across
+  // async fetch calls causes it to die and the oncomplete promise to hang.
   try {
     const db = await openDB();
-    const tx = db.transaction(STORE_NAME, "readwrite");
-    const store = tx.objectStore(STORE_NAME);
-    const allReq = store.getAll();
 
+    // Step 1: Read all queued items (separate read transaction)
+    const readTx = db.transaction(STORE_NAME, "readonly");
+    const readStore = readTx.objectStore(STORE_NAME);
+    const allReq = readStore.getAll();
     const items = await new Promise<QueuedReview[]>((resolve, reject) => {
       allReq.onsuccess = () => resolve(allReq.result as QueuedReview[]);
       allReq.onerror = () => reject(allReq.error);
     });
+    db.close();
 
+    if (items.length === 0) return 0;
+
+    // Step 2: Send each item to the server (no transaction open during fetches)
+    const succeededIds: number[] = [];
     for (const item of items) {
       try {
         const res = await fetch("/api/review", {
@@ -111,7 +122,7 @@ export async function flushQueue(): Promise<number> {
           body: JSON.stringify(item.body),
         });
         if (res.ok) {
-          if (item.id) store.delete(item.id);
+          if (item.id) succeededIds.push(item.id);
           flushed++;
         }
       } catch {
@@ -120,11 +131,20 @@ export async function flushQueue(): Promise<number> {
       }
     }
 
-    await new Promise<void>((resolve, reject) => {
-      tx.oncomplete = () => resolve();
-      tx.onerror = () => reject(tx.error);
-    });
-    db.close();
+    // Step 3: Delete successfully synced items (separate write transaction)
+    if (succeededIds.length > 0) {
+      const db2 = await openDB();
+      const writeTx = db2.transaction(STORE_NAME, "readwrite");
+      const writeStore = writeTx.objectStore(STORE_NAME);
+      for (const id of succeededIds) {
+        writeStore.delete(id);
+      }
+      await new Promise<void>((resolve, reject) => {
+        writeTx.oncomplete = () => resolve();
+        writeTx.onerror = () => reject(writeTx.error);
+      });
+      db2.close();
+    }
   } catch (e) {
     console.error("Failed to flush IndexedDB queue:", e);
   }
