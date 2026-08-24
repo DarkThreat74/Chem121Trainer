@@ -457,7 +457,7 @@ export default function TopicLearnPage({
         // Wait for content to render before scrolling
         requestAnimationFrame(() => {
           requestAnimationFrame(() => {
-            window.scrollTo({ top: pos, behavior: "instant" });
+            window.scrollTo(0, pos);
           });
         });
       }
