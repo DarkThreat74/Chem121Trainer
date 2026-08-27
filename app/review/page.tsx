@@ -1,7 +1,7 @@
 import { sql, SINGLE_USER_ID } from "@/lib/db";
 import { SAMPLE_QUESTIONS } from "@/lib/sample-data";
 import ReviewSession from "@/components/ReviewSession";
-import { TOPICS, type Question, type Topic } from "@/lib/types";
+import { TOPICS, type Question } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 export const runtime = "edge";
@@ -48,53 +48,13 @@ export default async function ReviewPage() {
 
   const now = new Date();
 
-  // Calculate which topics are unlocked based on guided path progress
-  // A topic is unlocked if:
-  //   - It is the first topic (order 1), OR
-  //   - The previous topic has seen >= 50% of its total question count
-  const sortedTopics = [...TOPICS].sort((a, b) => a.order - b.order);
-  const topicQuestionCounts: Record<string, number> = {};
-  for (const t of sortedTopics) {
-    topicQuestionCounts[t.id] = allQuestions.filter((q) => q.topic === t.id).length;
-  }
-
-  const topicSeenCounts: Record<string, number> = {};
-  for (const rs of reviewStates) {
-    // Only count questions with reps > 0 as "seen" — matches practice page
-    // lock check and dashboard unlock logic.
-    if (rs.reps <= 0) continue;
-    const q = allQuestions.find((q) => q.id === rs.question_id);
-    if (q) {
-      topicSeenCounts[q.topic] = (topicSeenCounts[q.topic] || 0) + 1;
-    }
-  }
-
-  const unlockedTopics: Set<Topic> = new Set();
-  for (let i = 0; i < sortedTopics.length; i++) {
-    const topic = sortedTopics[i];
-    if (i === 0) {
-      unlockedTopics.add(topic.id);
-    } else {
-      const prevTopic = sortedTopics[i - 1];
-      const prevTotal = topicQuestionCounts[prevTopic.id] || 0;
-      const prevSeen = topicSeenCounts[prevTopic.id] || 0;
-      // Unlock if previous topic has been seen at least 50%
-      if (prevTotal > 0 && prevSeen >= prevTotal * 0.5) {
-        unlockedTopics.add(topic.id);
-      }
-    }
-  }
-
-  // Only include questions from unlocked topics
-  const unlockedQuestions = allQuestions.filter((q) => unlockedTopics.has(q.topic));
-
+  // All topics always unlocked — no sequential locking.
   // Find DUE questions only (questions already seen and scheduled for review by FSRS)
   // Do NOT include unseen questions — those are introduced through topic-specific quizzes
   const dueStates = reviewStates
     .filter((rs) => {
       const q = allQuestions.find((q) => q.id === rs.question_id);
       if (!q) return false;
-      if (!unlockedTopics.has(q.topic)) return false;
       return new Date(rs.due) <= now;
     })
     .sort((a, b) => new Date(a.due).getTime() - new Date(b.due).getTime());
@@ -110,11 +70,7 @@ export default async function ReviewPage() {
   }
 
   if (dueQuestions.length === 0) {
-    // Check if user has any unlocked topics with seen questions at all
-    const hasAnySeen = reviewStates.some((rs) => {
-      const q = allQuestions.find((q) => q.id === rs.question_id);
-      return q && unlockedTopics.has(q.topic);
-    });
+    const hasAnySeen = reviewStates.length > 0;
 
     return (
       <div className="flex min-h-screen flex-col items-center justify-center px-4 text-center safe-top safe-bottom">

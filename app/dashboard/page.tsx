@@ -89,45 +89,12 @@ export default async function DashboardPage() {
   const streak = calculateStreak(reviewLogs);
   const topicMastery = calculateTopicMastery(reviewLogs, questions, reviewStates);
 
-  // Calculate unlocked topics (same logic as review page) so dueCount
-  // only counts cards the user can actually review
-  const sortedTopics = [...TOPICS].sort((a, b) => a.order - b.order);
-  const topicQuestionCounts: Record<string, number> = {};
-  for (const t of sortedTopics) {
-    topicQuestionCounts[t.id] = questions.filter((q) => q.topic === t.id).length;
-  }
-  const topicSeenCounts: Record<string, number> = {};
-  for (const rs of reviewStates) {
-    // Only count questions with reps > 0 as "seen" — this matches the
-    // practice page's lock check and the complete-topic API's behavior.
-    // A review_state row with reps=0 means the question was inserted but
-    // never actually reviewed.
-    if (rs.reps <= 0) continue;
-    const q = questions.find((q) => q.id === rs.question_id);
-    if (q) {
-      topicSeenCounts[q.topic] = (topicSeenCounts[q.topic] || 0) + 1;
-    }
-  }
-  const unlockedTopicIds = new Set<string>();
-  for (let i = 0; i < sortedTopics.length; i++) {
-    const topic = sortedTopics[i];
-    if (i === 0) {
-      unlockedTopicIds.add(topic.id);
-    } else {
-      const prevTopic = sortedTopics[i - 1];
-      const prevTotal = topicQuestionCounts[prevTopic.id] || 0;
-      const prevSeen = topicSeenCounts[prevTopic.id] || 0;
-      if (prevTotal > 0 && prevSeen >= prevTotal * 0.5) {
-        unlockedTopicIds.add(topic.id);
-      }
-    }
-  }
-
-  // Only count due cards from unlocked topics
+  // All topics are always unlocked — no sequential locking.
+  // Due count includes all topics.
   const dueCount = reviewStates.filter((rs) => {
     if (new Date(rs.due) > now) return false;
     const q = questions.find((q) => q.id === rs.question_id);
-    return q && unlockedTopicIds.has(q.topic);
+    return !!q;
   }).length;
   const questionsPerTopic = TOPICS.map((t) => ({
     ...t,
