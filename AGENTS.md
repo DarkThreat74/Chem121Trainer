@@ -49,7 +49,9 @@ Migrated from Supabase to Neon on Aug 13 2026. Removed: auth pages, middleware, 
 
 ## Current State (as of last session)
 
-- **162 questions** across 8 topics, all with explanations.
+- **176 questions** across 8 topics, all with explanations.
+  - Fundamentals: 28, Metric System: 22, Atomic Structure: 10, Significant Figures: 24, Dimensional Analysis: 22, The Mole: 20, Stoichiometry: 25, Molarity & Dilutions: 25.
+- **Study guide coverage**: Scientific method (hypothesis, theory, law, control, variables), physical/chemical properties, standard deviation, SI abbreviations (M, mol, mM, mmol, µM, µmol), mole vs molarity distinction, gas volume at STP (22.4 L/mol), stock solutions, C1V1=C2V2, dilution factor.
 - **8 giveaway questions fixed** (fund-001, fund-008, fund-009, fund-010, diman-011, diman-012, mole-012, molarity-015).
 - **Per-topic learn pages** at `/learn/[topic]` with detailed teaching content (concepts, diagrams, worked examples, vocabulary). Written for zero-knowledge beginners. Each section has a TTS play button. Scroll progress bar with time-remaining estimate in header.
 - **Dashboard cards** have two buttons each: Learn (goes to `/learn/[topic]`) and Quiz (goes to `/practice/[topic]`).

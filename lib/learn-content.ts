@@ -248,6 +248,122 @@ export const LEARN_CONTENT: Record<string, TopicContent> = {
         },
       },
       {
+        title: "Physical vs Chemical Properties",
+        body: "Every substance has two kinds of properties: physical properties and chemical properties. A physical property is a characteristic you can observe or measure without changing the substance into something new. Color, density, melting point, boiling point, hardness, and electrical conductivity are all physical properties. You can measure the melting point of ice without turning the water into a different substance. A chemical property describes how a substance reacts or fails to react with other substances — it can only be observed when the substance undergoes a chemical change. Flammability (will it burn?), reactivity with acids, toxicity, and whether it rusts or oxidizes are all chemical properties. You cannot tell if something is flammable just by looking at it; you have to try to burn it, which changes it into new substances.",
+        example: "Physical properties of iron: it is gray, shiny, dense (7.87 g/mL), melts at 1538 C, conducts electricity, and is magnetic. Chemical properties of iron: it rusts when exposed to oxygen and water (forms iron oxide), it reacts with acids to produce hydrogen gas, and it is not flammable. The physical properties you can observe without changing the iron. The chemical properties require a chemical reaction to observe.",
+        diagram: {
+          type: "comparison",
+          left: {
+            title: "PHYSICAL PROPERTIES",
+            items: [
+              "Observed WITHOUT a chemical reaction",
+              "No new substance formed",
+              "Color, density, melting point, boiling point",
+              "Hardness, conductivity, magnetism, odor",
+              "State (solid/liquid/gas), solubility",
+            ],
+          },
+          right: {
+            title: "CHEMICAL PROPERTIES",
+            items: [
+              "Observed ONLY during a chemical change",
+              "Describes reactivity with other substances",
+              "Flammability, toxicity, acidity",
+              "Reactivity with acids, water, or oxygen",
+              "Whether it rusts, oxidizes, or decomposes",
+            ],
+          },
+        },
+        misconception: "Many students confuse physical properties with physical changes and chemical properties with chemical changes. A physical PROPERTY is a characteristic (like color or density). A physical CHANGE is an event (like melting). The property is what the substance has; the change is what happens to it. Similarly, a chemical PROPERTY is the potential to react (iron CAN rust); a chemical CHANGE is the actual reaction happening (iron IS rusting).",
+      },
+      {
+        title: "The Scientific Method",
+        body: "The scientific method is a systematic process scientists use to answer questions about the natural world. It is not a rigid set of steps but a general framework: make observations, ask a question, form a hypothesis, design and conduct an experiment, collect and analyze data, and draw a conclusion. The scientific method is how chemistry (and all science) progresses. You have used it yourself without realizing it — when your phone stops working, you observe the problem, guess why (hypothesis), test your guess (try charging it), and conclude what was wrong.",
+        example: "Observation: a flashlight does not turn on. Question: why does it not work? Hypothesis: the batteries are dead. Experiment: replace the batteries with new ones and test. Result: the flashlight still does not work. Conclusion: the hypothesis was wrong — the batteries were not the problem. New hypothesis: the bulb is burned out. Test again: replace the bulb. It works. Conclusion: the bulb was the problem.",
+        diagram: {
+          type: "flowchart",
+          nodes: [
+            {
+              label: "1. OBSERVATION",
+              children: ["Notice something in the natural world"],
+              note: "Use your senses or instruments to gather information",
+            },
+            {
+              label: "2. QUESTION",
+              children: ["Ask a specific, testable question"],
+              note: "What do you want to find out?",
+            },
+            {
+              label: "3. HYPOTHESIS",
+              children: ["Propose a testable explanation"],
+              note: "An educated guess based on prior knowledge — not a random guess",
+            },
+            {
+              label: "4. EXPERIMENT",
+              children: ["Test the hypothesis under controlled conditions"],
+              note: "Change one variable, measure the result, keep everything else constant",
+            },
+            {
+              label: "5. ANALYSIS",
+              children: ["Collect and analyze the data"],
+              note: "Does the data support or refute the hypothesis?",
+            },
+            {
+              label: "6. CONCLUSION",
+              children: ["Report findings and decide next steps"],
+              note: "If supported, the hypothesis may lead to a theory. If not, revise and retest.",
+            },
+          ],
+        },
+        misconception: "Many people think the scientific method is always a straight line from observation to conclusion. In reality, it is a cycle. If your experiment refutes your hypothesis, you go back and form a new one. Science is iterative — you rarely get it right on the first try.",
+      },
+      {
+        title: "Hypothesis, Theory, and Law",
+        body: "These three terms are often confused, but they have distinct meanings in science. A hypothesis is a proposed, testable explanation for an observation. It is an educated guess that has not yet been thoroughly tested. A theory is a well-substantiated explanation of some aspect of the natural world that has been repeatedly confirmed through observation and experiment. Theories explain WHY things happen. A law is a statement that describes what happens in nature under certain conditions, often expressed as a mathematical equation. Laws describe WHAT happens but not WHY. The key distinction: theories explain, laws describe. A hypothesis does not 'grow up' to become a theory, and a theory does not 'graduate' into a law. They are different types of statements that serve different purposes.",
+        example: "Hypothesis: 'If I increase the temperature of a gas, its volume will increase.' Theory: The Kinetic Molecular Theory explains why gases expand when heated (particles move faster and collide harder with the walls). Law: Charles's Law states that V1/T1 = V2/T2 — it describes the mathematical relationship without explaining why. The theory explains why the law works.",
+        diagram: {
+          type: "comparison",
+          left: {
+            title: "HYPOTHESIS",
+            items: [
+              "A testable proposed explanation",
+              "Based on observation and prior knowledge",
+              "Not yet confirmed by extensive testing",
+              "Can be supported or refuted by one experiment",
+              "Example: 'Acid rain stunts plant growth'",
+            ],
+          },
+          right: {
+            title: "THEORY vs LAW",
+            items: [
+              "THEORY: explains WHY (well-tested)",
+              "Supported by many experiments over time",
+              "Example: Kinetic Molecular Theory",
+              "LAW: describes WHAT (a pattern)",
+              "Example: Charles's Law (V/T = constant)",
+            ],
+          },
+        },
+        misconception: "The phrase 'just a theory' is misleading. In everyday language, 'theory' means a guess. In science, a theory is one of the strongest forms of knowledge — it is backed by overwhelming evidence. The Theory of Evolution, the Atomic Theory, and the Germ Theory of Disease are not guesses; they are rigorously tested explanations. Also, theories do not become laws — they are fundamentally different things.",
+      },
+      {
+        title: "Variables and Controls in Experiments",
+        body: "A well-designed experiment tests one thing at a time. The independent variable is what you deliberately change. The dependent variable is what you measure (it depends on the independent variable). Control variables (also called constants) are everything else that you keep the same so they do not affect the result. A control is also a specific reference point: a control group is a group that does NOT receive the treatment, so you can compare it to the group that did. Without controls, you cannot know whether the independent variable actually caused the change you observed.",
+        example: "Experiment: Does fertilizer make plants grow taller? Independent variable: amount of fertilizer (0 g, 5 g, 10 g). Dependent variable: plant height after 4 weeks. Control variables: same soil, same water, same sunlight, same plant type. The 0 g group is the control group — it gets no fertilizer, so you can compare the fertilized plants to it.",
+        diagram: {
+          type: "table",
+          title: "Types of Variables",
+          headers: ["Type", "What It Is", "Example (Fertilizer Experiment)"],
+          rows: [
+            ["Independent Variable", "What YOU change", "Amount of fertilizer (0, 5, 10 g)"],
+            ["Dependent Variable", "What you MEASURE", "Plant height after 4 weeks"],
+            ["Control Variables", "What you keep the SAME", "Soil type, water, sunlight, plant species"],
+            ["Control Group", "The untreated reference", "The 0 g fertilizer group"],
+          ],
+        },
+        misconception: "A common mistake is changing more than one variable at a time. If you give one plant more fertilizer AND more water, and it grows taller, you cannot tell which change caused the growth. Change only ONE variable at a time and control everything else.",
+      },
+      {
         title: "Measurements: Every Measurement Has Two Parts",
         body: "Every scientific measurement consists of two parts: a number (the magnitude — how much) and a unit (what you are measuring). A number alone is meaningless in science. '5' tells you nothing. '5 grams' tells you exactly what you have. The number tells you the quantity, and the unit tells you the scale and what is being measured. Without both, a measurement is incomplete.",
         example: "25 mL has the number 25 and the unit mL (milliliters). 10.0 g has the number 10.0 and the unit g (grams). If someone says 'the mass is 5,' you cannot use that information — 5 what? 5 grams? 5 kilograms? 5 pounds? Those are very different amounts.",
@@ -331,6 +447,16 @@ export const LEARN_CONTENT: Record<string, TopicContent> = {
       { term: "Heterogeneous Mixture", def: "Non-uniform — can see distinct parts (sand and water, oil and water)" },
       { term: "Physical Change", def: "Change that does not produce a new substance (melting, cutting, dissolving)" },
       { term: "Chemical Change", def: "Change that produces one or more new substances (burning, rusting, cooking)" },
+      { term: "Physical Property", def: "A characteristic observed without changing the substance (color, density, melting point)" },
+      { term: "Chemical Property", def: "How a substance reacts with other substances (flammability, reactivity, toxicity)" },
+      { term: "Molecule", def: "Two or more atoms chemically bonded together (H2O, O2, CO2)" },
+      { term: "Weight", def: "The force of gravity on an object — changes with location (unlike mass)" },
+      { term: "Hypothesis", def: "A testable proposed explanation for an observation — an educated guess" },
+      { term: "Theory", def: "A well-substantiated explanation of natural phenomena, confirmed by many experiments" },
+      { term: "Law", def: "A statement describing what happens in nature under certain conditions (often a formula)" },
+      { term: "Control", def: "Variables kept constant in an experiment so only the independent variable affects the result" },
+      { term: "Variable", def: "Something that can change in an experiment — independent (changed), dependent (measured), control (kept same)" },
+      { term: "Scientific Method", def: "A systematic process: observe, question, hypothesize, experiment, analyze, conclude" },
       { term: "Accuracy", def: "How close a measurement is to the true value" },
       { term: "Precision", def: "How close repeated measurements are to each other" },
       { term: "Density", def: "Mass per unit volume (D = m/V) — how packed the matter is" },
@@ -479,6 +605,26 @@ export const LEARN_CONTENT: Record<string, TopicContent> = {
         body: "Some conversion factors are exact definitions — they have infinite significant figures. For example, 1 km = 1000 m is a definition. 1 inch = 2.54 cm is an exact definition. These do not limit the precision of your calculation. Other conversions are measured and have a specific number of significant figures. For example, 1 mile = 1.609 km was measured, so it has 4 significant figures and will limit your answer to 4 sig figs.",
         example: "Exact (infinite sig figs): 1000 mg = 1 g, 100 cm = 1 m, 1 inch = 2.54 cm. Measured (limited sig figs): 1 mile = 1.609 km (4 sig figs), 1 pound = 453.6 g (4 sig figs). When doing calculations, exact conversions do not affect your sig figs, but measured ones do.",
       },
+      {
+        title: "SI Abbreviations You Must Know",
+        body: "In chemistry, using the correct abbreviation is not optional — it is required for credit on exams, quizzes, and labs. The most confusing abbreviations involve the letter M. A capital M means molarity (mol/L) — a concentration. A lowercase m as a prefix means milli (10^-3). The word mol means mole (a quantity). So mM means millimolar (mmol/L), and mmol means millimole (a quantity). The capital M is a concentration; the lowercase m prefix is a multiplier. Getting these wrong changes the meaning of your answer entirely.",
+        example: "M = molarity = mol/L (concentration). mM = millimolar = mmol/L = 10^-3 M (concentration). uM = micromolar = umol/L = 10^-6 M (concentration). mol = mole (a quantity, 6.02 x 10^23 items). mmol = millimole = 10^-3 mol (a quantity). umol = micromole = 10^-6 mol (a quantity). m = meter (length). Do NOT write 'M' when you mean 'mol' or 'm' — they are completely different.",
+        diagram: {
+          type: "table",
+          title: "SI Abbreviations for Chemistry",
+          headers: ["Abbreviation", "Full Name", "What It Is", "Meaning"],
+          rows: [
+            ["m", "meter", "Length (base unit)", "1 m = base unit of length"],
+            ["M", "molarity", "Concentration", "mol/L — moles per liter of solution"],
+            ["mol", "mole", "Quantity (amount)", "6.02 x 10^23 items"],
+            ["mmol", "millimole", "Quantity (amount)", "10^-3 mol = 0.001 mol"],
+            ["umol", "micromole", "Quantity (amount)", "10^-6 mol = 0.000001 mol"],
+            ["mM", "millimolar", "Concentration", "mmol/L = 10^-3 M"],
+            ["uM", "micromolar", "Concentration", "umol/L = 10^-6 M"],
+          ],
+        },
+        misconception: "The most common mistake is confusing M (molarity, a concentration) with m (meter, a length) or mol (mole, a quantity). Capital M = concentration. Lowercase m = meter or the prefix milli-. The word mol = mole (a count of particles). These are three completely different things. Another mistake: writing 'mM' as 'mm' — mm is millimeters (length), not millimolar (concentration).",
+      },
     ],
     formulas: [
       {
@@ -517,6 +663,12 @@ export const LEARN_CONTENT: Record<string, TopicContent> = {
       { term: "Kelvin (K)", def: "SI temperature unit. 0 K = absolute zero = -273.15 C" },
       { term: "Conversion Factor", def: "A fraction equal to 1, used to convert between units" },
       { term: "Factor-Label Method", def: "Converting units by multiplying by conversion factors so units cancel" },
+      { term: "Molarity (M)", def: "Concentration unit: mol/L (moles per liter). Capital M = concentration" },
+      { term: "Millimolar (mM)", def: "Concentration unit: mmol/L = 10^-3 M. NOT the same as mm (millimeters)" },
+      { term: "Micromolar (uM)", def: "Concentration unit: umol/L = 10^-6 M" },
+      { term: "Mole (mol)", def: "A quantity: 6.02 x 10^23 items. NOT a concentration" },
+      { term: "Millimole (mmol)", def: "A quantity: 10^-3 mol = 0.001 mol. NOT a concentration" },
+      { term: "Micromole (umol)", def: "A quantity: 10^-6 mol = 0.000001 mol. NOT a concentration" },
     ],
   },
 
@@ -807,6 +959,32 @@ export const LEARN_CONTENT: Record<string, TopicContent> = {
           caption: "For addition and subtraction, the answer has the same number of decimal places as the number with the fewest decimal places.",
         },
       },
+      {
+        title: "Standard Deviation: Measuring Precision Statistically",
+        body: "Standard deviation is a statistical measure of how spread out your data is from the average (mean). It tells you how precise your measurements are. A small standard deviation means your data points are clustered tightly around the mean (high precision). A large standard deviation means your data points are scattered far from the mean (low precision). When you report a result, you often write it as mean +/- standard deviation, for example 25.3 +/- 0.2 g. This tells the reader that most of your measurements fell within 0.2 g of 25.3 g. Standard deviation measures precision, NOT accuracy — it tells you how consistent your measurements are, not whether they are correct.",
+        example: "Two students each measure the mass of a sample 5 times. Student A gets: 10.1, 10.2, 10.0, 10.1, 10.1 g (mean = 10.10, tightly clustered, small standard deviation = 0.07). Student B gets: 9.5, 10.8, 10.2, 9.9, 10.6 g (mean = 10.20, scattered, large standard deviation = 0.50). Student A has better precision (smaller standard deviation) even though both means are similar.",
+        diagram: {
+          type: "visual",
+          visual:
+            "  NORMAL DISTRIBUTION (BELL CURVE)\n" +
+            "\n" +
+            "         .---.\n" +
+            "        /     \\\n" +
+            "       /       \\\n" +
+            "      /         \\\n" +
+            "   --/-----------\\--\n" +
+            "    -2s  -1s  mean  +1s  +2s\n" +
+            "\n" +
+            "  ~68% of data within +/- 1 standard deviation\n" +
+            "  ~95% of data within +/- 2 standard deviations\n" +
+            "  ~99.7% of data within +/- 3 standard deviations\n" +
+            "\n" +
+            "  Small SD = narrow curve = high precision\n" +
+            "  Large SD = wide curve = low precision",
+          caption: "The bell curve (normal distribution). About 68% of measurements fall within one standard deviation of the mean. A smaller standard deviation means a narrower, taller curve and more precise data.",
+        },
+        misconception: "Standard deviation tells you about precision (consistency), not accuracy (correctness). A scale that always reads 2 g too high has a small standard deviation (precise) but is not accurate. Also, the ~68% rule only applies if your data follows a normal distribution (bell curve). If your data is skewed, the percentages may differ.",
+      },
     ],
     workedExamples: [
       {
@@ -839,6 +1017,8 @@ export const LEARN_CONTENT: Record<string, TopicContent> = {
       { term: "Scientific Notation", def: "Format like 1.23 x 10^5 that makes the number of sig figs unambiguous" },
       { term: "Precision", def: "How closely repeated measurements agree with each other" },
       { term: "Uncertainty", def: "The estimated range within which the true value likely lies" },
+      { term: "Standard Deviation", def: "A statistical measure of how spread out data is from the mean — measures precision, not accuracy" },
+      { term: "Normal Distribution", def: "The bell curve pattern of random variation — ~68% of data falls within +/- 1 standard deviation" },
     ],
   },
 
@@ -1719,6 +1899,23 @@ export const LEARN_CONTENT: Record<string, TopicContent> = {
         misconception:
           "Some students think that if a gas is produced and escapes, mass is not conserved. The mass is still conserved -- it just left the container. If you could capture every atom, including the gas that escaped, the total mass would still be the same. Conservation of mass applies to the entire system, not just what stays in the beaker.",
       },
+      {
+        title: "Gas Volume at STP: 22.4 L per Mole",
+        body:
+          "When working with gases in stoichiometry, you often need to convert between moles and volume. At standard temperature and pressure (STP), defined as 0 degrees Celsius (273 K) and 1 atmosphere of pressure, one mole of ANY gas occupies exactly 22.4 liters. This is called the molar volume of a gas at STP. It does not matter what the gas is — hydrogen, oxygen, CO2, or anything else — one mole always occupies 22.4 L at STP. This gives you a conversion factor: 1 mol gas = 22.4 L gas (at STP). You can use it just like molar mass: to convert moles to liters, multiply by 22.4 L/mol. To convert liters to moles, divide by 22.4 L/mol. This only works at STP — at other temperatures and pressures, the volume per mole is different.",
+        example:
+          "How many liters of O2 gas (at STP) are produced from 2.0 moles of KClO3? Balanced equation: 2 KClO3 -> 2 KCl + 3 O2. Mole ratio: 3 mol O2 / 2 mol KClO3. 2.0 mol KClO3 x (3 mol O2 / 2 mol KClO3) x (22.4 L O2 / 1 mol O2) = 67.2 L O2.",
+        diagram: {
+          type: "visual",
+          title: "Molar Volume at STP",
+          visual:
+            "  STP = Standard Temperature and Pressure\n  Temperature = 0 C = 273 K\n  Pressure = 1 atm\n\n  At STP, 1 mole of ANY gas = 22.4 L\n\n  +---------------------------------+\n  |                                 |\n  |   o   o   o   o   o   o   o    |\n  |                                 |   22.4 L total volume\n  |   o   o   o   o   o   o   o    |   1 mole of gas\n  |                                 |   (any gas!)\n  |   o   o   o   o   o   o   o    |\n  |                                 |\n  +---------------------------------+\n\n  Conversion factors:\n    moles -> liters:  multiply by 22.4 L/mol\n    liters -> moles:  divide by 22.4 L/mol\n\n  This ONLY works at STP (0 C, 1 atm).",
+          caption:
+            "At STP, one mole of any gas occupies 22.4 liters. This is a conversion factor between moles and volume for gases.",
+        },
+        misconception:
+          "The 22.4 L/mol conversion factor only works at STP. If the problem does not say 'at STP,' you cannot use 22.4 L/mol. Also, 22.4 L is the volume per mole of gas — it is NOT the molar mass. The molar mass of O2 is 32 g/mol, but its molar volume at STP is 22.4 L/mol. These are completely different quantities.",
+      },
     ],
     formulas: [
       {
@@ -1744,6 +1941,14 @@ export const LEARN_CONTENT: Record<string, TopicContent> = {
           "The Law of Conservation of Mass states that the total mass of all reactants equals the total mass of all products in a chemical reaction. No mass is created or destroyed.",
         example:
           "10.0 g of reactant A + 15.0 g of reactant B = 25.0 g of products total.",
+      },
+      {
+        name: "Molar Volume at STP",
+        formula: "1 mol gas = 22.4 L gas (at STP: 0 C, 1 atm)",
+        desc:
+          "At standard temperature and pressure (0 C / 273 K and 1 atm), one mole of any gas occupies 22.4 liters. Use this as a conversion factor between moles and volume for gases at STP.",
+        example:
+          "3.0 mol of O2 at STP = 3.0 x 22.4 = 67.2 L of O2.",
       },
     ],
     workedExamples: [
@@ -1864,6 +2069,16 @@ export const LEARN_CONTENT: Record<string, TopicContent> = {
         term: "Coefficient",
         def:
           "The number placed in front of a chemical formula in a balanced equation, indicating the relative number of moles of that substance.",
+      },
+      {
+        term: "STP",
+        def:
+          "Standard Temperature and Pressure: 0 C (273 K) and 1 atm. At STP, 1 mole of any gas occupies 22.4 L.",
+      },
+      {
+        term: "Molar Volume (at STP)",
+        def:
+          "The volume occupied by 1 mole of any gas at STP: 22.4 L/mol. Used as a conversion factor between moles and liters for gases.",
       },
     ],
   },
@@ -2016,6 +2231,39 @@ export const LEARN_CONTENT: Record<string, TopicContent> = {
         },
         misconception:
           "A very common mistake is dissolving the solute in exactly 500 mL of water. This would give you MORE than 500 mL of total solution (because the solute adds volume), making the concentration slightly lower than intended. You must dissolve first, then fill to the mark.",
+      },
+      {
+        title: "Mole vs Molarity: Quantity vs Concentration",
+        body:
+          "The mole and molarity are two of the most commonly confused concepts in chemistry. A mole is a QUANTITY — it tells you HOW MANY particles you have (6.02 x 10^23 per mole). Molarity is a CONCENTRATION — it tells you how many moles are packed into each liter of solution (mol/L). The difference matters: if you have 1.0 mole of NaCl, you have a specific amount of salt. If you have 1.0 M NaCl, you have a solution where each liter contains 1.0 mole — but the total amount depends on how much solution you have. 1 liter of 1.0 M NaCl contains 1.0 mole. 0.5 liter of 1.0 M NaCl contains only 0.5 mole. The concentration is the same, but the amount is different. Think of it like juice: the mole is how much juice you have (a cup, a gallon), and molarity is how strong the juice is (concentrated or diluted).",
+        example:
+          "1.0 mole of NaCl = 6.02 x 10^23 molecules of NaCl (a quantity). 1.0 M NaCl = a solution containing 1.0 mol per liter (a concentration). If you have 250 mL of 1.0 M NaCl, you have 0.25 moles of NaCl (1.0 mol/L x 0.250 L). The concentration tells you the ratio; the volume tells you how much you actually have.",
+        diagram: {
+          type: "comparison",
+          title: "Mole (Quantity) vs Molarity (Concentration)",
+          left: {
+            title: "MOLE (quantity)",
+            items: [
+              "Tells you HOW MANY particles",
+              "1 mole = 6.02 x 10^23 items",
+              "Like 'a dozen' = 12 items",
+              "Unit: mol (or mmol, umol)",
+              "Example: 2.0 mol NaCl = 2 x 6.02x10^23 molecules",
+            ],
+          },
+          right: {
+            title: "MOLARITY (concentration)",
+            items: [
+              "Tells you how CROWDED the particles are",
+              "1 M = 1 mole per liter of solution",
+              "Like 'how strong is the juice'",
+              "Unit: M (mol/L) (or mM, uM)",
+              "Example: 2.0 M NaCl = 2 mol in every liter",
+            ],
+          },
+        },
+        misconception:
+          "The most common error is treating molarity as an amount. If a problem says 'you have 500 mL of 2.0 M NaCl,' that does NOT mean you have 2.0 moles. You have 2.0 x 0.500 = 1.0 mole. Molarity x Volume = Moles. You must always multiply concentration by volume to get the actual amount.",
       },
       {
         title: "The Dilution Equation: C1V1 = C2V2",
@@ -2211,6 +2459,21 @@ export const LEARN_CONTENT: Record<string, TopicContent> = {
         term: "Stock Solution",
         def:
           "A concentrated solution stored in the laboratory that is diluted as needed to prepare solutions of lower concentration.",
+      },
+      {
+        term: "Concentration",
+        def:
+          "The amount of solute per unit volume of solution. Molarity (mol/L) is the most common unit of concentration in chemistry.",
+      },
+      {
+        term: "Millimolarity (mM)",
+        def:
+          "A concentration unit: mmol/L = 10^-3 M. Used for dilute solutions. 1 mM = 0.001 M.",
+      },
+      {
+        term: "Micromolarity (uM)",
+        def:
+          "A concentration unit: umol/L = 10^-6 M. Used for very dilute solutions. 1 uM = 0.000001 M.",
       },
     ],
   },
