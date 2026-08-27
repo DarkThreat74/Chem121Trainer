@@ -15,11 +15,47 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Get all question IDs for this topic (from DB or sample fallback)
-    let questionIds: string[];
+    // Load sample questions for this topic (used for auto-inserting
+    // any questions not yet in the DB, and as a fallback for question IDs).
     const { SAMPLE_QUESTIONS } = await import("@/lib/sample-data");
     const sampleQuestions = SAMPLE_QUESTIONS.filter((q) => q.topic === topicId);
 
+    // Ensure all sample questions exist in the DB.
+    // The review_state table has a FK constraint on question_id → questions.id,
+    // so any question not in the questions table will cause a FK violation.
+    //
+    // We use a single INSERT ... SELECT FROM unnest(...) query instead of
+    // 28+ individual INSERTs. This reduces the number of HTTP requests to
+    // Neon from 56+ down to 2-3, avoiding Vercel edge runtime timeouts.
+    if (sampleQuestions.length > 0) {
+      const ids = sampleQuestions.map((q) => q.id);
+      const topics = sampleQuestions.map((q) => q.topic);
+      const subtopics = sampleQuestions.map((q) => q.subtopic);
+      const modes = sampleQuestions.map((q) => q.mode);
+      const difficulties = sampleQuestions.map((q) => q.difficulty);
+      const contents = sampleQuestions.map((q) => JSON.stringify(q.content));
+      const isSamples = sampleQuestions.map((q) => q.is_sample);
+
+      await sql`
+        INSERT INTO public.questions (id, topic, subtopic, mode, difficulty, content, is_sample)
+        SELECT id, topic, subtopic, mode, difficulty, content, is_sample
+        FROM unnest(
+          ${ids}::text[],
+          ${topics}::text[],
+          ${subtopics}::text[],
+          ${modes}::text[],
+          ${difficulties}::int[],
+          ${contents}::jsonb[],
+          ${isSamples}::boolean[]
+        ) AS t(id, topic, subtopic, mode, difficulty, content, is_sample)
+        ON CONFLICT (id) DO NOTHING
+      `;
+    }
+
+    // Get ALL question IDs for this topic from the DB (after the insert above,
+    // this includes any questions that were just added from sample data).
+    // Fall back to sample data if the DB is unreachable.
+    let questionIds: string[];
     try {
       const dbQs = await sql`
         SELECT id FROM public.questions WHERE topic = ${topicId}
@@ -40,48 +76,27 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Ensure all questions exist in the DB before inserting review_state.
-    // The review_state table has a FK constraint on question_id → questions.id,
-    // so any question not in the questions table will cause a 500 error.
-    // Auto-insert from sample data (same approach as /api/review route).
-    //
-    // All queries are batched into a single transaction (one HTTP request)
-    // to avoid edge runtime timeouts — doing 44+ individual queries in a loop
-    // exceeds Vercel's edge function time limit.
+    // Mark all questions as seen (reps=1, state=Review) using a single
+    // INSERT ... SELECT FROM unnest(...) query. This replaces the previous
+    // approach of 28+ individual INSERTs in a transaction.
     const now = new Date();
     const due = new Date(now.getTime() + 86400000 * 7); // due in 7 days
     const nowIso = now.toISOString();
     const dueIso = due.toISOString();
 
-    const queries: ReturnType<typeof sql>[] = [];
-
-    // Insert any missing questions from sample data
-    for (const sampleQ of sampleQuestions) {
-      queries.push(sql`
-        INSERT INTO public.questions (id, topic, subtopic, mode, difficulty, content, is_sample)
-        VALUES (${sampleQ.id}, ${sampleQ.topic}, ${sampleQ.subtopic}, ${sampleQ.mode}, ${sampleQ.difficulty}, ${JSON.stringify(sampleQ.content)}, ${sampleQ.is_sample})
-        ON CONFLICT (id) DO NOTHING
-      `);
-    }
-
-    // Mark all questions as seen (reps=1, state=Review)
-    for (const qid of questionIds) {
-      queries.push(sql`
-        INSERT INTO public.review_state
-          (user_id, question_id, stability, difficulty, due, reps, lapses, state, elapsed_days, scheduled_days, last_review)
-        VALUES
-          (${SINGLE_USER_ID}, ${qid}, 3.0, 5.0, ${dueIso}, 1, 0, 2, 0, 7, ${nowIso})
-        ON CONFLICT (user_id, question_id) DO UPDATE SET
-          reps = GREATEST(public.review_state.reps, 1),
-          state = 2,
-          due = ${dueIso},
-          scheduled_days = 7,
-          last_review = ${nowIso}
-      `);
-    }
-
-    // Batch all queries into a single HTTP request via transaction()
-    await sql.transaction(queries);
+    await sql`
+      INSERT INTO public.review_state
+        (user_id, question_id, stability, difficulty, due, reps, lapses, state, elapsed_days, scheduled_days, last_review)
+      SELECT
+        ${SINGLE_USER_ID}, qid, 3.0, 5.0, ${dueIso}::timestamptz, 1, 0, 2, 0, 7, ${nowIso}::timestamptz
+      FROM unnest(${questionIds}::text[]) AS qid
+      ON CONFLICT (user_id, question_id) DO UPDATE SET
+        reps = GREATEST(public.review_state.reps, 1),
+        state = 2,
+        due = EXCLUDED.due,
+        scheduled_days = 7,
+        last_review = EXCLUDED.last_review
+    `;
 
     return NextResponse.json({
       success: true,

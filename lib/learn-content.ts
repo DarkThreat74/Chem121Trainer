@@ -70,7 +70,7 @@ export const LEARN_CONTENT: Record<string, TopicContent> = {
     subtitle: "What chemistry is, what matter is, and how we measure it",
     color: "#818cf8",
     intro:
-      "Before you can do any chemistry, you need to understand three things: what chemistry studies (matter), how we classify matter, and how we measure it. This section starts from absolute zero — no prior knowledge needed. By the end, you will understand what matter is, how to classify it, the difference between accuracy and precision, and how density works.",
+      "Before you can do any chemistry, you need to understand what chemistry studies (matter), how scientists learn about it (the scientific method), how we classify it, and how we measure it. This section starts from absolute zero — no prior knowledge needed. By the end, you will understand what matter is, how to classify it, physical vs chemical properties and changes, the scientific method (hypothesis, theory, law, variables), the difference between accuracy and precision, and how density works.",
     concepts: [
       {
         title: "What is Chemistry?",
@@ -376,16 +376,14 @@ export const LEARN_CONTENT: Record<string, TopicContent> = {
         diagram: {
           type: "visual",
           visual:
-            "ACCURATE + PRECISE    PRECISE, NOT ACCURATE    ACCURATE, NOT PRECISE    NEITHER\n" +
-            "\n" +
-            "      .                      .                  .         .\n" +
-            "    ( O )                    .                  .             .\n" +
-            "      .                    .                  .         .\n" +
-            "                           .                  .                .\n" +
-            "\n" +
-            "  Darts in center,      Darts clustered      Darts average      Darts\n" +
-            "  clustered together    but off-center       to center but      scattered\n" +
-            "                                              scattered          everywhere",
+            "  ACCURATE + PRECISE     PRECISE, NOT ACCURATE    ACCURATE, NOT PRECISE    NEITHER\n\n" +
+            "     .  .  .                .  .  .              .        .             .   .\n" +
+            "    .  (O)  .              .  .  .            .    .        .           .     .\n" +
+            "     .  .  .                .  .  .               .          .            . .\n" +
+            "                                                                 .    .\n" +
+            "  Darts in center,        Darts clustered       Darts average        Darts\n" +
+            "  clustered together      but off-center        to center but        scattered\n" +
+            "                                                scattered            everywhere",
           caption: "The classic target diagram. Accuracy = hitting the center. Precision = tight grouping. The best measurements are both accurate and precise.",
         },
         misconception: "Many students think precision means the same thing as accuracy. It does not. A scale that always reads 2 pounds too heavy is precise (consistent) but not accurate (wrong). A scale that sometimes reads correctly but varies a lot is accurate on average but not precise.",
@@ -469,7 +467,7 @@ export const LEARN_CONTENT: Record<string, TopicContent> = {
     subtitle: "How scientists measure length, mass, volume, and temperature",
     color: "#34d399",
     intro:
-      "The metric system is the universal language of science. Unlike the imperial system (inches, pounds, gallons), the metric system is based on powers of 10 — every unit is 10 times bigger or smaller than the next. This makes conversions incredibly simple once you understand the pattern. This section will teach you the base units, the prefixes that scale them, and how to convert between metric units.",
+      "The metric system is the universal language of science. Unlike the imperial system (inches, pounds, gallons), the metric system is based on powers of 10 — every unit is 10 times bigger or smaller than the next. This makes conversions incredibly simple once you understand the pattern. This section will teach you the base units, the prefixes that scale them, how to convert between metric units, temperature scales, and the SI abbreviations (M, mol, mM, mmol) you must know for exams.",
     concepts: [
       {
         title: "Why the Metric System?",
@@ -517,31 +515,29 @@ export const LEARN_CONTENT: Record<string, TopicContent> = {
         diagram: {
           type: "visual",
           visual:
-            "           kilo (k) = 1000\n" +
-            "              |\n" +
-            "           hecto (h) = 100\n" +
-            "              |\n" +
-            "           deca (da) = 10\n" +
-            "              |\n" +
-            "           BASE UNIT (m, g, L) = 1\n" +
-            "              |\n" +
-            "           deci (d) = 0.1\n" +
-            "              |\n" +
-            "           centi (c) = 0.01\n" +
-            "              |\n" +
-            "           milli (m) = 0.001\n" +
-            "              |\n" +
-            "           micro (u) = 0.000001\n" +
+            "  THE METRIC STAIRCASE\n\n" +
+            "         kilo (k) = 1000         x1000\n" +
+            "            |\n" +
+            "         hecto (h) = 100          x100\n" +
+            "            |\n" +
+            "         deca (da) = 10           x10\n" +
+            "            |\n" +
+            "         BASE UNIT (m, g, L) = 1  <-- START HERE\n" +
+            "            |\n" +
+            "         deci (d) = 0.1           /10\n" +
+            "            |\n" +
+            "         centi (c) = 0.01         /100\n" +
+            "            |\n" +
+            "         milli (m) = 0.001        /1000\n" +
+            "            |\n" +
+            "         micro (u) = 0.000001     /1,000,000\n" +
             "\n" +
-            "Going DOWN (to smaller units): MULTIPLY by 10 each step\n" +
-            "Going UP (to larger units): DIVIDE by 10 each step\n" +
+            "  GOING DOWN (to smaller units): MULTIPLY by 10 each step\n" +
+            "  GOING UP (to larger units): DIVIDE by 10 each step\n" +
             "\n" +
-            "K    H    D    B    D    C    M\n" +
-            "i    e    e    A    e    e    i\n" +
-            "l    c    c    S    c    n    l\n" +
-            "o    t    a    E    i    t    l\n" +
-            "           o    i           i\n" +
-            "                e           (King Henry Died By Drinking Chocolate Milk)",
+            "  Mnemonic: King Henry Died By Drinking Chocolate Milk\n" +
+            "            K    H    D    B  D    C        M\n" +
+            "            ilo  ecto  eca  ase eci    enti    illi",
           caption: "The metric staircase. Each step is a power of 10. Going down to smaller units, multiply. Going up to larger units, divide.",
         },
       },
@@ -651,6 +647,25 @@ export const LEARN_CONTENT: Record<string, TopicContent> = {
           { label: "Check sig figs", detail: "4.50 has 3 sig figs. The conversion factors (1000 and 100) are exact. So the answer has 3 sig figs: 4.50 x 10^5 cm, or 450000 cm (3 sig figs)." },
         ],
         answer: "4.50 x 10^5 cm (3 sig figs)",
+      },
+      {
+        problem: "Convert 25 C to Kelvin.",
+        steps: [
+          { label: "Identify the formula", detail: "K = C + 273.15. Celsius and Kelvin use the same size degree, only the starting point differs." },
+          { label: "Plug in the value", detail: "K = 25 + 273.15" },
+          { label: "Calculate", detail: "K = 298.15 K. In chemistry, we typically round to the ones place: 298 K." },
+        ],
+        answer: "298 K",
+      },
+      {
+        problem: "Convert 750 mL to liters using the factor-label method.",
+        steps: [
+          { label: "Write the starting value", detail: "Start: 750 mL. We want liters (L)." },
+          { label: "Write the conversion factor", detail: "Equality: 1000 mL = 1 L. Since mL is on top in our starting value, put mL on the bottom: (1 L / 1000 mL)." },
+          { label: "Set up and cancel", detail: "750 mL x (1 L / 1000 mL). The mL on top cancels with mL on bottom. Only L survives." },
+          { label: "Compute", detail: "750 / 1000 = 0.750 L. Sanity check: L is bigger than mL, so the number should get smaller. 750 -> 0.750. Correct." },
+        ],
+        answer: "0.750 L",
       },
     ],
     vocabulary: [
@@ -837,6 +852,27 @@ export const LEARN_CONTENT: Record<string, TopicContent> = {
         ],
         answer: "Chlorine, mass number = 35, charge = -1 (the chloride ion, Cl-)",
       },
+      {
+        problem: "An atom of nitrogen (N) has a mass number of 15. How many protons, neutrons, and electrons does it have? Write its nuclear notation.",
+        steps: [
+          { label: "Find the atomic number", detail: "Nitrogen (N) is element 7 on the periodic table, so it has 7 protons. Z = 7." },
+          { label: "Find the neutrons", detail: "Mass number = protons + neutrons. Neutrons = A - Z = 15 - 7 = 8 neutrons." },
+          { label: "Find the electrons", detail: "A neutral atom has equal protons and electrons. So it has 7 electrons." },
+          { label: "Write the nuclear notation", detail: "15N (mass number 15 on top, element symbol N, atomic number 7 on bottom). This is the isotope nitrogen-15." },
+        ],
+        answer: "7 protons, 8 neutrons, 7 electrons. Nuclear notation: 15N.",
+      },
+      {
+        problem: "Calcium (Ca) loses 2 electrons to form an ion. How many protons, neutrons (mass number 40), and electrons does the ion have? What is its charge and symbol?",
+        steps: [
+          { label: "Find protons", detail: "Calcium is element 20 on the periodic table, so it has 20 protons." },
+          { label: "Find neutrons", detail: "Neutrons = A - Z = 40 - 20 = 20 neutrons." },
+          { label: "Find electrons in the ion", detail: "Neutral Ca has 20 electrons. It lost 2, so the ion has 20 - 2 = 18 electrons." },
+          { label: "Calculate the charge", detail: "Charge = protons - electrons = 20 - 18 = +2. This is a cation (positive ion)." },
+          { label: "Write the symbol", detail: "Ca2+ (calcium ion with a +2 charge)." },
+        ],
+        answer: "20 protons, 20 neutrons, 18 electrons, charge = +2. Symbol: Ca2+.",
+      },
     ],
     vocabulary: [
       { term: "Atom", def: "The smallest unit of an element that retains its properties" },
@@ -916,6 +952,24 @@ export const LEARN_CONTENT: Record<string, TopicContent> = {
             ["5", "Trailing zeros, no decimal", "Ambiguous", "123,000 = use sci notation"],
           ],
         },
+      },
+      {
+        title: "Scientific Notation: Making Sig Figs Unambiguous",
+        body: "Scientific notation writes numbers as a coefficient (between 1 and 10) times a power of 10. The format is: A.BCD x 10^n. In scientific notation, ALL digits in the coefficient are significant — there are no ambiguous leading or trailing zeros. This is why scientists use it: it removes all guesswork about which digits were measured. To convert a regular number to scientific notation, move the decimal point until only one non-zero digit is to its left, then count the moves as the exponent (right = positive, left = negative).",
+        example: "4.900 x 10^5 has 4 sig figs (4, 9, 0, 0 — all are significant in the coefficient). 6.37549 x 10^-2 has 6 sig figs. 0.333 x 10^3 has 3 sig figs. The power of 10 does NOT affect the sig fig count — only the coefficient matters.",
+        diagram: {
+          type: "table",
+          title: "Scientific Notation Examples",
+          headers: ["Number", "Scientific Notation", "Sig Figs", "Notes"],
+          rows: [
+            ["4.900 x 10^5", "Already in sci notation", "4", "All 4 digits in 4.900 are significant"],
+            ["6.37549 x 10^-2", "Already in sci notation", "6", "All 6 digits in the coefficient count"],
+            ["0.333 x 10^3", "Already in sci notation", "3", "All 3 digits in 0.333 count"],
+            ["300", "3.00 x 10^2 (if 3 sf)", "3", "Ambiguous in regular form — sci notation fixes it"],
+            ["0.00210", "2.10 x 10^-3", "3", "Leading zeros vanish; trailing zero after decimal counts"],
+          ],
+        },
+        misconception: "The power of 10 (the exponent) does NOT count as a sig fig. In 4.900 x 10^5, the exponent 5 is just a placeholder — it tells you where the decimal goes. Only the digits 4, 9, 0, 0 are significant. Also, when converting to scientific notation, do not drop trailing zeros from the coefficient — they are significant.",
       },
       {
         title: "Rule 6: Exact Numbers Have Infinite Sig Figs",
@@ -1006,6 +1060,24 @@ export const LEARN_CONTENT: Record<string, TopicContent> = {
           { label: "Calculate", detail: "27.0 / 10.0 = 2.70 g/mL (3 sig figs)" },
         ],
         answer: "2.70 g/mL (3 sig figs)",
+      },
+      {
+        problem: "How many significant figures are in 4.900 x 10^5?",
+        steps: [
+          { label: "Identify the coefficient", detail: "The coefficient is 4.900. The power of 10 (10^5) is just a placeholder — it does NOT count as sig figs." },
+          { label: "Apply the rules to the coefficient", detail: "4 and 9 are non-zero digits — significant (Rule 1). The two trailing zeros are after a decimal — significant (Rule 4)." },
+          { label: "Count", detail: "4, 9, 0, 0 = 4 significant figures. The exponent 5 does not add or remove any." },
+        ],
+        answer: "4 significant figures (the 4, 9, and two trailing zeros in the coefficient)",
+      },
+      {
+        problem: "Convert 0.00210 to scientific notation and state how many sig figs it has.",
+        steps: [
+          { label: "Move the decimal point", detail: "Move the decimal 3 places to the right to get one non-zero digit before it: 0.00210 -> 2.10. Since we moved right, the exponent is negative: 10^-3." },
+          { label: "Write in scientific notation", detail: "2.10 x 10^-3. The leading zeros are gone — they were never significant anyway." },
+          { label: "Count the sig figs", detail: "In the coefficient 2.10: 2 and 1 are non-zero (significant), and the trailing 0 is after a decimal (significant). Total = 3 sig figs." },
+        ],
+        answer: "2.10 x 10^-3, which has 3 significant figures",
       },
     ],
     vocabulary: [
@@ -1459,7 +1531,7 @@ export const LEARN_CONTENT: Record<string, TopicContent> = {
           type: "visual",
           title: "The Mole Concept Map",
           visual:
-            "                    GRAMS                       PARTICLES\n                  (what you weigh)              (individual atoms)\n                       |                               |\n                       |                               |\n            divide by molar mass            multiply by 6.02 x 10^23\n             (or multiply by it              (or divide by it to\n              to go the other way)            go the other way)\n                       |                               |\n                       |                               |\n                       v                               v\n\n                    +-------+                    +-------+\n                    |       |                    |       |\n                    | MOLES | <----------------> | MOLES |\n                    |       |                    |       |\n                    +-------+                    +-------+\n\n         GRAMS  <--(molar mass)-->  MOLES  <--(Avogadro's #)-->  PARTICLES\n\n    Key conversions:\n      grams -> moles:   divide grams by molar mass (g / (g/mol) = mol)\n      moles -> grams:   multiply moles by molar mass (mol x g/mol = g)\n      moles -> particles:  multiply moles by 6.02 x 10^23\n      particles -> moles:  divide particles by 6.02 x 10^23\n      grams -> particles:  grams -> moles -> particles (TWO steps)\n      particles -> grams:  particles -> moles -> grams (TWO steps)",
+            "     GRAMS                         PARTICLES\n     (what you weigh)               (individual atoms)\n          |                               |\n          |  x (1 mol / molar mass)       |  x (6.02 x 10^23 / 1 mol)\n          |  or                           |  or\n          |  / (molar mass / 1 mol)       |  / (1 mol / 6.02 x 10^23)\n          v                               v\n          +-------------------------------+\n          |          MOLES                |\n          |     (the central hub)         |\n          +-------------------------------+\n\n  Key conversions:\n    grams -> moles:     divide grams by molar mass (g / (g/mol) = mol)\n    moles -> grams:     multiply moles by molar mass (mol x g/mol = g)\n    moles -> particles: multiply moles by 6.02 x 10^23\n    particles -> moles: divide particles by 6.02 x 10^23\n    grams -> particles: grams -> moles -> particles (TWO steps)\n    particles -> grams: particles -> moles -> grams (TWO steps)",
         },
         misconception:
           "Students often try to convert grams directly to particles using the molar mass. That does not work. The molar mass converts grams to moles only. You must then use Avogadro's number to go from moles to particles. Always go through moles.",
@@ -1716,7 +1788,19 @@ export const LEARN_CONTENT: Record<string, TopicContent> = {
           type: "visual",
           title: "The Cookie Recipe Analogy",
           visual:
-            "  COOKBOOK RECIPE              CHEMICAL EQUATION\n\n  2 cups flour  +              2 H2       +\n  1 cup sugar   +              1 O2       +\n  3 eggs        ------>        12 cookies     ------>    2 H2O\n\n  Ratio: 2 : 1 : 3 : 12        Ratio: 2 : 1 : 2\n\n  Double the recipe?            Double the reaction?\n  4 cups flour                  4 H2\n  2 cups sugar                  2 O2\n  6 eggs                        4 H2O\n\n  The ratio NEVER changes.\n  You just scale it up or down.",
+            "  COOKBOOK RECIPE              CHEMICAL EQUATION\n\n" +
+            "  2 cups flour   +             2 H2   +\n" +
+            "  1 cup sugar    +             1 O2   +\n" +
+            "  3 eggs         ------>       2 H2O\n" +
+            "  ----------                   ----------\n" +
+            "  = 12 cookies                 (2 molecules of water)\n\n" +
+            "  Ratio: 2 : 1 : 3 : 12        Ratio: 2 : 1 : 2\n\n" +
+            "  Double the recipe?            Double the reaction?\n" +
+            "  4 cups flour                  4 H2\n" +
+            "  2 cups sugar                  2 O2\n" +
+            "  6 eggs                        4 H2O\n\n" +
+            "  The ratio NEVER changes.\n" +
+            "  You just scale it up or down.",
           caption:
             "A balanced equation is a recipe. The coefficients are the proportions. Scale up or down, but never change the ratio.",
         },
@@ -2022,6 +2106,33 @@ export const LEARN_CONTENT: Record<string, TopicContent> = {
           },
         ],
         answer: "The percent yield is 84.9%.",
+      },
+      {
+        problem:
+          "How many liters of CO2 gas (at STP) are produced when 50.0 g of CaCO3 decomposes? Balanced equation: CaCO3 -> CaO + CO2. (Molar mass CaCO3 = 100.09 g/mol)",
+        steps: [
+          {
+            label: "Step 1: Convert grams of CaCO3 to moles",
+            detail:
+              "50.0 g CaCO3 x (1 mol / 100.09 g) = 0.500 mol CaCO3. Grams cancel, moles survive.",
+          },
+          {
+            label: "Step 2: Use the mole ratio to find moles of CO2",
+            detail:
+              "From the balanced equation, the ratio is 1 mol CO2 / 1 mol CaCO3. 0.500 mol CaCO3 x (1 mol CO2 / 1 mol CaCO3) = 0.500 mol CO2.",
+          },
+          {
+            label: "Step 3: Convert moles of CO2 to liters at STP",
+            detail:
+              "At STP, 1 mol gas = 22.4 L. 0.500 mol CO2 x (22.4 L / 1 mol) = 11.2 L CO2.",
+          },
+          {
+            label: "Sanity check",
+            detail:
+              "0.500 mol is half a mole. Half of 22.4 L is 11.2 L. The answer makes sense. 3 sig figs from 50.0.",
+          },
+        ],
+        answer: "11.2 L of CO2 at STP (3 sig figs)",
       },
     ],
     vocabulary: [
@@ -2417,6 +2528,29 @@ export const LEARN_CONTENT: Record<string, TopicContent> = {
         ],
         answer:
           "There are 0.375 moles of solute, which corresponds to 15.0 grams of NaOH.",
+      },
+      {
+        problem:
+          "A student says 'I have 2 moles of NaCl' and another says 'I have 2 M NaCl.' Explain the difference and calculate how many moles are in 500 mL of the 2 M solution.",
+        steps: [
+          {
+            label: "Explain the difference",
+            detail:
+              "'2 moles of NaCl' describes an AMOUNT — exactly 2 moles (about 117 g) of NaCl, no volume involved. '2 M NaCl' describes a CONCENTRATION — 2 moles of NaCl dissolved per liter of solution. The first is a quantity; the second is a ratio. They are completely different.",
+          },
+          {
+            label: "Calculate moles in 500 mL of 2 M solution",
+            detail:
+              "M = moles / liters, so moles = M x liters. 500 mL = 0.500 L. moles = 2.0 M x 0.500 L = 1.0 mol.",
+          },
+          {
+            label: "Interpret the result",
+            detail:
+              "500 mL of 2 M NaCl contains 1.0 mole of NaCl. If you had the full 1 L, you would have 2.0 moles. The molarity tells you the ratio; the actual amount depends on the volume you take.",
+          },
+        ],
+        answer:
+          "2 moles is an amount; 2 M is a concentration. 500 mL of 2 M NaCl contains 1.0 mole of NaCl.",
       },
     ],
     vocabulary: [
