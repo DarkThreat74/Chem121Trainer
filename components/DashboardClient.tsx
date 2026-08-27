@@ -72,12 +72,15 @@ export default function DashboardClient({
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [markingTopic, setMarkingTopic] = useState<string | null>(null);
   const [markError, setMarkError] = useState<string | null>(null);
+  const [markErrorTopic, setMarkErrorTopic] = useState<string | null>(null);
   useEffect(() => {
     setTodayLabel(new Date().toLocaleDateString("en-US", { weekday: "short" }));
   }, []);
 
   const handleMarkComplete = async (topicId: string) => {
     setMarkingTopic(topicId);
+    setMarkError(null);
+    setMarkErrorTopic(null);
     try {
       const res = await fetch("/api/complete-topic", {
         method: "POST",
@@ -90,10 +93,12 @@ export default function DashboardClient({
         const data = await res.json().catch(() => ({}));
         console.error("Failed to mark topic complete:", res.status, data);
         setMarkError(data.error || `Server error (${res.status}). Please try again.`);
+        setMarkErrorTopic(topicId);
       }
     } catch (e) {
       console.error("Failed to mark topic complete:", e);
       setMarkError("Network error. Check your connection and try again.");
+      setMarkErrorTopic(topicId);
     } finally {
       setMarkingTopic(null);
     }
@@ -401,13 +406,13 @@ export default function DashboardClient({
                     {isCurrent && (
                       <div className="mt-1.5">
                         <button
-                          onClick={() => { setMarkError(null); handleMarkComplete(topic.id); }}
+                          onClick={() => { setMarkError(null); setMarkErrorTopic(null); handleMarkComplete(topic.id); }}
                           disabled={markingTopic === topic.id}
                           className="text-[10px] text-text-tertiary/60 underline-offset-2 transition hover:text-text-tertiary hover:underline disabled:opacity-40"
                         >
                           {markingTopic === topic.id ? "marking…" : "mark as complete"}
                         </button>
-                        {markError && markingTopic === null && (
+                        {markError && markErrorTopic === topic.id && markingTopic === null && (
                           <p className="mt-1 text-[10px] text-err">{markError}</p>
                         )}
                       </div>

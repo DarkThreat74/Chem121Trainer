@@ -98,6 +98,11 @@ export default async function DashboardPage() {
   }
   const topicSeenCounts: Record<string, number> = {};
   for (const rs of reviewStates) {
+    // Only count questions with reps > 0 as "seen" — this matches the
+    // practice page's lock check and the complete-topic API's behavior.
+    // A review_state row with reps=0 means the question was inserted but
+    // never actually reviewed.
+    if (rs.reps <= 0) continue;
     const q = questions.find((q) => q.id === rs.question_id);
     if (q) {
       topicSeenCounts[q.topic] = (topicSeenCounts[q.topic] || 0) + 1;
@@ -238,6 +243,8 @@ function calculateTopicMastery(
 
   const seenPerTopic: Record<string, Set<string>> = {};
   for (const rs of reviewStates) {
+    // Only count as "seen" if reps > 0 — matches practice page lock check
+    if (rs.reps <= 0) continue;
     const topic = topicMap.get(rs.question_id);
     if (!topic) continue;
     if (!seenPerTopic[topic]) seenPerTopic[topic] = new Set();

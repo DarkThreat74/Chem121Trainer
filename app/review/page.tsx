@@ -60,6 +60,9 @@ export default async function ReviewPage() {
 
   const topicSeenCounts: Record<string, number> = {};
   for (const rs of reviewStates) {
+    // Only count questions with reps > 0 as "seen" — matches practice page
+    // lock check and dashboard unlock logic.
+    if (rs.reps <= 0) continue;
     const q = allQuestions.find((q) => q.id === rs.question_id);
     if (q) {
       topicSeenCounts[q.topic] = (topicSeenCounts[q.topic] || 0) + 1;
