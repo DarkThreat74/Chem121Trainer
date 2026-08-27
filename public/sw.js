@@ -3,7 +3,8 @@
  *
  * Caching strategy:
  * - Navigation (page) requests: network-first, fall back to cache (offline support)
- * - Static assets (JS/CSS/images/fonts): cache-first, fall back to network
+ * - Static assets (JS/CSS/images/fonts): stale-while-revalidate (always fetch fresh
+ *   in background, serve cached instantly — ensures new deployments load fast)
  * - All successful GET responses are cached for offline use
  *
  * Offline review saves:
@@ -11,7 +12,7 @@
  * - Background Sync is registered so the SW can trigger a flush when back online
  */
 
-const CACHE_NAME = "chem121-v3";
+const CACHE_NAME = "chem121-v4";
 
 // All 8 topic IDs — used to pre-cache practice and learn pages
 const TOPIC_IDS = [
@@ -46,11 +47,13 @@ self.addEventListener("install", (event) => {
 });
 
 self.addEventListener("activate", (event) => {
+  // Delete ALL old caches — forces fresh fetch of all assets
   event.waitUntil(
     caches.keys().then((keys) =>
       Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)))
     )
   );
+  // Take control of all clients immediately
   self.clients.claim();
 });
 
@@ -90,7 +93,10 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Static assets (JS, CSS, images, fonts): cache-first, fall back to network
+  // Static assets (JS, CSS, images, fonts): stale-while-revalidate
+  // This ensures new deployments are always fetched — the cached version
+  // is served immediately, but a fresh copy is fetched in the background
+  // and replaces the cache for next load.
   if (
     request.destination === "script" ||
     request.destination === "style" ||
@@ -98,15 +104,17 @@ self.addEventListener("fetch", (event) => {
     request.destination === "font"
   ) {
     event.respondWith(
-      caches.match(request).then(
-        (cached) =>
-          cached ||
-          fetch(request).then((response) => {
+      caches.match(request).then((cached) => {
+        const fetchPromise = fetch(request)
+          .then((response) => {
             const clone = response.clone();
             caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
             return response;
           })
-      )
+          .catch(() => cached);
+        // Return cached immediately if available, otherwise wait for network
+        return cached || fetchPromise;
+      })
     );
     return;
   }

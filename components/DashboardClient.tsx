@@ -103,6 +103,33 @@ export default function DashboardClient({
     }
   };
 
+  const handleMarkIncomplete = async (topicId: string) => {
+    setMarkingTopic(topicId);
+    setMarkError(null);
+    setMarkErrorTopic(null);
+    try {
+      const res = await fetch("/api/reset-topic", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ topicId }),
+      });
+      if (res.ok) {
+        window.location.reload();
+      } else {
+        const data = await res.json().catch(() => ({}));
+        console.error("Failed to reset topic:", res.status, data);
+        setMarkError(data.error || `Server error (${res.status}). Please try again.`);
+        setMarkErrorTopic(topicId);
+      }
+    } catch (e) {
+      console.error("Failed to reset topic:", e);
+      setMarkError("Network error. Check your connection and try again.");
+      setMarkErrorTopic(topicId);
+    } finally {
+      setMarkingTopic(null);
+    }
+  };
+
   return (
     <div className="space-y-6">
       <SettingsPanel open={settingsOpen} onClose={() => setSettingsOpen(false)} />
@@ -390,10 +417,9 @@ export default function DashboardClient({
                     </Link>
                   </div>
 
-                  {/* Mark as completed — available for any non-complete topic,
-                      even if the user hasn't started it yet */}
-                  {isCurrent && (
-                    <div className="mt-1.5">
+                  {/* Mark as complete / incomplete toggle */}
+                  <div className="mt-1.5">
+                    {isCurrent ? (
                       <button
                         onClick={() => { setMarkError(null); setMarkErrorTopic(null); handleMarkComplete(topic.id); }}
                         disabled={markingTopic === topic.id}
@@ -401,11 +427,19 @@ export default function DashboardClient({
                       >
                         {markingTopic === topic.id ? "marking…" : "mark as complete"}
                       </button>
-                      {markError && markErrorTopic === topic.id && markingTopic === null && (
-                        <p className="mt-1 text-[10px] text-err">{markError}</p>
-                      )}
-                    </div>
-                  )}
+                    ) : (
+                      <button
+                        onClick={() => { setMarkError(null); setMarkErrorTopic(null); handleMarkIncomplete(topic.id); }}
+                        disabled={markingTopic === topic.id}
+                        className="text-[10px] text-text-tertiary/60 underline-offset-2 transition hover:text-text-tertiary hover:underline disabled:opacity-40"
+                      >
+                        {markingTopic === topic.id ? "resetting…" : "mark as incomplete"}
+                      </button>
+                    )}
+                    {markError && markErrorTopic === topic.id && markingTopic === null && (
+                      <p className="mt-1 text-[10px] text-err">{markError}</p>
+                    )}
+                  </div>
                 </div>
               </motion.div>
             );
