@@ -119,7 +119,7 @@ export default function LandingPage() {
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
           </Link>
           <Link
-            href="/learn"
+            href="/dashboard"
             className="flex items-center justify-center gap-2 rounded-2xl border border-border bg-bg-card px-6 py-3.5 font-semibold text-text transition-all duration-200 hover:border-border-strong hover:bg-bg-hover sm:px-8 sm:py-4"
           >
             <Sparkles className="h-4 w-4 text-accent" />

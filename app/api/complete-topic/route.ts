@@ -17,6 +17,9 @@ export async function POST(request: NextRequest) {
 
     // Get all question IDs for this topic (from DB or sample fallback)
     let questionIds: string[];
+    const { SAMPLE_QUESTIONS } = await import("@/lib/sample-data");
+    const sampleQuestions = SAMPLE_QUESTIONS.filter((q) => q.topic === topicId);
+
     try {
       const dbQs = await sql`
         SELECT id FROM public.questions WHERE topic = ${topicId}
@@ -24,13 +27,10 @@ export async function POST(request: NextRequest) {
       if (dbQs.length > 0) {
         questionIds = dbQs.map((q) => q.id);
       } else {
-        // DB empty — fall back to sample data via dynamic import
-        const { SAMPLE_QUESTIONS } = await import("@/lib/sample-data");
-        questionIds = SAMPLE_QUESTIONS.filter((q) => q.topic === topicId).map((q) => q.id);
+        questionIds = sampleQuestions.map((q) => q.id);
       }
     } catch {
-      const { SAMPLE_QUESTIONS } = await import("@/lib/sample-data");
-      questionIds = SAMPLE_QUESTIONS.filter((q) => q.topic === topicId).map((q) => q.id);
+      questionIds = sampleQuestions.map((q) => q.id);
     }
 
     if (questionIds.length === 0) {
@@ -38,6 +38,18 @@ export async function POST(request: NextRequest) {
         { error: "No questions found for this topic" },
         { status: 400 }
       );
+    }
+
+    // Ensure all questions exist in the DB before inserting review_state.
+    // The review_state table has a FK constraint on question_id → questions.id,
+    // so any question not in the questions table will cause a 500 error.
+    // Auto-insert from sample data (same approach as /api/review route).
+    for (const sampleQ of sampleQuestions) {
+      await sql`
+        INSERT INTO public.questions (id, topic, subtopic, mode, difficulty, content, is_sample)
+        VALUES (${sampleQ.id}, ${sampleQ.topic}, ${sampleQ.subtopic}, ${sampleQ.mode}, ${sampleQ.difficulty}, ${JSON.stringify(sampleQ.content)}, ${sampleQ.is_sample})
+        ON CONFLICT (id) DO NOTHING
+      `;
     }
 
     const now = new Date();
@@ -53,6 +65,8 @@ export async function POST(request: NextRequest) {
         ON CONFLICT (user_id, question_id) DO UPDATE SET
           reps = GREATEST(public.review_state.reps, 1),
           state = 2,
+          due = ${due.toISOString()},
+          scheduled_days = 7,
           last_review = ${now.toISOString()}
       `;
     }

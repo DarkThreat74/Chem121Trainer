@@ -394,14 +394,15 @@ export default function DashboardClient({
                       </Link>
                     </div>
 
-                    {/* Mark as completed (small fallback link) */}
-                    {isCurrent && mastery.seen > 0 && (
+                    {/* Mark as completed — available for any unlocked, non-complete topic,
+                        even if the user hasn't started it yet */}
+                    {isCurrent && (
                       <button
                         onClick={() => handleMarkComplete(topic.id)}
                         disabled={markingTopic === topic.id}
                         className="mt-1.5 text-[10px] text-text-tertiary/60 underline-offset-2 transition hover:text-text-tertiary hover:underline disabled:opacity-40"
                       >
-                        {markingTopic === topic.id ? "marking…" : "mark done"}
+                        {markingTopic === topic.id ? "marking…" : "mark as complete"}
                       </button>
                     )}
                   </div>

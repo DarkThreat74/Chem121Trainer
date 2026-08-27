@@ -9,7 +9,11 @@ function getSql(): NeonQueryFunction<false, false> {
   if (_sql) return _sql;
   const conn = process.env.DATABASE_URL;
   if (!conn) throw new Error("DATABASE_URL environment variable is not set");
-  _sql = neon(conn);
+  // fetchOptions: { cache: 'no-store' } prevents the edge runtime from
+  // caching HTTP responses. Without this, Neon query results can be
+  // cached across requests, causing stale data (e.g. topics staying
+  // locked after being marked complete).
+  _sql = neon(conn, { fetchOptions: { cache: "no-store" } as any });
   return _sql;
 }
 

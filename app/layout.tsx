@@ -32,6 +32,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
+      <head>
+        {/* Apply saved theme before React hydrates to prevent flash of wrong theme */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var s=JSON.parse(localStorage.getItem('chem121-settings')||'{}');if(s.theme==='light'){document.documentElement.classList.remove('dark');document.documentElement.classList.add('light');}}catch(e){}`
+          }}
+        />
+      </head>
       <body className="min-h-screen bg-bg text-text" suppressHydrationWarning>
         <SettingsProvider>
           <NavBar />

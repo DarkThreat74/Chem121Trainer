@@ -56,31 +56,29 @@ export default async function PracticePage({
     let prevSeenCount = 0;
     let prevTotalCount = 0;
     try {
-      // Get previous topic's actual question IDs from the DB (not sample data)
-      // so the 50% unlock threshold is calculated against the real question set
-      const prevDbQuestions = await sql`
-        SELECT id FROM public.questions
-        WHERE topic = ${prevTopic.id}
-      ` as any[];
-      let prevQuestionIds: string[];
-      if (prevDbQuestions.length > 0) {
-        prevQuestionIds = prevDbQuestions.map((q) => q.id);
-      } else {
-        // Fallback to sample data if DB has no questions for this topic
-        prevQuestionIds = SAMPLE_QUESTIONS.filter(
+      // Count previous topic's questions and seen questions using a JOIN.
+      // NOTE: We cannot use ANY(${array}) here because the Neon serverless
+      // driver does not correctly serialize array parameters in the edge
+      // runtime — the query silently returns 0 rows. A JOIN on the questions
+      // table avoids the array parameter entirely.
+      const prevStats = await sql`
+        SELECT
+          (SELECT COUNT(*) FROM public.questions WHERE topic = ${prevTopic.id}) as total,
+          (SELECT COUNT(*)
+           FROM public.review_state rs
+           JOIN public.questions q ON q.id = rs.question_id
+           WHERE rs.user_id = ${SINGLE_USER_ID}
+             AND q.topic = ${prevTopic.id}
+             AND rs.reps > 0) as seen
+      `;
+      prevTotalCount = prevStats[0]?.total || 0;
+      prevSeenCount = prevStats[0]?.seen || 0;
+
+      // Fallback to sample data count if DB has no questions for this topic
+      if (prevTotalCount === 0) {
+        prevTotalCount = SAMPLE_QUESTIONS.filter(
           (q) => q.topic === prevTopic.id
-        ).map((q) => q.id);
-      }
-      prevTotalCount = prevQuestionIds.length;
-      if (prevTotalCount > 0) {
-        const seenResult = await sql`
-          SELECT COUNT(*) as seen
-          FROM public.review_state
-          WHERE user_id = ${SINGLE_USER_ID}
-          AND question_id = ANY(${prevQuestionIds})
-          AND reps > 0
-        `;
-        prevSeenCount = seenResult[0]?.seen || 0;
+        ).length;
       }
     } catch {
       // DB unavailable — allow access (fallback mode)
@@ -116,12 +114,13 @@ export default async function PracticePage({
 
   let reviewStates: any[] = [];
   try {
-    const questionIds = questions.map((q) => q.id);
+    // Use a JOIN to avoid ANY(${array}) which fails in the Neon edge runtime.
     reviewStates = await sql`
-      SELECT question_id, stability, difficulty, due, reps, lapses, state, elapsed_days, scheduled_days, last_review
-      FROM public.review_state
-      WHERE user_id = ${SINGLE_USER_ID}
-      AND question_id = ANY(${questionIds})
+      SELECT rs.question_id, rs.stability, rs.difficulty, rs.due, rs.reps, rs.lapses, rs.state, rs.elapsed_days, rs.scheduled_days, rs.last_review
+      FROM public.review_state rs
+      JOIN public.questions q ON q.id = rs.question_id
+      WHERE rs.user_id = ${SINGLE_USER_ID}
+      AND q.topic = ${params.topic}
     `;
   } catch {}
 
