@@ -71,6 +71,7 @@ export default function DashboardClient({
   const [todayLabel, setTodayLabel] = useState("");
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [markingTopic, setMarkingTopic] = useState<string | null>(null);
+  const [markError, setMarkError] = useState<string | null>(null);
   useEffect(() => {
     setTodayLabel(new Date().toLocaleDateString("en-US", { weekday: "short" }));
   }, []);
@@ -86,12 +87,13 @@ export default function DashboardClient({
       if (res.ok) {
         window.location.reload();
       } else {
-        console.error("Failed to mark topic complete:", res.status);
-        alert("Failed to mark topic complete. Please try again.");
+        const data = await res.json().catch(() => ({}));
+        console.error("Failed to mark topic complete:", res.status, data);
+        setMarkError(data.error || `Server error (${res.status}). Please try again.`);
       }
     } catch (e) {
       console.error("Failed to mark topic complete:", e);
-      alert("Failed to mark topic complete. Check your connection and try again.");
+      setMarkError("Network error. Check your connection and try again.");
     } finally {
       setMarkingTopic(null);
     }
@@ -397,13 +399,18 @@ export default function DashboardClient({
                     {/* Mark as completed — available for any unlocked, non-complete topic,
                         even if the user hasn't started it yet */}
                     {isCurrent && (
-                      <button
-                        onClick={() => handleMarkComplete(topic.id)}
-                        disabled={markingTopic === topic.id}
-                        className="mt-1.5 text-[10px] text-text-tertiary/60 underline-offset-2 transition hover:text-text-tertiary hover:underline disabled:opacity-40"
-                      >
-                        {markingTopic === topic.id ? "marking…" : "mark as complete"}
-                      </button>
+                      <div className="mt-1.5">
+                        <button
+                          onClick={() => { setMarkError(null); handleMarkComplete(topic.id); }}
+                          disabled={markingTopic === topic.id}
+                          className="text-[10px] text-text-tertiary/60 underline-offset-2 transition hover:text-text-tertiary hover:underline disabled:opacity-40"
+                        >
+                          {markingTopic === topic.id ? "marking…" : "mark as complete"}
+                        </button>
+                        {markError && markingTopic === null && (
+                          <p className="mt-1 text-[10px] text-err">{markError}</p>
+                        )}
+                      </div>
                     )}
                   </div>
                 ) : (

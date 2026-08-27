@@ -44,32 +44,44 @@ export async function POST(request: NextRequest) {
     // The review_state table has a FK constraint on question_id → questions.id,
     // so any question not in the questions table will cause a 500 error.
     // Auto-insert from sample data (same approach as /api/review route).
+    //
+    // All queries are batched into a single transaction (one HTTP request)
+    // to avoid edge runtime timeouts — doing 44+ individual queries in a loop
+    // exceeds Vercel's edge function time limit.
+    const now = new Date();
+    const due = new Date(now.getTime() + 86400000 * 7); // due in 7 days
+    const nowIso = now.toISOString();
+    const dueIso = due.toISOString();
+
+    const queries: ReturnType<typeof sql>[] = [];
+
+    // Insert any missing questions from sample data
     for (const sampleQ of sampleQuestions) {
-      await sql`
+      queries.push(sql`
         INSERT INTO public.questions (id, topic, subtopic, mode, difficulty, content, is_sample)
         VALUES (${sampleQ.id}, ${sampleQ.topic}, ${sampleQ.subtopic}, ${sampleQ.mode}, ${sampleQ.difficulty}, ${JSON.stringify(sampleQ.content)}, ${sampleQ.is_sample})
         ON CONFLICT (id) DO NOTHING
-      `;
+      `);
     }
-
-    const now = new Date();
-    const due = new Date(now.getTime() + 86400000 * 7); // due in 7 days
 
     // Mark all questions as seen (reps=1, state=Review)
     for (const qid of questionIds) {
-      await sql`
+      queries.push(sql`
         INSERT INTO public.review_state
           (user_id, question_id, stability, difficulty, due, reps, lapses, state, elapsed_days, scheduled_days, last_review)
         VALUES
-          (${SINGLE_USER_ID}, ${qid}, 3.0, 5.0, ${due.toISOString()}, 1, 0, 2, 0, 7, ${now.toISOString()})
+          (${SINGLE_USER_ID}, ${qid}, 3.0, 5.0, ${dueIso}, 1, 0, 2, 0, 7, ${nowIso})
         ON CONFLICT (user_id, question_id) DO UPDATE SET
           reps = GREATEST(public.review_state.reps, 1),
           state = 2,
-          due = ${due.toISOString()},
+          due = ${dueIso},
           scheduled_days = 7,
-          last_review = ${now.toISOString()}
-      `;
+          last_review = ${nowIso}
+      `);
     }
+
+    // Batch all queries into a single HTTP request via transaction()
+    await sql.transaction(queries);
 
     return NextResponse.json({
       success: true,
